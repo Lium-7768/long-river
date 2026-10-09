@@ -10,6 +10,8 @@
 3. **反向边构建期自动补全** —— 只需单向书写，`A 父子 B` 自动生成 `B 子父 A`。
 4. **政权作用域** —— 官职、机构按政权划分；家族、姓氏、地点跨政权。
 5. **争议数据多值并列** —— 不强制单一确定值。
+6. **实体自带出处** —— 凡可溯源的字段带 `Ref`，不给出处的信息不进正式目录。
+7. **别名不散落** —— 别名字段（字、号、旧地名、年号）统一进构建期检索索引，不靠各页面自行处理。
 
 ---
 
@@ -56,7 +58,9 @@ type Person = {
   name: string              // '苏轼'
   zi?: string               // '子瞻'
   hao?: string[]            // ['东坡居士']
-  altNames?: string[]       // 谥号、封号、别称
+  altNames?: string[]       // 谥号、封号、别称（进检索别名索引，见需求 §9.1）
+  gender: '男' | '女' | '不详'  // 谱系布局与姻亲边推导依赖此字段
+  disambig?: string         // 同名异人区分语，如「南宋初名将」，用于检索结果与互链提示
   birth?: YearValue
   death?: YearValue
   polity: string            // 主要活动政权
@@ -66,6 +70,7 @@ type Person = {
   entryPath?: '科举' | '门荫' | '荐举' | '军功' | '其他'
   entryYear?: number        // 登科年
   summary: string           // 一句话
+  refs?: Ref[]              // 史料出处，见「引用与出处」
   // 生平长文存于 MDX body
 }
 ```
@@ -118,13 +123,17 @@ type Work = {
   author: string | string[] // person slug
   year?: YearValue
   place?: string            // place slug
+  status: '存世' | '部分存世' | '已佚' | '辑佚' | '伪托'  // 存佚状况，不标则用户误以为可见原文
   fullText?: string         // 诗词全文
   excerpt?: string          // 长著作摘录
   background: string        // 创作背景
   relatedEvents?: string[]
   summary: string
+  refs?: Ref[]
 }
 ```
+
+**`status` 是硬性字段。** 大量作品已佚失、仅存目录或疑为伪托，用户看到条目却找不到原文必须有解释。
 
 诗词需竖排渲染，与散文类型走不同的展示组件。
 
@@ -352,6 +361,34 @@ type Causality = {
 
 ## 数据类型
 
+### Ref 引用与出处
+
+**全站通用字段。** 任何实体都可带 `refs`，回答「这条信息哪来的」。
+
+```ts
+type Ref = {
+  source: string            // 出处标识，如 '宋史' / 'CBDB v20240101' / '续资治通鉴长编'
+  locator?: string          // 卷次、页码、表名行号等定位
+  note?: string             // 异说、存疑说明
+}
+```
+
+`source` 指向史籍名、数据库版本或本项目的原创标注。**必须从 schema 一开始就带** —— 事后补要动全部内容文件，而历史站不给出处可信度为零。详见[需求文档 §9.2](./requirements.md#92-数据模型漏洞)。
+
+### 检索别名索引
+
+非存储实体，**构建期派生**。从各实体的别名字段聚合为「归一化别名 → 实体 slug」的映射，供 minisearch 使用：
+
+| 别名来源 | 示例 |
+|---|---|
+| `Person.altNames` / `zi` / `hao` | 「东坡」→ su-shi |
+| `Place.altNames` | 「汴梁」「东京」→ bianjing |
+| `Era.name` + 公元换算 | 「元丰三年」→ 对应年份及 era slug |
+| 干支纪年 | 「辛未」→ 对应年份 |
+| `Surname` / `Clan` | 姓与郡望 |
+
+需公共换算函数处理年号 ↔ 公元 ↔ 干支，全站共用（见[需求文档 §7](./requirements.md#7-视觉与排版)、[§9.1](./requirements.md#91-结构性缺口)）。
+
 ### YearValue 带不确定性的年份
 
 ```ts
@@ -429,8 +466,8 @@ MDX frontmatter 存结构化字段，body 存散文长文。关系边与时间�
 
 | CBDB 表 | 本项目目标 |
 |---|---|
-| `BIOG_MAIN` | `Person` 基础字段、生卒年 |
-| `ALTNAME_DATA` | `Person.zi` / `hao` / `altNames` |
+| `BIOG_MAIN` | `Person` 基础字段、生卒年、`gender`（CBDB index year / gender 字段，需核对列名） |
+| `ALTNAME_DATA` | `Person.zi` / `hao` / `altNames`（进检索别名索引） |
 | `CHORONYM_CODES` | 郡望 → `Clan.seat` |
 | `KIN_DATA` + `KINSHIP_CODES` | `Kinship` |
 | `POSTED_TO_OFFICE_DATA` | `Appointment` |
