@@ -84,7 +84,7 @@ export function DynastyProfileView({
             </div>
           }
         >
-          <div className="grid grid-cols-[repeat(auto-fill,240px)] justify-start gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
             {people.map((per) => (
               <PersonCard key={per.id} person={per} onClick={() => goPerson(per)} />
             ))}
@@ -266,7 +266,7 @@ function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => v
   return (
     <button
       onClick={onClick}
-      className="w-[240px] max-w-[240px] cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
+      className="w-full cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
     >
       <div className="flex items-baseline justify-between gap-2">
         <span
