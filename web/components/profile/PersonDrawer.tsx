@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { api, type PersonDetail } from '@/lib/api';
 import { fmtRangeBP } from '@/components/river/year';
 
-/** 人物抽屉：从关系图点人时滑出，显示那个人自己的详情。 */
+/** 人物抽屉：点关系图姓名时滑出，显示那个人自己的详情。 */
 export function PersonDrawer({
   person,
   onClose,
