@@ -85,11 +85,19 @@ function Starfield() {
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
   const accent2 = useThemeColor('--lr-accent-2', [0.5, 0.35, 1]);
 
-  // 1) 远景球壳星（不受雾影响）
+  // 1) 远景球壳星：大小/明暗分级 + 星色（真实星空调色板）
   const farGeom = useMemo(() => {
-    const count = 4000;
+    const count = 4500;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
+    // 真实星空星色：蓝白 / 纯白 / 微黄 / 微橙 / 微红
+    const palette = [
+      new THREE.Color(0.75, 0.85, 1.0), // 蓝白（热）
+      new THREE.Color(1.0, 1.0, 1.0), // 纯白
+      new THREE.Color(1.0, 0.97, 0.85), // 微黄
+      new THREE.Color(1.0, 0.9, 0.72), // 橙
+      new THREE.Color(1.0, 0.82, 0.78), // 微红（冷巨星）
+    ];
     for (let i = 0; i < count; i++) {
       let x, y, z, r;
       do {
@@ -98,50 +106,61 @@ function Starfield() {
         z = Math.random() * 2 - 1;
         r = Math.hypot(x, y, z);
       } while (r > 1 || r < 0.3);
-      const nx = x / r,
-        ny = y / r,
-        nz = z / r;
       const R = 90 + Math.random() * 50;
-      pos[i * 3] = nx * R;
-      pos[i * 3 + 1] = ny * R;
-      pos[i * 3 + 2] = nz * R - 30;
-      const c = new THREE.Color(0.7, 0.78, 1).offsetHSL(
-        (Math.random() - 0.5) * 0.2,
-        0,
-        (Math.random() - 0.5) * 0.3,
-      );
-      col[i * 3] = c.r;
-      col[i * 3 + 1] = c.g;
-      col[i * 3 + 2] = c.b;
+      pos[i * 3] = (x / r) * R;
+      pos[i * 3 + 1] = (y / r) * R;
+      pos[i * 3 + 2] = (z / r) * R - 30;
+      // 星等：多数暗、少数亮（幂律）——用 pow 让大的少
+      const mag = Math.pow(Math.random(), 2.5); // 0..1，偏 0
+      const base = palette[Math.floor(Math.random() * palette.length)];
+      const bright = 0.35 + mag * 0.75;
+      col[i * 3] = base.r * bright;
+      col[i * 3 + 1] = base.g * bright;
+      col[i * 3 + 2] = base.b * bright;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     return g;
   }, []);
-
-  // 2) 银河带：一条斜跨天空的密集星云带
+  // 银河：一条斜跨天空的弥散光带（单条！）
+  // 主轴 = 一条直线（倾斜），垂直方向高斯扩散 → 中心浓、两侧淡
   const galaxyGeom = useMemo(() => {
-    const count = 10000;
+    const count = 14000;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
-    const c1 = new THREE.Color(accent2[0], accent2[1], accent2[2]);
-    const c2 = new THREE.Color(0.6, 0.85, 1);
+    const cCore = new THREE.Color(0.85, 0.9, 1.0); // 银心偏暖白
+    const cEdge = new THREE.Color(accent2[0], accent2[1], accent2[2]);
+    const cCool = new THREE.Color(accent[0], accent[1], accent[2]);
+
+    // 主轴：一条横跨天空的斜带（左上→右下）
+    const axis = new THREE.Vector3(1, -0.5, -0.35).normalize();
+    const up = new THREE.Vector3(0, 1, 0);
+    const side = new THREE.Vector3().crossVectors(axis, up).normalize();
+    const side2 = new THREE.Vector3().crossVectors(axis, side).normalize();
+    // 放到很远的天幕背景（相机不会飞进去）
+    const center = new THREE.Vector3(-20, 26, -95);
+
     for (let i = 0; i < count; i++) {
-      // 沿一条大圆弧分布，垂直于弧线方向做高斯扩散
-      const t = Math.random() * Math.PI * 2;
-      const spread = Math.random() - 0.5;
-      const gauss = spread * Math.abs(spread) * 2; // 中间密两边疏
-      const R = 120 + Math.random() * 30;
-      // 银河平面：绕 X 轴倾斜 60°
-      const u = Math.cos(t),
-        v = Math.sin(t);
-      const band = gauss * 26;
-      pos[i * 3] = u * R + band * 0.2;
-      pos[i * 3 + 1] = v * Math.sin(1.05) * R + band;
-      pos[i * 3 + 2] = v * Math.cos(1.05) * R - 30;
-      const c = c1.clone().lerp(c2, Math.random());
-      const dim = 0.7 + Math.random() * 0.5;
+      // 沿主轴均匀铺开
+      const along = (Math.random() - 0.5) * 240;
+      // 垂直扩散：高斯（两三个随机数之和≈高斯）
+      const g1 = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+      const g2 = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+      const width = 14;
+      const p = center
+        .clone()
+        .addScaledVector(axis, along)
+        .addScaledVector(side, g1 * width)
+        .addScaledVector(side2, g2 * width * 0.5);
+      pos[i * 3] = p.x;
+      pos[i * 3 + 1] = p.y;
+      pos[i * 3 + 2] = p.z;
+
+      // 颜色：越靠中心越暖白，越靠边缘越冷/主题色
+      const dist = Math.hypot(g1, g2);
+      const c = cCore.clone().lerp(dist > 0.6 ? cEdge : cCool, Math.min(dist, 1));
+      const dim = 0.35 + Math.random() * 0.65;
       col[i * 3] = c.r * dim;
       col[i * 3 + 1] = c.g * dim;
       col[i * 3 + 2] = c.b * dim;
@@ -150,11 +169,11 @@ function Starfield() {
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     return g;
-  }, [accent2]);
+  }, [accent, accent2]);
 
-  // 3) 近景星（可动，带一点主题色）
+  // 3) 近景星：更亮更大，带主题色 + 星色
   const nearGeom = useMemo(() => {
-    const count = 900;
+    const count = 1100;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -169,14 +188,15 @@ function Starfield() {
       pos[i * 3] = (x / r) * R;
       pos[i * 3 + 1] = (y / r) * R * 0.6 + 3;
       pos[i * 3 + 2] = (z / r) * R * 2.2 - 30;
-      const c = new THREE.Color(accent[0], accent[1], accent[2]).offsetHSL(
-        (Math.random() - 0.5) * 0.1,
-        0,
-        (Math.random() - 0.5) * 0.3,
-      );
-      col[i * 3] = c.r;
-      col[i * 3 + 1] = c.g;
-      col[i * 3 + 2] = c.b;
+      const mag = Math.pow(Math.random(), 2);
+      const c =
+        Math.random() < 0.6
+          ? new THREE.Color(0.8, 0.88, 1.0)
+          : new THREE.Color(accent[0], accent[1], accent[2]);
+      const bright = 0.4 + mag * 0.7;
+      col[i * 3] = c.r * bright;
+      col[i * 3 + 1] = c.g * bright;
+      col[i * 3 + 2] = c.b * bright;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -225,14 +245,29 @@ function Starfield() {
           fog={false}
         />
       </points>
-      {/* 远景星：柔和圆光点（星空顶） */}
+      {/* 远景星：暗小星（多数） */}
       <points ref={far} geometry={farGeom} frustumCulled={false}>
         <pointsMaterial
-          size={1.1}
+          size={0.7}
           map={getStarTexture()}
           vertexColors
           transparent
-          opacity={0.95}
+          opacity={0.7}
+          sizeAttenuation
+          depthWrite={false}
+          toneMapped={false}
+          fog={false}
+        />
+      </points>
+      {/* 远景星：亮大星（少数，同一批几何但用大尺寸叠加出"亮星"） */}
+      <points geometry={farGeom} frustumCulled={false}>
+        <pointsMaterial
+          size={1.6}
+          map={getStarTexture()}
+          vertexColors
+          transparent
+          opacity={0.9}
+          blending={THREE.AdditiveBlending}
           sizeAttenuation
           depthWrite={false}
           toneMapped={false}
