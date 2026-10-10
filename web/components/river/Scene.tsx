@@ -80,10 +80,9 @@ function RiverRibbon() {
   );
 }
 
-/* ---------- 星空 + 银河 ---------- */
+/* ---------- 星空 ---------- */
 function Starfield() {
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
-  const accent2 = useThemeColor('--lr-accent-2', [0.5, 0.35, 1]);
 
   // 1) 远景球壳星：大小/明暗分级 + 星色（真实星空调色板）
   const farGeom = useMemo(() => {
@@ -123,53 +122,6 @@ function Starfield() {
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     return g;
   }, []);
-  // 银河：一条斜跨天空的弥散光带（单条！）
-  // 主轴 = 一条直线（倾斜），垂直方向高斯扩散 → 中心浓、两侧淡
-  const galaxyGeom = useMemo(() => {
-    const count = 14000;
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-    const cCore = new THREE.Color(0.85, 0.9, 1.0); // 银心偏暖白
-    const cEdge = new THREE.Color(accent2[0], accent2[1], accent2[2]);
-    const cCool = new THREE.Color(accent[0], accent[1], accent[2]);
-
-    // 主轴：一条横跨天空的斜带（左上→右下）
-    const axis = new THREE.Vector3(1, -0.5, -0.35).normalize();
-    const up = new THREE.Vector3(0, 1, 0);
-    const side = new THREE.Vector3().crossVectors(axis, up).normalize();
-    const side2 = new THREE.Vector3().crossVectors(axis, side).normalize();
-    // 放到很远的天幕背景（相机不会飞进去）
-    const center = new THREE.Vector3(-20, 26, -95);
-
-    for (let i = 0; i < count; i++) {
-      // 沿主轴均匀铺开
-      const along = (Math.random() - 0.5) * 240;
-      // 垂直扩散：高斯（两三个随机数之和≈高斯）
-      const g1 = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
-      const g2 = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
-      const width = 14;
-      const p = center
-        .clone()
-        .addScaledVector(axis, along)
-        .addScaledVector(side, g1 * width)
-        .addScaledVector(side2, g2 * width * 0.5);
-      pos[i * 3] = p.x;
-      pos[i * 3 + 1] = p.y;
-      pos[i * 3 + 2] = p.z;
-
-      // 颜色：越靠中心越暖白，越靠边缘越冷/主题色
-      const dist = Math.hypot(g1, g2);
-      const c = cCore.clone().lerp(dist > 0.6 ? cEdge : cCool, Math.min(dist, 1));
-      const dim = 0.35 + Math.random() * 0.65;
-      col[i * 3] = c.r * dim;
-      col[i * 3 + 1] = c.g * dim;
-      col[i * 3 + 2] = c.b * dim;
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
-    return g;
-  }, [accent, accent2]);
 
   // 3) 近景星：更亮更大，带主题色 + 星色
   const nearGeom = useMemo(() => {
@@ -205,46 +157,15 @@ function Starfield() {
   }, [accent]);
 
   const far = useRef<THREE.Points>(null);
-  const gal = useRef<THREE.Points>(null);
   const near = useRef<THREE.Points>(null);
   useFrame(({ clock }) => {
     const t = clock.elapsedTime;
     if (far.current) far.current.rotation.y = t * 0.004;
-    if (gal.current) gal.current.rotation.y = t * 0.003;
     if (near.current) near.current.rotation.y = -t * 0.01;
   });
 
   return (
     <group>
-      {/* 银河带：双层（柔光晕 + 亮核），圆形贴图 */}
-      <points ref={gal} geometry={galaxyGeom} frustumCulled={false}>
-        <pointsMaterial
-          size={3.2}
-          map={getStarTexture()}
-          vertexColors
-          transparent
-          opacity={0.5}
-          blending={THREE.AdditiveBlending}
-          sizeAttenuation
-          depthWrite={false}
-          toneMapped={false}
-          fog={false}
-        />
-      </points>
-      <points geometry={galaxyGeom} frustumCulled={false}>
-        <pointsMaterial
-          size={1.2}
-          map={getStarTextureTight()}
-          vertexColors
-          transparent
-          opacity={0.9}
-          blending={THREE.AdditiveBlending}
-          sizeAttenuation
-          depthWrite={false}
-          toneMapped={false}
-          fog={false}
-        />
-      </points>
       {/* 远景星：暗小星（多数） */}
       <points ref={far} geometry={farGeom} frustumCulled={false}>
         <pointsMaterial
