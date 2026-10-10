@@ -76,26 +76,59 @@ def clean_name(n):
     return n or t2s(n)
 
 
+def _extract_balanced(src, start):
+    """从 src[start]（' { '）做括号配对，返回完整对象文本。跳过字符串内括号。"""
+    depth = 0
+    i = start
+    in_s = False
+    esc = False
+    while i < len(src):
+        c = src[i]
+        if esc:
+            esc = False
+        elif c == "\\":
+            esc = True
+        elif c == "'":
+            in_s = not in_s
+        elif not in_s:
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+                if depth == 0:
+                    return src[start : i + 1]
+        i += 1
+    return src[start:]
+
+
 def load_prototype():
-    """原型人物 + summary，按简体名建索引。"""
+    """原型人物 + summary，按简体名建索引。
+
+    用括号配对提取每个 person 对象（正则无法可靠处理嵌套字段）。
+    """
     src = open(os.path.join(ROOT, "prototype", "data.js"), encoding="utf-8").read()
     out = {}
-    # 带 summary 的完整匹配
-    for m in re.finditer(
-        r"\{ id: '(?P<id>[^']+)', name: '(?P<name>[^']+)', type: 'person'[^}]*?"
-        r"from: (?P<from>[\dnull]+), to: (?P<to>[\dnull]+)(?P<rest>[^}]*)\}",
-        src, re.S,
-    ):
-        rest = m.group("rest")
-        summ = re.search(r"summary: '((?:[^'\\]|\\.)*)'", rest)
-        z = re.search(r"zi: '([^']*)'", rest)
-        p = re.search(r"polity: '([^']*)'", rest)
-        role = re.search(r"role: '([^']*)'", rest)
-        out[t2s(m.group("name"))] = {
-            "id": m.group("id"),
-            "name": m.group("name"),
-            "from": None if m.group("from") == "null" else int(m.group("from")),
-            "to": None if m.group("to") == "null" else int(m.group("to")),
+    for m in re.finditer(r"type: 'person'", src):
+        start = src.rfind("{", 0, m.start())
+        if start < 0:
+            continue
+        obj = _extract_balanced(src, start)
+        idm = re.search(r"id: '([^']+)'", obj)
+        nam = re.search(r"name: '([^']+)'", obj)
+        if not idm or not nam:
+            continue
+        f = re.search(r"from: ([\dnull]+)", obj)
+        t = re.search(r"to: ([\dnull]+)", obj)
+        summ = re.search(r"summary: '((?:[^'\\]|\\.)*)'", obj)
+        z = re.search(r"zi: '([^']*)'", obj)
+        p = re.search(r"polity: '([^']*)'", obj)
+        role = re.search(r"role: '([^']*)'", obj)
+        name = nam.group(1)
+        out[t2s(name)] = {
+            "id": idm.group(1),
+            "name": name,
+            "from": None if (not f or f.group(1) == "null") else int(f.group(1)),
+            "to": None if (not t or t.group(1) == "null") else int(t.group(1)),
             "zi": z.group(1) if z else None,
             "polity": p.group(1) if p else None,
             "role": role.group(1) if role else None,
@@ -210,19 +243,30 @@ def main():
                 del rec["raw_name"]
             stat["from_cbdb"] += 1
 
-            # 优先用原型 id / summary —— 仅当该名在 CBDB 唯一，或首个占用者
+            # 散文/标识挂载：判断 CBDB 这个人是否 = 原型那个人
+            # 同名唯一 → 直接挂；
+            # 同名异人 → (a) 生卒匹配者认领；(b) 若 CBDB 全无生卒而原型有 → 首个认领；
+            #             (c) 生卒皆无 → 无法判定（保留在原型资产中，不臆断）
             proto_rec = proto.get(sname)
-            can_claim = proto_rec and (
-                name_freq.get(sname, 1) == 1 and proto_rec["id"] not in claimed_proto
-            )
-            if can_claim:
+            matched = False
+            if proto_rec and proto_rec["id"] not in claimed_proto:
+                if name_freq.get(sname, 1) == 1:
+                    matched = True
+                else:
+                    pf, pt = proto_rec.get("from"), proto_rec.get("to")
+                    df, dt = d["birth"], d["death"]
+                    if (pf and df and abs(pf - df) <= 2) or (pt and dt and abs(pt - dt) <= 2):
+                        matched = True  # 生卒匹配
+                    elif (pf or pt) and df is None and dt is None:
+                        matched = True  # 原型有年、CBDB 无年 → 首个认领（见 name_freq 首个判断）
+                    # 否则：同名多人且无从判定 → 不挂
+            if proto_rec and matched:
                 rec["id"] = proto_rec["id"]
                 claimed_proto.add(proto_rec["id"])
             else:
                 rec["id"] = make_id(sname, d["cbdb_id"], used_ids)
 
-            # 散文与冲突处理：只要 CBDB 这个人是原型那个人，就挂上（同名异人时仅首个）
-            if proto_rec and (name_freq.get(sname, 1) == 1 or proto_rec["id"] in claimed_proto):
+            if proto_rec and proto_rec["id"] in claimed_proto and rec["id"] == proto_rec["id"]:
                 if proto_rec["summary"]:
                     rec["summary"] = proto_rec["summary"]
                     stat["with_proto_summary"] += 1
