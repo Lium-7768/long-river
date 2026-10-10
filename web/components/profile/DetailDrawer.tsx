@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { api, type PersonDetail } from '@/lib/api';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
+import { KinshipGraph } from './KinshipGraph';
 
 /**
  * 通用详情抽屉：右侧滑出。
@@ -122,17 +123,7 @@ function PersonDetailView({ p }: { p: PersonDetail }) {
 
       {p.kinships.length > 0 && (
         <Section title={`亲属关系（${p.kinships.length}）`}>
-          <div className="space-y-1">
-            {p.kinships.slice(0, 40).map((k, i) => (
-              <div key={i} className="flex items-baseline gap-2 text-sm">
-                <span className="w-28 shrink-0 text-xs text-white/40">{cleanRel(k.rel)}</span>
-                <span className="text-white/75">{k.name}</span>
-              </div>
-            ))}
-            {p.kinships.length > 40 && (
-              <div className="text-xs text-white/30">… 其余 {p.kinships.length - 40} 条</div>
-            )}
-          </div>
+          <KinshipGraph kinships={p.kinships} />
         </Section>
       )}
 
@@ -174,13 +165,4 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       {children}
     </section>
   );
-}
-
-/** 亲属关系标签简化 */
-function cleanRel(rel: string): string {
-  return rel
-    .replace('(反向)', '')
-    .split(';')[0]
-    .replace('直系祖先', '先祖')
-    .replace('直系后代', '后裔');
 }
