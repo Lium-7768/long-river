@@ -84,7 +84,7 @@ export function DynastyProfileView({
             </div>
           }
         >
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2">
+          <div className="grid grid-cols-[repeat(auto-fill,240px)] justify-start gap-2">
             {people.map((per) => (
               <PersonCard key={per.id} person={per} onClick={() => goPerson(per)} />
             ))}
@@ -259,12 +259,22 @@ function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => v
   return (
     <button
       onClick={onClick}
-      className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
+      className="w-[240px] max-w-[240px] cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
     >
       <div className="flex items-baseline justify-between gap-2">
-        <span className="truncate text-base font-medium text-white/90">{person.name}</span>
+        <span
+          className="min-w-0 flex-1 truncate text-base font-medium text-white/90"
+          title={person.name}
+        >
+          {person.name}
+        </span>
         {person.top_office && (
-          <span className="shrink-0 truncate text-base text-sky-300/70">{person.top_office}</span>
+          <span
+            className="max-w-[104px] shrink-0 truncate text-base text-sky-300/70"
+            title={person.top_office}
+          >
+            {person.top_office}
+          </span>
         )}
       </div>
       <div className="mt-1 flex items-baseline justify-between gap-2">
