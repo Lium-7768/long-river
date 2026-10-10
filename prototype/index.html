@@ -311,7 +311,7 @@ const BODY = {
   treaty:'缔约方 · 岁币 · 边界划定 · 存续期 · 后续影响。',
   office:'名称 · 品阶 · 所属机构 · 职掌 · 历任者 · 前后朝沿革。'
 };
-const fmtY = y => y<0 ? `前${-y}` : `${y}`;
+const fmtY = y => (y==null||y==='') ? '?' : (y<0 ? `前${-y}` : `${y}`);
 
 const all = [];
 (function walk(n,d){ n._d=d; all.push(n); (n.children||[]).forEach(c=>walk(c,d+1)); })(ROOT,-1);
@@ -430,7 +430,7 @@ function buildFan(tier){
       card.style.setProperty('--c',c);
       card.innerHTML = `<div class="ct">${TYPECN[k.type]||'条目'}</div>
         <div class="cn">${k.name}</div>
-        <div class="cy">${fmtY(k.from)}–${fmtY(k.to)}</div>`;
+        <div class="cy">${(k.from==null&&k.to==null)?'':fmtY(k.from)+'–'+fmtY(k.to)}</div>`;
       card.addEventListener('click', e=>{ e.stopPropagation(); openDrawer(k); });
 
       const offInRow = (inRow - (cnt-1)/2)*(CARD_W+GAP);
@@ -537,7 +537,10 @@ function openDrawer(node){
   document.getElementById('d-tag').textContent = TYPECN[node.type]||'条目';
   document.getElementById('d-name').textContent = node.name;
   document.getElementById('d-life').textContent =
-    node.from!=null ? `${fmtY(node.from)} — ${fmtY(node.to)}` : '';
+    (node.from!=null || node.to!=null)
+      ? (node.from!=null ? fmtY(node.from)+' — '+fmtY(node.to)
+                         : '生年无考　卒 '+fmtY(node.to))
+      : '';
 
   let h='';
   // 人物：字 / 号 / 入仕
@@ -720,7 +723,8 @@ window.openClan=id=>{
   document.getElementById('scrim').classList.add('on');
 };
 window.openPlace=id=>{
-  const p=window.LONG_RIVER_DATA.places.find(x=>x.id===id);
+  const D=window.LONG_RIVER_DATA;
+  const p=D.places.find(x=>x.id===id);
   if(!p) return;
   document.getElementById('d-tag').textContent=p.type;
   document.getElementById('d-name').textContent=p.name;
@@ -729,6 +733,15 @@ window.openPlace=id=>{
   let h='';
   if(p.alt&&p.alt.length) h+=`<div class="meta">旧称　${esc(p.alt.join('、'))}</div>`;
   h+=`<p>${p.summary}</p>`;
+  // 关联事件
+  if(p.events&&p.events.length){
+    h+=`<div class="div"></div><span class="kl">关联事件 · ${p.events.length}</span><div class="chips">`;
+    p.events.forEach(eid=>{
+      const n=all.find(x=>x.id===eid);
+      if(n) h+=`<span class="chip" onclick="goto('${eid}')">${n.name}</span>`;
+    });
+    h+=`</div>`;
+  }
   document.getElementById('d-body').innerHTML=h;
   document.getElementById('drawer').classList.add('on');
   document.getElementById('scrim').classList.add('on');
