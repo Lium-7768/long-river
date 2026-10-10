@@ -8,6 +8,7 @@ import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
+import { Breadcrumb } from '@/components/profile/Breadcrumb';
 import type { PersonBrief } from '@/lib/api';
 import type { Dynasty } from '@/content/dynasties';
 
@@ -41,29 +42,25 @@ export function DynastyProfileView({
   return (
     <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
-        {/* 返回 */}
-        <button
-          onClick={() => router.push('/')}
-          className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/60 transition hover:bg-white/10 hover:text-white"
-        >
-          ← 返回长河
-        </button>
+        <Breadcrumb items={[{ label: '长河', href: '/' }, { label: dynasty.name }]} />
 
         {/* 页头 */}
         <header>
-          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">朝代档案</div>
+          <div className="text-base tracking-[0.3em] text-sky-300/70">朝代档案</div>
           <div className="mt-2 flex items-baseline gap-4">
             <h1 className="text-6xl font-semibold tracking-tight">{dynasty.name}</h1>
             <div className="text-lg tabular-nums text-white/45">
               {fmtRangeBP(dynasty.start, dynasty.end)}
             </div>
           </div>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">{profile.overview}</p>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+            {profile.overview}
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {profile.keywords.map((k) => (
               <span
                 key={k}
-                className="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-xs text-sky-200"
+                className="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-base text-sky-200"
               >
                 {k}
               </span>
@@ -82,7 +79,7 @@ export function DynastyProfileView({
                 value={q}
                 onChange={(e) => run(e.target.value)}
                 placeholder="搜索人物…"
-                className="w-40 bg-transparent text-xs text-white placeholder:text-white/30 focus:outline-none"
+                className="w-40 bg-transparent text-base text-white placeholder:text-white/30 focus:outline-none"
               />
             </div>
           }
@@ -151,14 +148,14 @@ export function DynastyProfileView({
               className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-cyan-400/40 hover:bg-cyan-400/[0.07]"
             >
               <div className="flex items-baseline gap-2">
-                <span className="text-sm font-medium text-white/90">{dynasty.name}疆域</span>
+                <span className="text-base font-medium text-white/90">{dynasty.name}疆域</span>
                 {cov && (
-                  <span className="text-xs text-cyan-300/70">
+                  <span className="text-base text-cyan-300/70">
                     {cov.provinces.length} 省（示意）
                   </span>
                 )}
               </div>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/50">
+              <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
                 都城 {profile.territory.capital}
               </p>
             </button>
@@ -203,7 +200,7 @@ function Block({
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
         <div className="flex items-baseline gap-2">
           <h2 className="text-2xl font-semibold tracking-wide text-white/90">{title}</h2>
-          {sub && <span className="text-xs text-white/35">{sub}</span>}
+          {sub && <span className="text-base text-white/35">{sub}</span>}
         </div>
         {action}
       </div>
@@ -242,12 +239,12 @@ function Card({
       <div className="flex items-baseline gap-2">
         <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
         {year != null && (
-          <span className="text-sm tabular-nums text-white/45">{fmtYearShort(year)}</span>
+          <span className="text-base tabular-nums text-white/45">{fmtYearShort(year)}</span>
         )}
         <span className="font-medium text-white/90">{name}</span>
-        {tag && <span className={`text-xs ${c.tag}`}>{tag}</span>}
+        {tag && <span className={`text-base ${c.tag}`}>{tag}</span>}
       </div>
-      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/50">{desc}</p>
+      <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">{desc}</p>
     </button>
   );
 }
@@ -265,14 +262,16 @@ function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => v
       className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
     >
       <div className="flex items-baseline justify-between gap-2">
-        <span className="truncate text-sm font-medium text-white/90">{person.name}</span>
+        <span className="truncate text-base font-medium text-white/90">{person.name}</span>
         {person.top_office && (
-          <span className="shrink-0 truncate text-xs text-sky-300/70">{person.top_office}</span>
+          <span className="shrink-0 truncate text-base text-sky-300/70">{person.top_office}</span>
         )}
       </div>
       <div className="mt-1 flex items-baseline justify-between gap-2">
-        <span className="truncate text-xs text-white/40">{person.zi ? `字${person.zi}` : ''}</span>
-        {life && <span className="shrink-0 text-xs tabular-nums text-white/35">{life}</span>}
+        <span className="truncate text-base text-white/40">
+          {person.zi ? `字${person.zi}` : ''}
+        </span>
+        {life && <span className="shrink-0 text-base tabular-nums text-white/35">{life}</span>}
       </div>
     </button>
   );

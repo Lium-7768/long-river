@@ -59,7 +59,7 @@ function buildNodes(kinships: Kinship[]): Node[] {
   const order: Category[] = ['ancestor', 'descendant', 'sibling', 'spouse', 'affine', 'other'];
   const present = order.filter((c) => byCat.has(c));
   const nodes: Node[] = [];
-  const R = 6;
+  const R = 9.5;
 
   present.forEach((cat, ci) => {
     const items = byCat.get(cat)!;
@@ -72,7 +72,7 @@ function buildNodes(kinships: Kinship[]): Node[] {
       const ang = sectorCenter + (t - 0.5) * sectorSpan;
       const rr = R * (0.9 + (i % 4) * 0.05);
       // 轻微上下错落，形成 3D 层次
-      const yy = ((i % 5) - 2) * 0.55;
+      const yy = ((i % 6) - 2.5) * 1.35;
       nodes.push({
         id: k.id,
         name: k.name,
@@ -128,7 +128,7 @@ function KinshipNode({
         </mesh>
         {/* 彩色姓名文字（始终面向相机）*/}
         <Text
-          fontSize={hover ? 0.46 : 0.38}
+          fontSize={hover ? 0.62 : 0.52}
           color={hover ? '#ffffff' : color}
           anchorX="center"
           anchorY="middle"
@@ -207,8 +207,8 @@ function Scene({
         enablePan={false}
         enableDamping
         dampingFactor={0.08}
-        minDistance={9}
-        maxDistance={26}
+        minDistance={12}
+        maxDistance={40}
       />
       <EffectComposer multisampling={0}>
         <Bloom
@@ -245,7 +245,7 @@ export function KinshipGraph3D({
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center gap-3 text-xs">
+      <div className="mb-3 flex flex-wrap items-center gap-3 text-base">
         {cats.map(([cat, count]) => (
           <span key={cat} className="flex items-center gap-1.5">
             <span
@@ -259,9 +259,9 @@ export function KinshipGraph3D({
         ))}
         <span className="text-white/25">拖拽旋转 · 滚轮缩放 · 点击查看详情</span>
       </div>
-      <div className="h-[440px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#04070e]">
+      <div className="h-[520px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#04070e]">
         <Canvas
-          camera={{ position: [0, 4, 13], fov: 50 }}
+          camera={{ position: [0, 3, 20], fov: 50 }}
           gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
           dpr={[1, 1.75]}
         >
@@ -269,7 +269,7 @@ export function KinshipGraph3D({
           <Scene nodes={nodes} onPick={(id, name) => onPick?.(id, name)} onHover={setHovered} />
         </Canvas>
       </div>
-      <div className="mt-2 text-center text-[11px] text-white/30">
+      <div className="mt-2 text-center text-base text-white/30">
         共 {kinships.length} 条亲属 · 节点按关系类别着色
       </div>
     </div>

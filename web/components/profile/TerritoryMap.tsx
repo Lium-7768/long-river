@@ -151,7 +151,7 @@ export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; h
 
   if (!cov) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-sm text-white/40">
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-base text-white/40">
         该朝代暂无疆域示意数据
       </div>
     );
@@ -187,7 +187,7 @@ export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; h
       </div>
       {/* 图注 */}
       <div className="border-t border-white/10 px-5 py-3">
-        <div className="flex items-center gap-4 text-xs">
+        <div className="flex items-center gap-4 text-base">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-2.5 rounded-sm bg-sky-400" />
             <span className="text-white/60">疆域内</span>
@@ -198,8 +198,8 @@ export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; h
           </span>
           <span className="text-white/30">共 {cov.provinces.length} 省</span>
         </div>
-        {cov.note && <p className="mt-2 text-xs leading-relaxed text-white/45">※ {cov.note}</p>}
-        <p className="mt-1 text-[11px] text-white/25">
+        {cov.note && <p className="mt-2 text-base leading-relaxed text-white/45">※ {cov.note}</p>}
+        <p className="mt-1 text-base text-white/25">
           示意图：以现代省份轮廓近似古代疆域，非精确历史边界。
         </p>
       </div>
