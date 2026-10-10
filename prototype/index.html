@@ -44,6 +44,56 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
 .bc b.on{color:var(--ink)}
 .bc s{text-decoration:none;color:#2a363c}
 
+/* 顶部模式切换 */
+.modes{display:flex;gap:22px;pointer-events:auto;font-family:var(--serif);
+  font-size:12px;letter-spacing:.24em}
+.modes b{font-weight:400;color:var(--ink-3);cursor:pointer;
+  padding-bottom:5px;border-bottom:1px solid transparent;transition:.3s}
+.modes b:hover{color:var(--ink-2)}
+.modes b.on{color:var(--jade);border-bottom-color:var(--jade)}
+
+/* 目录模式（家族/地点/年号）：整屏 2D 面板 */
+#catalog{position:fixed;inset:0;z-index:40;background:
+    linear-gradient(180deg,rgba(7,10,12,.97),rgba(8,11,13,.99));
+  padding:110px 6% 60px;overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity .5s}
+#catalog.on{opacity:1;pointer-events:auto}
+.cat-sec{margin-bottom:56px}
+.cat-sec h3{font-family:var(--serif);font-size:13px;font-weight:400;
+  letter-spacing:.36em;color:var(--jade);margin-bottom:6px;
+  display:flex;align-items:baseline;gap:12px}
+.cat-sec h3 em{font-style:normal;font-size:10px;letter-spacing:.1em;
+  color:var(--ink-3);font-family:var(--sans)}
+.cat-sec .sub{font-size:12px;color:var(--ink-3);letter-spacing:.06em;
+  margin-bottom:22px;font-family:var(--serif);line-height:1.9}
+.cat-grid{display:grid;gap:14px;
+  grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+.ctile{padding:16px 18px;border:1px solid rgba(95,214,189,.14);border-radius:4px;
+  background:linear-gradient(150deg,rgba(18,25,28,.7),rgba(11,15,17,.8));
+  cursor:pointer;transition:.35s;position:relative}
+.ctile:hover{border-color:rgba(95,214,189,.5);
+  box-shadow:0 14px 36px -12px rgba(0,0,0,.9),0 0 26px -8px rgba(95,214,189,.4)}
+.ctile .tn{font-family:var(--serif);font-size:16px;letter-spacing:.1em;
+  color:var(--ink);margin-bottom:7px}
+.ctile .tm{font-size:10px;letter-spacing:.1em;color:var(--ink-3);
+  margin-bottom:9px;font-family:var(--serif)}
+.ctile .td{font-size:12px;line-height:1.85;color:#93a8a3;letter-spacing:.03em;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ctile .cnt{position:absolute;top:14px;right:16px;font-size:10px;
+  letter-spacing:.05em;color:var(--amber);opacity:.75}
+/* 年号密排 */
+.era-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.era-chip{font-family:var(--serif);font-size:13px;letter-spacing:.14em;
+  padding:8px 15px;border:1px solid rgba(95,214,189,.18);border-radius:3px;
+  background:rgba(95,214,189,.03);cursor:pointer;transition:.3s;color:#a6c2bc}
+.era-chip:hover{border-color:rgba(95,214,189,.65);color:#e6f6f1;
+  background:rgba(95,214,189,.11)}
+.era-chip em{font-style:normal;font-size:9px;color:var(--ink-3);
+  margin-left:7px;letter-spacing:.02em}
+.era-group{margin-bottom:26px}
+.era-group .gl{font-size:10.5px;letter-spacing:.3em;color:var(--ink-3);
+  margin-bottom:13px;font-family:var(--serif)}
+
 .legend{position:fixed;left:40px;bottom:28px;z-index:30;font-size:10.5px;
   letter-spacing:.16em;color:var(--ink-3);line-height:2.4;font-family:var(--serif)}
 .legend i{display:inline-block;width:16px;height:2px;margin-right:10px;
@@ -193,6 +243,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
 <header>
   <div class="brand"><h1>长河</h1><em>RIVER OF DYNASTIES</em></div>
   <nav class="bc" id="bc"></nav>
+  <div class="modes" id="modes">
+    <b class="on" data-m="river">时间轴</b>
+    <b data-m="clan">家族</b>
+    <b data-m="place">地点</b>
+    <b data-m="era">年号</b>
+  </div>
 </header>
 
 <div class="legend">
@@ -208,6 +264,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
     <div id="axis"></div>
     <div id="fan"></div>
   </div>
+</div>
+
+<!-- 目录模式：家族 / 地点 / 年号 -->
+<div id="catalog">
+  <div class="cat-inner" id="cat-inner"></div>
 </div>
 
 <div id="scrim"></div>
@@ -491,9 +552,25 @@ function openDrawer(node){
   // 正文：有 summary 用 summary，否则用类型占位说明
   h += `<p>${node.summary || BODY[node.type] || ''}</p>`;
 
+  // 所属家族（跨实体引用）
+  const D = window.LONG_RIVER_DATA;
+  const owned = (D.clans||[]).filter(c=>(c.members||[]).some(m=>m.name===node.name));
+  if(owned.length){
+    h += `<div class="div"></div><span class="kl">所属家族</span><div class="chips">`;
+    owned.forEach(c=> h += `<span class="chip" onclick="openClan('${c.id}')">${c.name}</span>`);
+    h += `</div>`;
+  }
+  // 年号（若此人曾为帝）
+  const eras = (D.eras||[]).filter(e=>e.emperor===node.name);
+  if(eras.length){
+    h += `<div class="div"></div><span class="kl">年号 · ${eras.length}</span><div class="chips">`;
+    eras.forEach(e=> h += `<span class="chip" onclick="openEra('${e.id}')">${e.name}<em style="font-style:normal;font-size:9px;opacity:.55;margin-left:5px">${fmtY(e.from)}</em></span>`);
+    h += `</div>`;
+  }
+
   const kids=node.children||[];
   if(kids.length){
-    h+=`<div class="div"></div><span class="kl">关联</span><div class="chips">`;
+    h+=`<div class="div"></div><span class="kl">关联 · ${kids.length}</span><div class="chips">`;
     kids.forEach(k=> h+=`<span class="chip" onclick="goto('${k.id}')">${k.name}</span>`);
     h+=`</div>`;
   }
@@ -510,8 +587,14 @@ function closeDrawer(silent){
 }
 window.closeDrawer=closeDrawer;
 window.goto=id=>{
+  const D = window.LONG_RIVER_DATA;
+  // 附属实体（家族/地点/年号）
+  if((D.clans||[]).some(c=>c.id===id)){ setMode('clan'); openClan(id); return; }
+  if((D.places||[]).some(p=>p.id===id)){ setMode('place'); openPlace(id); return; }
+  if((D.eras||[]).some(e=>e.id===id)){ setMode('era'); openEra(id); return; }
   const n=all.find(x=>x.id===id);
   if(!n) return;
+  if(mode!=='river') setMode('river');
   if(n._d===0){ enterTier(n); closeDrawer(true); }
   else {
     // 找到它所属的顶层朝代
@@ -550,12 +633,128 @@ addEventListener('keydown', e=>{
 
 renderBC();
 
+/* ============================================================
+   目录模式：家族 / 地点 / 年号
+   ============================================================ */
+const CAT = document.getElementById('catalog');
+const CATIN = document.getElementById('cat-inner');
+let mode = 'river';
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderCatalog(m){
+  const D = window.LONG_RIVER_DATA;
+  let h='';
+  if(m==='clan'){
+    h+=`<div class="cat-sec"><h3>宋代家族<em>${D.clans.length}</em></h3>
+      <div class="sub">科举时代，门阀让位于"科第世家"——同一家族累代登科、子弟并起，构成宋代政治与文化的骨架。</div>
+      <div class="cat-grid">`;
+    D.clans.forEach(c=>{
+      h+=`<div class="ctile" onclick="openClan('${c.id}')">
+        <span class="cnt">${c.members.length} 人</span>
+        <div class="tn">${esc(c.name)}</div>
+        <div class="tm">${esc(c.place)}　${fmtY(c.from)}–${fmtY(c.to)}</div>
+        <div class="td">${esc(c.summary)}</div></div>`;
+    });
+    h+=`</div></div>`;
+  }
+  if(m==='place'){
+    const order=['都城','陪都','边境','战场','贬谪地','书院'];
+    order.forEach(t=>{
+      const ps=D.places.filter(p=>p.type===t);
+      if(!ps.length) return;
+      h+=`<div class="cat-sec"><h3>${t}<em>${ps.length}</em></h3><div class="cat-grid">`;
+      ps.forEach(p=>{
+        h+=`<div class="ctile" onclick="openPlace('${p.id}')">
+          <div class="tn">${esc(p.name)}</div>
+          <div class="tm">${esc(p.polity||'')}　${fmtY(p.from)}–${fmtY(p.to)}${p.alt&&p.alt.length?'　旧称：'+esc(p.alt.join('、')):''}</div>
+          <div class="td">${esc(p.summary)}</div></div>`;
+      });
+      h+=`</div></div>`;
+    });
+  }
+  if(m==='era'){
+    h+=`<div class="cat-sec"><h3>两宋年号<em>${D.eras.length}</em></h3>
+      <div class="sub">宋代共 57 个正年号。仁宗 9 个、理宗 8 个、徽宗 6 个；高宗独用 2 个，绍兴一纪三十二年，为宋朝最久。</div>`;
+    ['北宋','南宋'].forEach(p=>{
+      h+=`<div class="era-group"><div class="gl">${p}　${D.eras.filter(e=>e.polity===p).length} 个</div><div class="era-wrap">`;
+      D.eras.filter(e=>e.polity===p).forEach(e=>{
+        h+=`<span class="era-chip" onclick="openEra('${e.id}')">${esc(e.name)}<em>${fmtY(e.from)}–${fmtY(e.to)}</em></span>`;
+      });
+      h+=`</div></div>`;
+    });
+    h+=`</div>`;
+  }
+  CATIN.innerHTML=h;
+}
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.modes b').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  const river = m==='river';
+  CAT.classList.toggle('on',!river);
+  document.getElementById('stage').style.visibility = river ? '' : 'hidden';
+  document.querySelector('.legend').style.display = river ? '' : 'none';
+  if(!river){ closeDrawer(true); renderCatalog(m); }
+}
+document.querySelectorAll('.modes b').forEach(b=>
+  b.addEventListener('click',()=>setMode(b.dataset.m)));
+
+// 打开家族
+window.openClan=id=>{
+  const c=window.LONG_RIVER_DATA.clans.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('d-tag').textContent='家族';
+  document.getElementById('d-name').textContent=c.name;
+  document.getElementById('d-life').textContent=`${c.place}　${fmtY(c.from)} — ${fmtY(c.to)}`;
+  let h=`<p>${c.summary}</p><div class="div"></div><span class="kl">成员</span><div class="chips">`;
+  c.members.forEach(mem=>{
+    const inTree = all.find(x=>x.name===mem.name);
+    h += inTree
+      ? `<span class="chip" onclick="goto('${inTree.id}')">${mem.name}<em style="font-style:normal;font-size:9px;opacity:.6;margin-left:6px">${fmtY(mem.from)}</em></span>`
+      : `<span class="chip" style="cursor:default;opacity:.7">${mem.name}<em style="font-style:normal;font-size:9px;opacity:.6;margin-left:6px">${fmtY(mem.from)}</em></span>`;
+  });
+  h+=`</div>`;
+  document.getElementById('d-body').innerHTML=h;
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+};
+window.openPlace=id=>{
+  const p=window.LONG_RIVER_DATA.places.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('d-tag').textContent=p.type;
+  document.getElementById('d-name').textContent=p.name;
+  document.getElementById('d-life').textContent=
+    `${p.polity||''}　${fmtY(p.from)} — ${fmtY(p.to)}`;
+  let h='';
+  if(p.alt&&p.alt.length) h+=`<div class="meta">旧称　${esc(p.alt.join('、'))}</div>`;
+  h+=`<p>${p.summary}</p>`;
+  document.getElementById('d-body').innerHTML=h;
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+};
+window.openEra=id=>{
+  const e=window.LONG_RIVER_DATA.eras.find(x=>x.id===id);
+  if(!e) return;
+  document.getElementById('d-tag').textContent='年号';
+  document.getElementById('d-name').textContent=e.name;
+  document.getElementById('d-life').textContent=`${e.emperor}　${fmtY(e.from)} — ${fmtY(e.to)}　凡 ${e.to-e.from+1} 年`;
+  let h=`<p>${e.note || (e.polity+'年号，'+e.emperor+'在位期间使用，起'+fmtY(e.from)+'，讫'+fmtY(e.to)+'。')}</p>`;
+  document.getElementById('d-body').innerHTML=h;
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+};
+
 window.__diag=()=>({
   ticks:document.querySelectorAll('.tick').length,
   cards:document.querySelectorAll('.card').length,
   active:active?active.id:null,
   drawer:document.getElementById('drawer').classList.contains('on'),
-  worldT:document.getElementById('world').style.transform
+  worldT:document.getElementById('world').style.transform,
+  mode:mode,
+  catTiles:document.querySelectorAll('.ctile').length,
+  eraChips:document.querySelectorAll('.era-chip').length,
+  catOn:CAT.classList.contains('on')
 });
 window.addEventListener('error',e=>{ window.__err=e.message; });
 </script>
