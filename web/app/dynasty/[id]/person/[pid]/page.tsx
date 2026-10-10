@@ -26,7 +26,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
   }, [pid]);
 
   return (
-    <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
+    <main className="relative z-10 min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
         <Breadcrumb
           items={[
