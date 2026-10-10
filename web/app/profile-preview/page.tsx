@@ -47,7 +47,7 @@ export default function Preview() {
 
         {/* ① 代表人物 */}
         <Block title="代表人物" sub="按生年排序 · 点击进入关系图">
-          <div className="grid gap-2">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-2">
             {people.map((per) => (
               <PersonCard key={per.id} person={per} />
             ))}
@@ -131,23 +131,19 @@ function Timeline({
 }) {
   const c = COLOR[color];
   return (
-    <div className="relative pl-24">
-      <div className={`absolute bottom-2 left-[66px] top-2 w-px ${c.line}`} />
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
       {nodes.map((n, i) => (
-        <div key={`${n.name}-${i}`} className="relative mb-6 flex items-start">
-          <div className="absolute -left-24 w-14 pt-1 text-right text-sm tabular-nums text-white/55">
-            {fmtYearShort(n.year)}
+        <div
+          key={`${n.name}-${i}`}
+          className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+        >
+          <div className="flex items-baseline gap-2">
+            <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
+            <span className="text-sm tabular-nums text-white/45">{fmtYearShort(n.year)}</span>
+            <span className="font-medium text-white/90">{n.name}</span>
+            {n.tag && <span className={`text-xs ${c.tag}`}>{n.tag}</span>}
           </div>
-          <div className="relative z-10 flex w-[24px] justify-center pt-1.5">
-            <span className={`h-3 w-3 rounded-full ${c.dot} ring-4 ring-[#03060f]`} />
-          </div>
-          <div className="flex-1 pl-4">
-            <div className="flex items-baseline gap-2">
-              <span className="font-medium text-white/90">{n.name}</span>
-              {n.tag && <span className={`text-xs ${c.tag}`}>{n.tag}</span>}
-            </div>
-            <div className="mt-0.5 text-sm text-white/50">{n.desc}</div>
-          </div>
+          <p className="mt-1 text-xs leading-relaxed text-white/50">{n.desc}</p>
         </div>
       ))}
     </div>
