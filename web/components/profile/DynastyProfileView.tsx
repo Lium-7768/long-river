@@ -235,22 +235,24 @@ function Card({
   onClick: () => void;
 }) {
   const c = COLOR[color];
+  const yr = year != null ? (endYear != null ? fmtRangeBP(year, endYear) : fmtYear(year)) : '';
   return (
     <button
       onClick={onClick}
       className={`cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition ${c.hover}`}
+      title={desc}
     >
-      <div className="flex items-baseline gap-2">
-        <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
-        {year != null && (
-          <span className="shrink-0 text-base tabular-nums text-white/45">
-            {endYear != null ? fmtRangeBP(year, endYear) : fmtYear(year)}
-          </span>
-        )}
-        <span className="font-medium text-white/90">{name}</span>
-        {tag && <span className={`text-base ${c.tag}`}>{tag}</span>}
+      {/* 第一行：年 + 名称 | 分类 */}
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="flex min-w-0 items-baseline gap-2">
+          <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
+          {yr && <span className="shrink-0 text-base tabular-nums text-white/45">{yr}</span>}
+          <span className="truncate font-medium text-white/90">{name}</span>
+        </span>
+        {tag && <span className={`shrink-0 text-base ${c.tag}`}>{tag}</span>}
       </div>
-      <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">{desc}</p>
+      {/* 第二行：一句话（单行截断） */}
+      <p className="mt-1 truncate text-base text-white/50">{desc}</p>
     </button>
   );
 }
