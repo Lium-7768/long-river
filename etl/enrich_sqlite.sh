@@ -9,4 +9,7 @@ echo
 echo "== 2. 计算 fame_score =="
 python3 etl/compute_fame.py "$DB"
 echo
+echo "== 3. 提取代表官职 =="
+python3 etl/extract_top_office.py "$DB"
+echo
 echo "完成：$DB"

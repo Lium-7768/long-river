@@ -59,7 +59,7 @@ function handle(pathname, searchParams) {
 
     const cnt = db.prepare(`SELECT COUNT(*) n FROM persons${wsql}`).get(...binds);
     const rows = db.prepare(
-      `SELECT id,name,surname,birth,death,polity,dynasty_id,zi,role,prominence,fame_score,
+      `SELECT id,name,surname,birth,death,polity,dynasty_id,zi,role,prominence,fame_score,top_office,
               substr(summary,1,120) AS summary
        FROM persons${wsql}
        ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC
