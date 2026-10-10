@@ -561,8 +561,6 @@ const DATA = {
             children: [
               { id: 'jigulu', name: '《集古录》', type: 'work', from: 1063, to: 1069,
                 summary: '欧阳修撰，第一部金石学专著，录历代金石拓本四百余种并加跋尾。' },
-              { id: 'jinshilu', name: '《金石录》', type: 'work', from: 1120, to: 1140,
-                summary: '赵明诚撰，李清照续成，录金石二千种，为金石学名著。' },
               { id: 'kaogutu', name: '《考古图》', type: 'work', from: 1092, to: 1092,
                 summary: '吕大临撰，摹绘青铜器形制并释铭文，为最早系统古器物图录。' },
             ]},
@@ -872,8 +870,6 @@ const DATA = {
             children: [
               { id: 'huaxue', name: '画学', type: 'art', from: 1104, to: 1127,
                 summary: '徽宗崇宁三年设，中国最早的皇家美术学院，分六科取士。' },
-              { id: 'xuanhe-huapu', name: '《宣和画谱》', type: 'art', from: 1120, to: 1120,
-                summary: '徽宗敕编，录宫廷藏画六千余轴，分十门，为绘画史要籍。' },
             ]},
           { id: 'shanshui-hua', name: '宋代山水画', type: 'art', from: 960, to: 1279,
             summary: '宋代绘画最高成就。北宋多北派巨嶂（范宽、郭熙），南宋多水墨苍润（马远、夏圭），"三远法"为其理论。' },
@@ -1383,8 +1379,6 @@ const DATA = {
             summary: '宋代官修，二十卷，录宣和内府所藏书帖，历代书法家小传并评其书，与《宣和画谱》为姊妹之作。' },
           { id: 'tuhua-jianwen', name: '《图画见闻志》', type: 'work', from: 1080, to: 1090,
             summary: '郭若虚撰，继张彦远《历代名画记》，记唐宋画家与画事，为宋代画史要籍。' },
-          { id: 'linquan-gaozhi', name: '《林泉高致》', type: 'work', from: 1100, to: 1110,
-            summary: '郭熙子郭思辑其父画论，倡山水"三远"（高远、深远、平远），为宋代山水画论之经典。' },
           { id: 'julü', name: '《橘录》', type: 'work', from: 1178, to: 1178,
             summary: '韩彦直撰，世界最早之柑橘专著，记温州柑、橘、橙之品种栽培。' },
           { id: 'taiping-huimin-jifang', name: '《太平惠民和剂局方》', type: 'work', from: 1078, to: 1151,
@@ -1573,8 +1567,6 @@ const DATA = {
             polity: '北宋',
             summary: '广源州壮族首领。起兵反宋，建"大南国"，陷邕州、围广州，为狄青所败。为宋代西南边疆之大事。',
             children: [
-              { id: 'kunlun-guan', name: '昆仑关之战', type: 'event', from: 1053, to: 1053,
-                summary: '狄青率军夜袭昆仑关，大破侬智高，平岭南。' },
             ]},
           { id: 'li-jiqian', name: '李继迁', type: 'person', role: '名将', from: 963, to: 1004,
             polity: '西夏', entryPath: '党项首领',
@@ -1693,8 +1685,6 @@ const DATA = {
             ]},
           { id: 'song-huiyao', name: '《宋会要辑稿》', type: 'work', from: 1200, to: 1220,
             summary: '宋代官修《会要》之辑本，记典章制度至详，为研究宋史第一手史料，今本辑自《永乐大典》。' },
-          { id: 'taiping-guangji', name: '《太平广记》', type: 'work', from: 977, to: 978,
-            summary: '李昉等奉敕编，五百卷，收汉至宋初小说野史，为古小说之总汇，宋代四大书之一。' },
           /* ==== 外部穷举审计补漏 E：南宋末/金元之际/笔记/信仰 ==== */
           { id: 'chen-yizhong', name: '陈宜中', type: 'person', role: '名臣', from: 1236, to: 1284,
             zi: '与权', polity: '南宋', entryPath: '科举',
@@ -1945,8 +1935,6 @@ const DATA = {
                 summary: '苏轼文集之总称，含诗、词、文、奏议等，为宋代文学之金字塔。' },
               { id: 'linchuan-xiansheng', name: '《临川先生文集》', type: 'work', from: 1080, to: 1100,
                 summary: '王安石文集，含政论、诗文，为研究其变法思想之第一手。' },
-              { id: 'luancheng-ji', name: '《栾城集》', type: 'work', from: 1090, to: 1112,
-                summary: '苏辙文集，以栾城为名，含诗文与政论。' },
               { id: 'jiayou-ji', name: '《嘉祐集》', type: 'work', from: 1050, to: 1066,
                 summary: '苏洵文集，以其年号"嘉祐"名集，含《六国论》等政论名篇。' },
               { id: 'shangu-ji', name: '《山谷集》', type: 'work', from: 1100, to: 1140,
@@ -2308,8 +2296,6 @@ const DATA = {
             polity: '南宋',
             summary: '在位三十年。初有庆元党禁禁理学，后追封岳飞、贬秦桧；开禧北伐失败，订嘉定和议。',
             children: [
-              { id: 'kaixi-beifa', name: '开禧北伐', type: 'event', from: 1206, to: 1207,
-                summary: '韩侂胄主持北伐，宋军大败，韩侂胄被诛以谢金，遂订嘉定和议。' },
               { id: 'kaixi-zhushou', name: '诛韩侂胄', type: 'event', from: 1207, to: 1207,
                 summary: '北伐败后，史弥远等杀韩侂胄函首送金，宋金再和。' },
             ]},
@@ -2411,13 +2397,6 @@ const DATA = {
             children: [
               { id: 'wenxian-tongkao', name: '《文献通考》', type: 'work', from: 1280, to: 1310,
                 summary: '二十四考，上承杜佑《通典》，下启"三通"体系，为古代典制体巨制。' },
-            ]},
-          { id: 'yuan-shu', name: '袁枢', type: 'person', role: '学者', from: 1131, to: 1205,
-            zi: '机仲', polity: '南宋', entryPath: '科举',
-            summary: '史学家。取《资治通鉴》另编《通鉴纪事本末》，创纪事本末体。',
-            children: [
-              { id: 'tongjian-jishi', name: '《通鉴纪事本末》', type: 'work', from: 1173, to: 1174,
-                summary: '将《通鉴》分编为二百三十九事，以事件为纲，创纪事本末新史体。' },
             ]},
           /* ======== 工艺 · 行业（南宋）======== */
           { id: 'longquan-meiziqing', name: '龙泉窑梅子青', type: 'craft', from: 1200, to: 1279,
@@ -2616,8 +2595,6 @@ const DATA = {
             children: [
               { id: 'tianyuan-za', name: '《四时田园杂兴》', type: 'work', from: 1186, to: 1186,
                 summary: '六十首田园组诗，为古代田园诗集大成之作。' },
-              { id: 'wujun-zhi', name: '《吴郡志》', type: 'work', from: 1190, to: 1192,
-                summary: '范成大所撰苏州地方志，为宋志名作。' },
             ]},
           { id: 'jiang-kui', name: '姜夔', type: 'person', approx: true, role: '文人', from: 1155, to: 1221,
             zi: '尧章', hao: ['白石道人'], polity: '南宋',
@@ -2749,8 +2726,6 @@ const DATA = {
             summary: '孝宗北伐失利后所订，改"君臣"为"叔侄"，岁贡减十万。' },
           { id: 'jiaqing-treaty', name: '嘉定和议', type: 'treaty', from: 1208, to: 1234,
             summary: '开禧北伐失败后所订，宋金改称"伯侄"，岁币增至三十万。' },
-          { id: 'huizi', name: '会子', type: 'work', from: 1161, to: 1279,
-            summary: '南宋纸币，初行于东南。与北宋交子同为世界最早纸币之一，后期滥发致通胀。' },
         ]
       },
 
@@ -2807,9 +2782,6 @@ const DATA = {
       summary: '宋代最著名的文学世家。苏洵与二子轼、辙并称"三苏"，同列唐宋八大家，一门占其三，古今罕有。',
       members: [
         { id: 'su-xu', name: '苏序', from: 973, to: 1047, note: '祖，字仲先，乐善好施' },
-        { id: 'su-xun', name: '苏洵', from: 1009, to: 1066, note: '父，字明允，号老泉' },
-        { id: 'su-shi', name: '苏轼', from: 1037, to: 1101, note: '长子，字子瞻，号东坡' },
-        { id: 'su-zhe', name: '苏辙', from: 1039, to: 1112, note: '次子，字子由' },
         { id: 'su-mai', name: '苏迈', from: 1059, to: 1115, note: '苏轼长子' },
         { id: 'su-guo', name: '苏过', from: 1072, to: 1123, note: '苏轼三子，号斜川居士，随父贬岭南' },
       ]},
@@ -2817,7 +2789,6 @@ const DATA = {
       summary: '文坛世家。欧阳修主盟文坛三十年，子侄多发身科第。',
       members: [
         { id: 'ouyang-guan', name: '欧阳观', from: 952, to: 1010, note: '父，绵州军事推官' },
-        { id: 'ouyang-xiu', name: '欧阳修', from: 1007, to: 1072, note: '字永叔，号醉翁' },
         { id: 'ouyang-fa', name: '欧阳发', from: 1046, to: 1114, note: '长子' },
         { id: 'ouyang-fei', name: '欧阳棐', from: 1047, to: 1113, note: '次子，字叔弼' },
       ]},
@@ -2825,38 +2796,26 @@ const DATA = {
       summary: '变法世家。王安石兄弟并起，王安石与其子王雱同为熙宁新法核心。',
       members: [
         { id: 'wang-yi', name: '王益', from: 993, to: 1038, note: '父，都官员外郎' },
-        { id: 'wang-anshi', name: '王安石', from: 1021, to: 1086, note: '字介甫，号半山' },
-        { id: 'wang-anli', name: '王安礼', from: 1034, to: 1106, note: '弟，字和甫' },
-        { id: 'wang-pang', name: '王雱', from: 1044, to: 1076, note: '子，字元泽，助父修《三经新义》' },
       ]},
     { id: 'huayang-fan', name: '华阳范氏', place: '苏州吴县（原籍邠州）', from: 980, to: 1150,
       summary: '名臣世家。范仲淹四子皆有令名，纯仁位至宰相，父子两代俱以风节著称。',
       members: [
-        { id: 'fan-zhongyan', name: '范仲淹', from: 989, to: 1052, note: '字希文，谥文正' },
-        { id: 'fan-chunren', name: '范纯仁', from: 1027, to: 1101, note: '次子，字尧夫，官至宰相' },
         { id: 'fan-chunli', name: '范纯礼', from: 1031, to: 1106, note: '三子，字彝叟' },
         { id: 'fan-chuncui', name: '范纯粹', from: 1046, to: 1117, note: '四子，字德孺，长于边事' },
       ]},
     { id: 'lushi-donglai', name: '东莱吕氏', place: '开封（原籍东莱）', from: 970, to: 1200,
       summary: '中原望族。吕夷简、吕公著祖孙相继为相，累世显宦，为北宋最盛之世家。',
       members: [
-        { id: 'lv-yijian', name: '吕夷简', from: 978, to: 1044, note: '仁宗朝宰相' },
-        { id: 'lv-gongzhu', name: '吕公著', from: 1018, to: 1089, note: '夷简子，哲宗朝宰相' },
         { id: 'lv-xizhe', name: '吕希哲', from: 1039, to: 1116, note: '公著子，学者' },
       ]},
     { id: 'wuyuan-zhu', name: '婺源朱氏', place: '徽州婺源', from: 1090, to: 1300,
       summary: '理学世家。朱松以程门之学教子，朱熹集理学之大成，后世配享孔庙。',
       members: [
-        { id: 'zhu-song', name: '朱松', from: 1097, to: 1143, note: '父，字乔年，师事罗从彦' },
-        { id: 'zhu-xi', name: '朱熹', from: 1130, to: 1200, note: '字元晦，号晦庵' },
         { id: 'zhu-zai', name: '朱在', from: 1169, to: 1239, note: '子，官至工部侍郎' },
       ]},
     { id: 'mingzhou-shi', name: '明州史氏', place: '庆元府鄞县', from: 1100, to: 1300,
       summary: '南宋最盛宰相世家。史浩、史弥远、史嵩之三代为相，掌权近百年，亦为权臣之典型。',
       members: [
-        { id: 'shi-hao', name: '史浩', from: 1106, to: 1194, note: '孝宗朝宰相，为岳飞平反' },
-        { id: 'shi-miyuan', name: '史弥远', from: 1164, to: 1233, note: '宁宗、理宗朝专相二十六年' },
-        { id: 'shi-songzhi', name: '史嵩之', from: 1189, to: 1257, note: '理宗朝宰相' },
       ]},
   ],
 
@@ -2883,9 +2842,6 @@ const DATA = {
     { id: 'damingfu', name: '北京大名府', alt: ['魏州', '天雄军'], type: '陪都',
       polity: '北宋', from: 1042, to: 1127,
       summary: '北宋北京，河北军事重镇，为防辽前沿。' },
-    { id: 'yanyun', name: '燕云十六州', alt: ['幽云十六州', '幽蓟'], type: '边境',
-      polity: '辽', from: 938, to: 1125,
-      summary: '936年石敬瑭割予契丹，含幽、蓟、瀛、莫等十六州。为北宋国防致命缺口，历三百余年未复。' },
     { id: 'chanzhou', name: '澶州', alt: ['澶渊', '开德府'], type: '战场',
       polity: '北宋', from: 1004, to: 1005,
       summary: '澶渊之盟缔结地。1004年辽军南下至澶州，真宗亲征，宋军射杀辽将萧挞凛，遂议和。',
