@@ -462,20 +462,23 @@ MDX frontmatter 存结构化字段，body 存散文长文。关系边与时间�
 
 ## CBDB 映射
 
-> **表名需核对** —— 下列按记忆写出，须对照实际 CBDB dump 验证后更新本表。
+> **已核对真实 dump** —— 表名与字段已对照 CBDB `cbdb_20261003.sqlite3` 验证。
+> 完整映射、字段名、行数、政权 code 与覆盖率见 [`doc/cbdb.md`](./cbdb.md)；
+> 核对脚本 `etl/inspect_schema.py`。原文「按记忆写出，需核对」的表已作废。
 
-| CBDB 表 | 本项目目标 |
-|---|---|
-| `BIOG_MAIN` | `Person` 基础字段、生卒年、`gender`（CBDB index year / gender 字段，需核对列名） |
-| `ALTNAME_DATA` | `Person.zi` / `hao` / `altNames`（进检索别名索引） |
-| `CHORONYM_CODES` | 郡望 → `Clan.seat` |
-| `KIN_DATA` + `KINSHIP_CODES` | `Kinship` |
-| `POSTED_TO_OFFICE_DATA` | `Appointment` |
-| `OFFICE_CODES` | `Office` |
-| `ENTRY_DATA` | `Person.entryPath` / `entryYear` |
-| `BIOG_TEXT_DATA` | `Work` |
-| `ASSOC_DATA` | `PersonRelation` / `Discipleship` |
-| `ADDR_CODES` | `Place` |
+| CBDB 表 | 本项目目标 | 状态 |
+|---|---|---|
+| `BIOG_MAIN` | `Person` 基础字段、生卒年、`gender`（`c_female`） | ✅ 已验证 |
+| `ALTNAME_DATA` | `Person.zi` / `hao` / `altNames`（关联 `c_alt_name_type_code`） | ✅ 已验证 |
+| `CHORONYM_CODES` | 郡望 → `Clan.seat` | ✅ 已验证 |
+| `KIN_DATA` + `KINSHIP_CODES` | `Kinship` | ✅ 已验证 |
+| `POSTED_TO_OFFICE_DATA` | `Appointment`（关联 `c_office_id`） | ✅ 已验证 |
+| `OFFICE_CODES` | `Office` | ✅ 已验证 |
+| `ENTRY_DATA` + `ENTRY_CODES` | `Person.entryPath` / `entryYear` | ✅ 已验证 |
+| `BIOG_TEXT_DATA` | `Work`（著作关系表，53,355 行） | ✅ 已验证 |
+| `ASSOC_DATA` | `PersonRelation` / `Discipleship` | ✅ 已验证（下阶段接入） |
+| `BIOG_ADDR_DATA` + `ADDR_CODES` | `Place`（**原文漏列，实为籍贯主表**） | ✅ 已验证 |
+| `DYNASTIES` | 政权 code 字典（筛选宋段） | ✅ 已验证 |
 
 ### CBDB 覆盖不到的部分
 

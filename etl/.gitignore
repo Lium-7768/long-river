@@ -1,0 +1,20 @@
+# CBDB 原始数据（560MB，不入库；用 fetch.sh 拉取）
+data/*.sqlite3
+data/*.zip
+data/*.7z
+data/latest.json
+
+# ETL 大体积中间产物（可由 build_from_cbdb.py 重生成）
+build/persons.jsonl
+build/kinships.jsonl
+build/appointments.jsonl
+build/entries.jsonl
+build/works.jsonl
+
+*.log
+
+# 保留小体积汇总产物（入库供评审）:
+#   build/stats.json build/audit_report.json
+#   build/offices.json build/places.json
+#   build/enriched.jsonl build/additions_prom5.json
+__pycache__/
