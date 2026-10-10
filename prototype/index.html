@@ -242,10 +242,22 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
   gap:8px; padding:0 40px; flex-wrap:wrap; justify-content:flex-start;
   max-height:76px; overflow-y:auto; }
 #gnav.on{ display:flex; }
+/* ---- 二级导航（当前组的年代页）---- */
+#gnav2{ position:fixed; left:0; right:0; top:172px; z-index:41; display:none;
+  gap:6px; padding:0 40px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+  max-height:64px; overflow-y:auto; }
+#gnav2.on{ display:flex; }
+#gnav2 .g2lbl{ color:#e8c98a; font:600 12px/1 var(--serif); letter-spacing:.1em;
+  padding-right:10px; margin-right:4px; border-right:1px solid rgba(232,201,138,.3); }
+.gtab2{ --c:#e8c98a; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.08);
+  color:#7f8992; font:500 11px/1 var(--serif); letter-spacing:.05em;
+  padding:5px 10px; border-radius:999px; cursor:pointer; transition:all .18s; }
+.gtab2:hover{ color:#cdd6dc; border-color:rgba(255,255,255,.2); }
+.gtab2.on{ color:#0a0d10; background:var(--c); border-color:var(--c); }
 .gtab{ --c:#e8c98a; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10);
   color:#8a949c; font:500 12px/1 var(--serif); letter-spacing:.06em;
   padding:7px 12px; border-radius:999px; cursor:pointer; transition:all .18s; }
-.gtab em{ font-style:normal; opacity:.5; margin-left:5px; font-size:10px; }
+.gtab em{ font-style:normal; opacity:.5; margin-left:6px; padding-left:6px; border-left:1px solid currentColor; font-size:10px; }
 .gtab:hover{ color:#cdd6dc; border-color:rgba(255,255,255,.2); }
 .gtab.on{ color:#0a0d10; background:var(--c); border-color:var(--c); }
 .gtab.on em{ opacity:.7; }
@@ -350,7 +362,7 @@ const fam  = document.getElementById('fan');
 const TIERS = ROOT.children;
 const NW = TIERS.length;
 let active = null, leaf = null;
-let currentTier = null, activeGroup = 0;
+let currentTier = null, activeGroup = 0, activePage = 0;
 
 /* ---------- 一级刻度 ---------- */
 TIERS.forEach((tier,i)=>{
@@ -429,18 +441,71 @@ function buildFan(tier){
   const oneScreen = Math.max(6, Math.floor((window.innerHeight-260)/ROW_H)) * PER;
   const groupedMode = totalCards > oneScreen;
 
-  // 记住当前 tier 的选中组
-  if(currentTier!==tier){ currentTier=tier; activeGroup=0; }
+  // ---- 两级导航：一级=类型/角色组；二级=超大组的年代页 ----
+  // 原则：数据永不隐藏，只改 UI
+  const perGroupFit = Math.max(6, Math.floor((window.innerHeight-260)/ROW_H)) * PER;
+
+  // 一级：按类型/角色分的组（groups）
+  // 二级：给每个组计算"年代页"（仅当该组超出单屏时需要）
+  groups.forEach(g=>{
+    if(g.items.length <= perGroupFit){ g.pages = [{label:'', items:g.items}]; return; }
+    const dated = g.items.filter(x=>x.from!=null).sort((a,b)=>a.from-b.from);
+    const undated = g.items.filter(x=>x.from==null);
+    const buckets = [];
+    for(let base=860; base<=1280; base+=100){
+      const bk = dated.filter(x=>x.from>=base && x.from<base+100);
+      if(bk.length) buckets.push({lo:base, hi:base+99, items:bk});
+    }
+    const tail = dated.filter(x=>x.from>=1280);
+    if(tail.length) buckets.push({lo:1280, hi:1281, items:tail});
+    if(undated.length) buckets.push({lo:null, hi:null, items:undated});
+    g.pages = [];
+    buckets.forEach(b=>{
+      const parts = Math.ceil(b.items.length / perGroupFit);
+      const size = Math.ceil(b.items.length / parts);
+      for(let i=0;i<parts;i++){
+        const chunk = b.items.slice(i*size,(i+1)*size);
+        let lab;
+        if(b.lo===null) lab = parts>1 ? ('年份不详·'+(i+1)) : '年份不详';
+        else if(b.hi>=1281) lab = fmtY(b.lo)+'后'+(parts>1?('·'+(i+1)):'');
+        else lab = fmtY(b.lo)+'–'+fmtY(b.hi)+(parts>1?('·'+(i+1)):'');
+        g.pages.push({label:lab, items:chunk});
+      }
+    });
+  });
+
+  // 记住当前 tier 的选中组 / 选中页
+  if(currentTier!==tier){ currentTier=tier; activeGroup=0; activePage=0; }
   if(groupedMode){
     buildGroupNav(groups, tier);
-    // 只渲染 activeGroup
     const g = groups[Math.min(activeGroup, groups.length-1)];
-    renderGroups([g], ax, tier);
+    if(activePage >= g.pages.length) activePage = 0;
+    renderGroups([{type:g.type, name:g.name, items:g.pages[activePage].items}], ax, tier);
+    buildPageNav(g, tier);
   } else {
     clearGroupNav();
     renderGroups(groups, ax, tier);
   }
   fam.classList.add('on');
+}
+
+// ---------- 二级导航：当前组的年代页 ----------
+function buildPageNav(g, tier){
+  let nav = document.getElementById('gnav2');
+  if(!nav){ nav=document.createElement('div'); nav.id='gnav2'; const g1=document.getElementById('gnav'); (g1?g1.parentNode:fam.parentNode).insertBefore(nav, fam); }
+  if(!g.pages || g.pages.length<=1){ nav.classList.remove('on'); nav.innerHTML=''; return; }
+  nav.innerHTML='';
+  const lbl=document.createElement('span'); lbl.className='g2lbl'; lbl.textContent=g.name;
+  nav.appendChild(lbl);
+  g.pages.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='gtab2'+(i===activePage?' on':'');
+    b.style.setProperty('--c', COLOR[g.type]||COLOR.gold);
+    b.textContent=p.label;
+    b.onclick=e=>{ e.stopPropagation(); activePage=i; buildFan(tier); };
+    nav.appendChild(b);
+  });
+  nav.classList.add('on');
 }
 
 // ---------- 组导航条 ----------
@@ -453,7 +518,7 @@ function buildGroupNav(groups, tier){
     b.className='gtab'+(i===activeGroup?' on':'');
     b.style.setProperty('--c', COLOR[g.type]||COLOR.gold);
     b.innerHTML=`${g.name}<em>${g.items.length}</em>`;
-    b.onclick=e=>{ e.stopPropagation(); activeGroup=i; buildFan(tier); };
+    b.onclick=e=>{ e.stopPropagation(); activeGroup=i; activePage=0; buildFan(tier); };
     nav.appendChild(b);
   });
   nav.classList.add('on');
@@ -461,6 +526,8 @@ function buildGroupNav(groups, tier){
 function clearGroupNav(){
   const nav=document.getElementById('gnav');
   if(nav){ nav.classList.remove('on'); nav.innerHTML=''; }
+  const nav2=document.getElementById('gnav2');
+  if(nav2){ nav2.classList.remove('on'); nav2.innerHTML=''; }
 }
 
 // ---------- 渲染若干组 ----------
