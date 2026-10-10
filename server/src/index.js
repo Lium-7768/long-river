@@ -44,6 +44,7 @@ function handle(pathname, searchParams) {
   if (p === '/api/persons') {
     const q = searchParams.get('q');
     const polity = searchParams.get('polity');
+    const dynastyId = searchParams.get('dynasty');
     const minProm = parseInt(searchParams.get('min_prom') || '-1', 10);
     const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10), 500);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
@@ -52,15 +53,16 @@ function handle(pathname, searchParams) {
     const binds = [];
     if (q) { where.push('(name LIKE ? OR zi LIKE ?)'); binds.push(`%${q}%`, `%${q}%`); }
     if (polity) { where.push('polity = ?'); binds.push(polity); }
+    if (dynastyId) { where.push('dynasty_id = ?'); binds.push(dynastyId); }
     if (minProm >= 0) { where.push('prominence >= ?'); binds.push(minProm); }
     const wsql = where.length ? ' WHERE ' + where.join(' AND ') : '';
 
     const cnt = db.prepare(`SELECT COUNT(*) n FROM persons${wsql}`).get(...binds);
     const rows = db.prepare(
-      `SELECT id,name,surname,birth,death,polity,zi,role,prominence,
+      `SELECT id,name,surname,birth,death,polity,dynasty_id,zi,role,prominence,fame_score,
               substr(summary,1,120) AS summary
        FROM persons${wsql}
-       ORDER BY prominence DESC, birth ASC
+       ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC
        LIMIT ? OFFSET ?`
     ).all(...binds, limit, offset);
 
@@ -98,7 +100,7 @@ function handle(pathname, searchParams) {
               substr(summary,1,80) AS zh
        FROM persons
        WHERE name LIKE ? OR zi LIKE ? OR summary LIKE ?
-       ORDER BY prominence DESC, birth ASC LIMIT 100`
+       ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC LIMIT 100`
     ).all(`%${q}%`, `%${q}%`, `%${q}%`);
     return ok(rows, { q });
   }
