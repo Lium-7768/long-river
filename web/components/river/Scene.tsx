@@ -239,91 +239,193 @@ function Starfield() {
   );
 }
 
-/* ---------- 单个朝代节点 ---------- */
+/* ---------- 单个朝代节点：能量晶体 ---------- */
 function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => void }) {
   const d = DYNASTIES[index];
   const usable = hasData(d.id);
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
   const accent2 = useThemeColor('--lr-accent-2', [0.5, 0.35, 1]);
   const [hover, setHover] = useState(false);
-  const g = useRef<THREE.Group>(null);
-  const ring = useRef<THREE.Mesh>(null);
+
+  const coreRef = useRef<THREE.Mesh>(null);
+  const shellRef = useRef<THREE.Mesh>(null);
+  const ringARef = useRef<THREE.Mesh>(null);
+  const ringBRef = useRef<THREE.Mesh>(null);
+  const beamRef = useRef<THREE.Mesh>(null);
+  const textRef = useRef<THREE.Group>(null);
+  const sparkRef = useRef<THREE.Points>(null);
 
   const t = DYNASTY_T[index];
   const base = useMemo(() => pointAt(t), [t]);
-
-  const textRef = useRef<THREE.Group>(null);
   const col = usable ? accent : [0.35, 0.42, 0.55];
   const color = new THREE.Color(col[0], col[1], col[2]);
+  const color2 = new THREE.Color(accent2[0], accent2[1], accent2[2]);
+  const yNode = usable ? 1.0 : 0.5;
+  const R = usable ? 0.55 : 0.3;
+
+  // 晶体周围的发光微粒
+  const sparkGeom = useMemo(() => {
+    const count = usable ? 90 : 20;
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const b = Math.acos(Math.random() * 2 - 1);
+      const r = R * (1.6 + Math.random() * 1.8);
+      pos[i * 3] = Math.sin(b) * Math.cos(a) * r;
+      pos[i * 3 + 1] = Math.cos(b) * r + yNode;
+      pos[i * 3 + 2] = Math.sin(b) * Math.sin(a) * r;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    return g;
+  }, [R, yNode, usable]);
 
   useFrame(({ clock, camera }) => {
-    if (g.current) g.current.rotation.y = Math.sin(clock.elapsedTime * 0.5 + index) * 0.15;
-    if (ring.current) ring.current.rotation.z = clock.elapsedTime * (usable ? 0.6 : 0.15);
-    // 文字始终面向相机（billboard），保证任何角度都可读、不倒
+    const t0 = clock.elapsedTime;
+    const pulse = usable ? 1 + Math.sin(t0 * 2 + index) * 0.12 : 1;
+    // 核心晶体：缓慢自转 + 脉冲缩放
+    if (coreRef.current) {
+      coreRef.current.rotation.y = t0 * (usable ? 0.5 : 0.1) + index;
+      coreRef.current.rotation.x = Math.sin(t0 * 0.4 + index) * 0.3;
+      coreRef.current.scale.setScalar(pulse);
+    }
+    // 外层线框壳反向转
+    if (shellRef.current) {
+      shellRef.current.rotation.y = -t0 * (usable ? 0.3 : 0.08) - index;
+      shellRef.current.rotation.z = t0 * 0.2;
+    }
+    // 两个环：不同倾角、不同转速
+    if (ringARef.current) {
+      ringARef.current.rotation.z = t0 * (usable ? 0.7 : 0.15);
+      ringARef.current.rotation.x = Math.PI / 2.4;
+    }
+    if (ringBRef.current) {
+      ringBRef.current.rotation.z = -t0 * (usable ? 0.5 : 0.1);
+      ringBRef.current.rotation.x = Math.PI / 1.6;
+      ringBRef.current.rotation.y = t0 * 0.3;
+    }
+    // 光柱呼吸
+    if (beamRef.current) {
+      const m = beamRef.current.material as THREE.MeshBasicMaterial;
+      m.opacity = (usable ? 0.28 : 0.08) * (0.7 + Math.sin(t0 * 2.2 + index) * 0.3);
+    }
+    // 微粒旋转
+    if (sparkRef.current) sparkRef.current.rotation.y = t0 * 0.25 + index;
+    // 文字面向相机
     if (textRef.current) textRef.current.quaternion.copy(camera.quaternion);
   });
 
   return (
     <group position={base}>
-      <group ref={g}>
-        {/* 主碑：细高的晶体 */}
-        <mesh
-          position={[0, usable ? 0.9 : 0.4, 0]}
-          onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-            e.stopPropagation();
-            setHover(true);
-            document.body.style.cursor = usable ? 'pointer' : 'default';
-          }}
-          onPointerOut={() => {
-            setHover(false);
-            document.body.style.cursor = 'default';
-          }}
-          onClick={(e: ThreeEvent<MouseEvent>) => {
-            e.stopPropagation();
-            if (usable) onPick(index);
-          }}
-        >
-          <octahedronGeometry args={[usable ? 0.55 : 0.3, 0]} />
+      {/* 向下光柱：连到河面 */}
+      <mesh ref={beamRef} position={[0, yNode / 2, 0]}>
+        <cylinderGeometry args={[R * 0.28, R * 0.9, yNode, 16, 1, true]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={usable ? 0.28 : 0.08}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* 可交互主晶体（含外层线框 + 内发光核心） */}
+      <group
+        position={[0, yNode, 0]}
+        onPointerOver={(e: ThreeEvent<PointerEvent>) => {
+          e.stopPropagation();
+          setHover(true);
+          document.body.style.cursor = usable ? 'pointer' : 'default';
+        }}
+        onPointerOut={() => {
+          setHover(false);
+          document.body.style.cursor = 'default';
+        }}
+        onClick={(e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          if (usable) onPick(index);
+        }}
+      >
+        {/* 内发光核心 */}
+        <mesh ref={coreRef}>
+          <octahedronGeometry args={[R, 0]} />
           <meshStandardMaterial
             color={color}
             emissive={color}
-            emissiveIntensity={usable ? (hover ? 1.4 : 0.6) : 0.1}
-            roughness={0.15}
-            metalness={0.7}
+            emissiveIntensity={usable ? (hover ? 2.2 : 1.1) : 0.15}
+            roughness={0.1}
+            metalness={0.9}
             toneMapped={false}
           />
         </mesh>
-        {/* 旋转光环 */}
-        <mesh ref={ring} position={[0, usable ? 0.9 : 0.4, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[usable ? 0.9 : 0.5, 0.02, 8, 48]} />
+        {/* 外层线框壳 */}
+        <mesh ref={shellRef}>
+          <octahedronGeometry args={[R * 1.5, 0]} />
           <meshBasicMaterial
-            color={new THREE.Color(accent2[0], accent2[1], accent2[2])}
+            color={color2}
+            wireframe
+            transparent
+            opacity={usable ? 0.5 : 0.12}
+            toneMapped={false}
+          />
+        </mesh>
+        {/* 环 A */}
+        <mesh ref={ringARef}>
+          <torusGeometry args={[R * 1.9, 0.018, 8, 64]} />
+          <meshBasicMaterial
+            color={color}
+            transparent
+            opacity={usable ? 0.85 : 0.2}
+            toneMapped={false}
+          />
+        </mesh>
+        {/* 环 B */}
+        <mesh ref={ringBRef}>
+          <torusGeometry args={[R * 2.35, 0.012, 8, 64]} />
+          <meshBasicMaterial
+            color={color2}
             transparent
             opacity={usable ? 0.6 : 0.15}
             toneMapped={false}
           />
         </mesh>
+        {/* 微粒 */}
+        <points ref={sparkRef} geometry={sparkGeom}>
+          <pointsMaterial
+            size={0.05}
+            color={color}
+            transparent
+            opacity={usable ? 0.9 : 0.3}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            sizeAttenuation
+            toneMapped={false}
+          />
+        </points>
       </group>
+
       {/* 名字（billboard，始终面向相机） */}
       <group ref={textRef}>
         <Text
-          position={[0, usable ? 1.95 : 1.15, 0]}
-          fontSize={0.42}
+          position={[0, yNode + R + 0.85, 0]}
+          fontSize={usable ? 0.46 : 0.32}
           color={usable ? '#eaf6ff' : '#5e6f88'}
           anchorX="center"
           anchorY="bottom"
-          outlineWidth={0.008}
+          outlineWidth={0.01}
           outlineColor="#03060f"
         >
           {d.name}
         </Text>
         <Text
-          position={[0, usable ? -0.45 : -0.3, 0]}
-          fontSize={0.2}
-          color="#7b8aa8"
+          position={[0, yNode - R - 0.55, 0]}
+          fontSize={0.22}
+          color="#8fa6c4"
           anchorX="center"
           anchorY="top"
-          outlineWidth={0.006}
+          outlineWidth={0.008}
           outlineColor="#03060f"
         >
           {fmtYear(d.start)}
