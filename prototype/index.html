@@ -742,11 +742,14 @@ function renderCatalog(m){
     });
   }
   if(m==='era'){
-    h+=`<div class="cat-sec"><h3>两宋年号<em>${D.eras.length}</em></h3>
-      <div class="sub">宋代共 57 个正年号。仁宗 9 个、理宗 8 个、徽宗 6 个；高宗独用 2 个，绍兴一纪三十二年，为宋朝最久。</div>`;
-    ['北宋','南宋'].forEach(p=>{
-      h+=`<div class="era-group"><div class="gl">${p}　${D.eras.filter(e=>e.polity===p).length} 个</div><div class="era-wrap">`;
-      D.eras.filter(e=>e.polity===p).forEach(e=>{
+    const POL = ['北宋','南宋','辽','金','西夏'];
+    h+=`<div class="cat-sec"><h3>两宋辽金夏年号<em>${D.eras.length}</em></h3>
+      <div class="sub">北宋 35、南宋 22、辽 21、金 21、西夏 32，凡 ${D.eras.length} 个年号。两宋纪年首尾相衔，辽金夏各自纪年以相对照。</div>`;
+    POL.forEach(p=>{
+      const list = D.eras.filter(e=>e.polity===p);
+      if(!list.length) return;
+      h+=`<div class="era-group"><div class="gl">${p}　${list.length} 个</div><div class="era-wrap">`;
+      list.forEach(e=>{
         h+=`<span class="era-chip" onclick="openEra('${e.id}')">${esc(e.name)}<em>${fmtY(e.from)}–${fmtY(e.to)}</em></span>`;
       });
       h+=`</div></div>`;
