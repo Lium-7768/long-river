@@ -9,6 +9,7 @@ import { DYNASTIES, DYNASTIES_WITH_DATA } from '@/content/dynasties';
 import { riverCurve, DYNASTY_T, pointAt } from './curve';
 import { fmtYear } from './year';
 import { computeCamera, type CameraMode } from './cameraModes';
+import { getStarTexture, getStarTextureTight } from './starTexture';
 import { useThemeColor } from '@/lib/use-theme-color';
 
 /**
@@ -64,10 +65,11 @@ function RiverRibbon() {
       <primitive object={lineObj} />
       <points geometry={particleGeom}>
         <pointsMaterial
-          size={0.05}
+          size={0.16}
+          map={getStarTexture()}
           color={new THREE.Color(accent[0], accent[1], accent[2])}
           transparent
-          opacity={0.55}
+          opacity={0.7}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           sizeAttenuation
@@ -194,13 +196,14 @@ function Starfield() {
 
   return (
     <group>
-      {/* 银河带（不受雾影响，加色混合） */}
+      {/* 银河带：双层（柔光晕 + 亮核），圆形贴图 */}
       <points ref={gal} geometry={galaxyGeom} frustumCulled={false}>
         <pointsMaterial
-          size={0.9}
+          size={3.2}
+          map={getStarTexture()}
           vertexColors
           transparent
-          opacity={0.7}
+          opacity={0.5}
           blending={THREE.AdditiveBlending}
           sizeAttenuation
           depthWrite={false}
@@ -208,10 +211,25 @@ function Starfield() {
           fog={false}
         />
       </points>
-      {/* 远景星 */}
+      <points geometry={galaxyGeom} frustumCulled={false}>
+        <pointsMaterial
+          size={1.2}
+          map={getStarTextureTight()}
+          vertexColors
+          transparent
+          opacity={0.9}
+          blending={THREE.AdditiveBlending}
+          sizeAttenuation
+          depthWrite={false}
+          toneMapped={false}
+          fog={false}
+        />
+      </points>
+      {/* 远景星：柔和圆光点（星空顶） */}
       <points ref={far} geometry={farGeom} frustumCulled={false}>
         <pointsMaterial
-          size={0.7}
+          size={1.1}
+          map={getStarTexture()}
           vertexColors
           transparent
           opacity={0.95}
@@ -224,10 +242,11 @@ function Starfield() {
       {/* 近景星 */}
       <points ref={near} geometry={nearGeom} frustumCulled={false}>
         <pointsMaterial
-          size={0.5}
+          size={0.9}
+          map={getStarTexture()}
           vertexColors
           transparent
-          opacity={0.7}
+          opacity={0.8}
           blending={THREE.AdditiveBlending}
           sizeAttenuation
           depthWrite={false}
@@ -394,7 +413,8 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
         {/* 微粒 */}
         <points ref={sparkRef} geometry={sparkGeom}>
           <pointsMaterial
-            size={0.05}
+            size={0.12}
+            map={getStarTextureTight()}
             color={color}
             transparent
             opacity={usable ? 0.9 : 0.3}
