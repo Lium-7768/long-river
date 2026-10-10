@@ -6,7 +6,7 @@ import { SONG_W } from '@/content/profiles/song-w';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { DetailDrawer, type DetailPayload } from '@/components/profile/DetailDrawer';
-import { Territory } from '@/components/profile/Territory';
+import { TerritoryMap } from '@/components/profile/TerritoryMap';
 import type { PersonBrief } from '@/lib/api';
 
 const p = SONG_W;
@@ -138,12 +138,25 @@ export default function Preview() {
 
         {/* ⑤ 疆域地理 */}
         <Block title="疆域地理">
-          <Territory
-            id={p.id}
-            capital={p.territory.capital}
-            extent={p.territory.extent}
-            note={p.territory.note}
-          />
+          <div className="space-y-4">
+            <TerritoryMap dynastyId={p.id} />
+            <div className="space-y-2 text-sm">
+              <div className="flex gap-3">
+                <span className="w-14 shrink-0 text-white/40">都城</span>
+                <span className="text-white/80">{p.territory.capital}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="w-14 shrink-0 text-white/40">疆域</span>
+                <span className="text-white/70">{p.territory.extent}</span>
+              </div>
+              {p.territory.note && (
+                <div className="flex gap-3">
+                  <span className="w-14 shrink-0 text-white/40">备注</span>
+                  <span className="text-white/60">{p.territory.note}</span>
+                </div>
+              )}
+            </div>
+          </div>
         </Block>
       </div>
 
