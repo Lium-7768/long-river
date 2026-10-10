@@ -26,8 +26,8 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
   }, [pid]);
 
   return (
-    <main className="relative z-10 min-h-screen px-6 py-10 text-white">
-      <div className="mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[rgb(var(--lr-surface))] p-6 sm:p-8">
+    <main className="relative z-10 min-h-screen bg-[#05070d] px-6 py-10 text-white [background-image:linear-gradient(rgba(40,52,78,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(40,52,78,0.5)_1px,transparent_1px)] [background-size:44px_44px]">
+      <div className="mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[#0d121e]/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
         <Breadcrumb
           items={[
             { label: '长河', href: '/' },
