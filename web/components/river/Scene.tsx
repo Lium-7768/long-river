@@ -6,6 +6,7 @@ import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { DYNASTIES, DYNASTIES_WITH_DATA } from '@/content/dynasties';
 import { riverCurve, DYNASTY_T, pointAt } from './curve';
+import { computeCamera, type CameraMode } from './cameraModes';
 import { useThemeColor } from '@/lib/use-theme-color';
 
 /**
@@ -75,6 +76,89 @@ function RiverRibbon() {
   );
 }
 
+/* ---------- 星空 ---------- */
+function Starfield() {
+  const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
+  // 两层：远景细密白星 + 近景稀疏彩色星
+  const { farGeom, nearGeom } = useMemo(() => {
+    const make = (count: number, radius: number, spread: number, tint: THREE.Color) => {
+      const pos = new Float32Array(count * 3);
+      const col = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        // 球壳分布，但把中心掏空（避免挡住河道）
+        let x, y, z, r;
+        do {
+          x = (Math.random() - 0.5) * 2;
+          y = (Math.random() - 0.5) * 2;
+          z = (Math.random() - 0.5) * 2;
+          r = Math.hypot(x, y, z);
+        } while (r > 1 || r < 0.25);
+        const nx = x / r,
+          ny = y / r,
+          nz = z / r;
+        const R = radius + Math.random() * spread;
+        pos[i * 3] = nx * R;
+        pos[i * 3 + 1] = ny * R * 0.7 + 2;
+        pos[i * 3 + 2] = nz * R * 3.5 - 30; // 沿河拉长
+        const c = tint
+          .clone()
+          .offsetHSL(
+            (Math.random() - 0.5) * 0.15,
+            (Math.random() - 0.5) * 0.3,
+            (Math.random() - 0.5) * 0.25,
+          );
+        col[i * 3] = c.r;
+        col[i * 3 + 1] = c.g;
+        col[i * 3 + 2] = c.b;
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+      return g;
+    };
+    return {
+      farGeom: make(2600, 60, 60, new THREE.Color(0.75, 0.82, 1)),
+      nearGeom: make(700, 22, 22, new THREE.Color(accent[0], accent[1], accent[2])),
+    };
+  }, [accent]);
+
+  const far = useRef<THREE.Points>(null);
+  const near = useRef<THREE.Points>(null);
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    if (far.current) far.current.rotation.y = t * 0.006;
+    if (near.current) near.current.rotation.y = -t * 0.012;
+  });
+
+  return (
+    <group>
+      <points ref={far} geometry={farGeom}>
+        <pointsMaterial
+          size={0.28}
+          vertexColors
+          transparent
+          opacity={0.85}
+          sizeAttenuation
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+      <points ref={near} geometry={nearGeom}>
+        <pointsMaterial
+          size={0.5}
+          vertexColors
+          transparent
+          opacity={0.6}
+          blending={THREE.AdditiveBlending}
+          sizeAttenuation
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+    </group>
+  );
+}
+
 /* ---------- 单个朝代节点 ---------- */
 function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => void }) {
   const d = DYNASTIES[index];
@@ -87,22 +171,20 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
 
   const t = DYNASTY_T[index];
   const base = useMemo(() => pointAt(t), [t]);
-  const next = useMemo(() => pointAt(Math.min(t + 0.02, 1)), [t]);
-  const tangent = useMemo(() => next.clone().sub(base).normalize(), [base, next]);
 
+  const textRef = useRef<THREE.Group>(null);
   const col = usable ? accent : [0.35, 0.42, 0.55];
   const color = new THREE.Color(col[0], col[1], col[2]);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock, camera }) => {
     if (g.current) g.current.rotation.y = Math.sin(clock.elapsedTime * 0.5 + index) * 0.15;
     if (ring.current) ring.current.rotation.z = clock.elapsedTime * (usable ? 0.6 : 0.15);
+    // 文字始终面向相机（billboard），保证任何角度都可读、不倒
+    if (textRef.current) textRef.current.quaternion.copy(camera.quaternion);
   });
 
-  // 朝向：让碑面大致垂直于河的切线
-  const yaw = Math.atan2(tangent.x, tangent.z);
-
   return (
-    <group position={base} rotation={[0, yaw, 0]}>
+    <group position={base}>
       <group ref={g}>
         {/* 主碑：细高的晶体 */}
         <mesh
@@ -142,27 +224,43 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
           />
         </mesh>
       </group>
-      {/* 名字 */}
-      <Text
-        position={[0, usable ? 1.9 : 1.1, 0]}
-        fontSize={0.42}
-        color={usable ? '#e8f4ff' : '#5e6f88'}
-        anchorX="center"
-        anchorY="bottom"
-        outlineWidth={0.006}
-        outlineColor="#03060f"
-      >
-        {d.name}
-      </Text>
-      <Text position={[0, -0.35, 0]} fontSize={0.2} color="#7b8aa8" anchorX="center" anchorY="top">
-        {`${d.start < 0 ? '前' + -d.start : d.start}`}
-      </Text>
+      {/* 名字（billboard，始终面向相机） */}
+      <group ref={textRef}>
+        <Text
+          position={[0, usable ? 1.95 : 1.15, 0]}
+          fontSize={0.42}
+          color={usable ? '#eaf6ff' : '#5e6f88'}
+          anchorX="center"
+          anchorY="bottom"
+          outlineWidth={0.008}
+          outlineColor="#03060f"
+        >
+          {d.name}
+        </Text>
+        <Text
+          position={[0, usable ? -0.45 : -0.3, 0]}
+          fontSize={0.2}
+          color="#7b8aa8"
+          anchorX="center"
+          anchorY="top"
+          outlineWidth={0.006}
+          outlineColor="#03060f"
+        >
+          {`${d.start < 0 ? '前' + -d.start : d.start}`}
+        </Text>
+      </group>
     </group>
   );
 }
 
 /* ---------- 相机飞行（核心）---------- */
-function CameraRig({ progress }: { progress: React.MutableRefObject<number> }) {
+function CameraRig({
+  progress,
+  mode,
+}: {
+  progress: React.MutableRefObject<number>;
+  mode: CameraMode;
+}) {
   const { camera } = useThree();
   const lookAt = useRef(new THREE.Vector3());
   const pos = useRef(new THREE.Vector3());
@@ -177,24 +275,17 @@ function CameraRig({ progress }: { progress: React.MutableRefObject<number> }) {
     return () => window.removeEventListener('mousemove', onMove);
   }, []);
 
+  const tmp = useRef({ pos: new THREE.Vector3(), look: new THREE.Vector3() });
+
   useFrame((_, dt) => {
     const t = THREE.MathUtils.clamp(progress.current, 0, 1);
-    // 相机位于曲线当前点稍后一点，向前看
-    const p = pointAt(t);
-    const ahead = pointAt(Math.min(t + 0.06, 1));
+    computeCamera(mode, t, mouse.current, tmp.current);
 
-    // 期望位置：河道上方 + 侧向，随鼠标轻微偏移
-    const desired = new THREE.Vector3(
-      p.x + mouse.current.x * 1.4,
-      p.y + 1.6 - mouse.current.y * 0.6,
-      p.z + 3.2,
-    );
     // 缓动（惯性）
     const k = 1 - Math.exp(-6 * dt);
-    pos.current.lerp(desired, k);
+    pos.current.lerp(tmp.current.pos, k);
+    lookAt.current.lerp(tmp.current.look, k);
     camera.position.copy(pos.current);
-
-    lookAt.current.lerp(new THREE.Vector3(ahead.x, ahead.y + 0.6, ahead.z), k);
     camera.lookAt(lookAt.current);
   });
 
@@ -203,9 +294,11 @@ function CameraRig({ progress }: { progress: React.MutableRefObject<number> }) {
 
 export function Scene({
   progress,
+  mode,
   onPick,
 }: {
   progress: React.MutableRefObject<number>;
+  mode: CameraMode;
   onPick: (i: number) => void;
 }) {
   return (
@@ -214,11 +307,12 @@ export function Scene({
       <fog attach="fog" args={['#03060f', 18, 55]} />
       <ambientLight intensity={0.35} />
       <directionalLight position={[5, 10, 5]} intensity={0.7} />
+      <Starfield />
       <RiverRibbon />
       {DYNASTIES.map((_, i) => (
         <DynastyNode key={i} index={i} onPick={onPick} />
       ))}
-      <CameraRig progress={progress} />
+      <CameraRig progress={progress} mode={mode} />
     </>
   );
 }
