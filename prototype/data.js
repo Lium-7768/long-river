@@ -1758,7 +1758,7 @@ const DATA = {
               { id: 'linan-chujiang', name: '临安出降', type: 'event', from: 1276, to: 1276,
                 summary: '谢太后携恭帝奉表降元，被掳北上，后降封寿春郡夫人。' },
             ]},
-          { id: 'zhang-shijie', name: '张世杰', type: 'person', role: '名臣', from: null, to: 1279,
+          { id: 'zhang-shijie', name: '张世杰', type: 'person', role: '名将', from: 1213, to: 1279,
             polity: '南宋', entryPath: '军功',
             summary: '南宋末三杰之一（与文天祥、陆秀夫并称）。拥立二王，转战海上，崖山败后覆舟殉国。',
             children: [
