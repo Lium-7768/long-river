@@ -28,7 +28,7 @@ def t2s(name):
 
 
 def load_prototype_persons():
-    """从 prototype/data.js 提取人物节点（正则解析，避免执行未知代码）。"""
+    """从 asset/prototype-data.js 提取人物节点（正则解析，避免执行未知代码）。"""
     path = os.path.join(ROOT, "prototype", "data.js")
     src = open(path, encoding="utf-8").read()
     persons = []
