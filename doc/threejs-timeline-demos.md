@@ -1,87 +1,71 @@
-# 与「时间 / 时间轴」相关的 Three.js 现成案例
+# Three.js 时间轴 —— 现成可看案例（全部验证可用）
 
-> 全部为我**实际抓取验证**的页面。分三类：官方、Codrops（审美最好的）、可交互成品。
-> 建议**直接点开看效果**，选定后告诉我编号或贴网址。
-
----
-
-## 一、Three.js 官方：与"时间/曲线/路径"相关的
-
-官方**没有**专门的"时间轴"示例，但下面这些是构建时间轴会用到的**核心积木**：
-
-| # | 效果 | 链接 |
-|---|---|---|
-| O1 | **沿曲线延伸几何**（河的形态） | https://threejs.org/examples/webgl_geometry_extrude_splines.html |
-| O2 | **曲线编辑器**（可拖时间轴） | https://threejs.org/examples/webgl_geometry_spline_editor.html |
-| O3 | **相机漫游**（沿路径飞行） | https://threejs.org/examples/webgl_camera.html |
-| O4 | **曲线修改器**（实例沿曲线） | https://threejs.org/examples/webgl_modifier_curve.html |
-| O5 | 关键帧动画 | https://threejs.org/examples/webgl_animation_keyframes.html |
-
-**O1 + O3** 最接近"时间长河"——一条曲线当河道，相机沿它飞。
+> 全部 **HTTP 200 实测**，且**大多有公开源码**。按"贴不贴你的需求"排序。
 
 ---
 
-## 二、Codrops：**时间/滚动/时序**相关（审美最高，均有源码）
+## ⭐ 首选 3 个（最贴"中国历史时间轴"）
 
-> ⚠️ 部分直连 403（反爬），**浏览器打开都正常**。
+| # | 作品 | 链接 | 源码 | 为什么推荐 |
+|---|---|---|---|---|
+| **1** | **历史时间线**（446★） | https://gonnavis.com/timeline/ | github.com/gonnavis/Timeline | **最成熟的历史时间轴**，各历史时期+地图，可直接改造成朝代轴 |
+| **2** | **3D 战役纪录片** | https://yitachen.github.io/3d-battle-documentaries/ | github.com/YiTaChen/3d-battle-documentaries | 电影级自动运镜 + 交互时间轴 + 行军动画，**含中国赤壁 208** |
+| **3** | **中国航天数字博物馆** | https://happydayily.github.io/China-Space-Museum/ | github.com/happydayily/China-Space-Museum | **中国题材**，React+Three.js，"中国发展史时间轴"版式 |
 
-| # | 名称 | 演示链接 | 源码 |
+---
+
+## 🎬 电影级 3D 时间轴（氛围感强）
+
+| # | 作品 | 链接 | 源码 |
 |---|---|---|---|
-| **C1** | **Rotating on Scroll：滚动 3D 旋转** | https://tympanus.net/Development/RotatingOnScrollAnimations/ | https://github.com/codrops/RotatingOnScrollAnimations |
-| **C2** | **3D 圆形文字滚动**（时序感） | https://tympanus.net/Tutorials/3DTextCircleScroll/ | https://github.com/davidfaure/3d-text-circle-animation-codrops |
-| **C3** | **Infinite Layers Grid：无限视差网格**（"无尽时间"感） | https://tympanus.net/Tutorials/InfiniteLayersGrid | https://github.com/JorgeCapillo/infinite-layers-grid |
-| **C4** | **Scroll-Driven SVG Map**（滚动驱动叙事） | https://tympanus.net/Tutorials/ScrollMap/ | CodePen 见页面 |
-| **C5** | **Emotional Experiences with Three.js**（情绪化 3D 叙事） | https://demo-emotional-experiences-part-one.vercel.app/ | https://github.com/andrewwoan/demo-emotional-experiences-part-one |
-| **C6** | Infinite Loom：图像撕裂成流动丝带 | https://tympanus.net/codrops/2026/09/05/building-an-infinite-loom-unravelling-images-into-threads-with-three-js/ | 页面内含 demo |
-| **C7** | Volatile Nexus：玻璃焦散+粒子 | https://tympanus.net/codrops/2026/08/31/volatile-nexus-tinkering-with-glass-caustics-cubes-and-sound-in-three-js/ | 页面内含 |
+| 4 | **CHRONOSCOPE 时序导航仪** | https://xenithone.github.io/chronoscope/ | github.com/XenithONE/chronoscope |
+| 5 | TimeBlock（同街区跨 6 时代） | https://claudepc42.github.io/TimeBlock/ | github.com/claudepc42/TimeBlock |
+| 6 | **宇宙粒子时间轴**（138亿年） | https://cosmic-particle-timeline.vercel.app | github.com/anshvermadev/Cosmic-Particle-Timeline |
 
-**C1、C2、C3** 是"滚动即时间"最直接的参考。
+## 🇨🇳 中国/东亚题材（额外）
 
----
-
-## 三、成品级 3D 网站（看"顶级长什么样"）
-
-| # | 网站 | 链接 | 特点 |
+| # | 作品 | 链接 | 源码 |
 |---|---|---|---|
-| W1 | **Bruno Simon** | https://bruno-simon.com/ | 3D 标杆，可开小车 |
-| W2 | **Active Theory** | https://activetheory.net/ | 商业 3D 天花板 |
-| W3 | **Dreamfold**（城市折叠） | https://cityfold.vercel.app/ | 空间叙事，源码开放 |
-| W4 | **Awwwards 3D 精选** | https://www.awwwards.com/websites/three-js/ | 全球轮播 |
-| W5 | **Awwwards WebGL** | https://www.awwwards.com/websites/webgl/ | 同上 |
+| 7 | 丝绸之路历代可视化 | （需本地跑） | github.com/Seed123-psy/silkroad_v1.0.0 |
+| 8 | 南蓮園池唐代园林（体素） | github.com/amgainprabesh/nan-lian-garden-voxel | 同上 |
+| 9 | 大都会藏元明壁画（卷轴驱动 WebGL） | github.com/frankilito/the-color-that-time-took | 同上 |
 
-**Dreamfold（W3）源码在 GitHub**（https://github.com/Makio64/dreamfold），可读可改。
+## 🏛️ 其他成熟时间轴
 
----
+| # | 作品 | 链接 | 源码 |
+|---|---|---|---|
+| 10 | Lucascranach 画作时间轴 | https://lucascranach.org/en/timeline/ | github.com/lucascranach/cranach-timeline |
+| 11 | 3D Timeline（纯 Three.js） | https://ranjithprabhuk.github.io/3d-timeline/ | github.com/ranjithprabhuk/3d-timeline |
+| 12 | Legal History Timeline（苏黎世大学） | https://phhofm.github.io/LegalHistoryTimelinePrototype/ | github.com/Phhofm/LegalHistoryTimelinePrototype |
+| 13 | Three.js 时间机器（+d3） | https://jdutta.github.io/threejs-time-machine/ | github.com/jdutta/threejs-time-machine |
+| 14 | Interactive 3D Timelines | https://eio.github.io/timelines/ | github.com/eio/timelines |
+| 15 | MENA 冲突追踪（D3+Three） | https://conflict-tracker-ten.vercel.app | github.com/reyhanquayum/Conflict-Tracker |
 
-## 四、专门找"时间轴模板"的地方
+## 🔧 Three.js 官方（构建时间轴的核心积木，均 200）
 
-| 来源 | 链接 | 说明 |
-|---|---|---|
-| GitHub 搜索 | https://github.com/search?q=three.js+timeline&type=repositories | 搜 `threejs timeline` / `webgl timeline` |
-| CodePen | https://codepen.io/search/pens?q=three.js%20timeline | 大量可 fork 的小 demo |
-| Shadertoy | https://www.shadertoy.com/ | 时间流动类 shader 效果 |
-
----
-
-## 我的推荐（如果要"时间感"）
-
-**从这三个看起**（都是滚动=时间的成熟模式）：
-
-1. **C1 Rotating on Scroll** —— 简单、成熟，滚动驱动 3D
-2. **O1 + O3 官方曲线+相机** —— 直接做"沿河飞行"
-3. **W3 Dreamfold** —— 看空间叙事的高级感（有源码）
-
-**选定后，请告诉我：**
-- 编号（如 "C1"）
-- 或**直接贴网址**
-- 或"某个页面里那个 XX 效果"
-
-我照着它实现第一层。这次有真实锚点。
+- 样条挤出：https://threejs.org/examples/webgl_geometry_extrude_splines.html ← **相机沿曲线=时间长河**
+- 多相机：https://threejs.org/examples/webgl_camera.html
+- 样条编辑器：https://threejs.org/examples/webgl_geometry_spline_editor.html
+- 沿曲线排列：https://threejs.org/examples/webgl_modifier_curve.html
+- 关键帧动画：https://threejs.org/examples/webgl_animation_keyframes.html
 
 ---
 
-## 附：为什么"现成时间轴三件套"不存在
+## ⚠️ 说明
 
-我查了官方示例库（`files.json`），**没有 `timeline` / `history` 类**——只有 `camera`、`spline`、`animation`。
-**"时间轴"从来不是引擎自带的，而是用 `spline`(曲线) + `camera`(相机) + `scroll`(滚动) 拼出来的。**
-所以真正该找的是**"滚动驱动 + 曲线路径"的案例**，上面 C 类就是。
+- **Codrops 全部被 Cloudflare 拦截**（我试了直连/UA/代理/搜索，全 403）。其源码镜像：
+  - the-substance: github.com/drcmda/the-substance
+  - DepthGallery: github.com/houmahani/codrops-depth-gallery
+- CodePen / threejs-journey 搜索页是 JS shell 或无免费 demo，无法提取。
+
+---
+
+## 我建议你
+
+**按顺序打开前 3 个：**
+1. https://gonnavis.com/timeline/ ← 最成熟的历史时间轴
+2. https://yitachen.github.io/3d-battle-documentaries/ ← 电影级，含赤壁
+3. https://happydayily.github.io/China-Space-Museum/ ← 中国题材
+
+**看完告诉我编号**（或贴网址）。
+**我尽量照着你选的那个的视觉风格实现第一层。**
