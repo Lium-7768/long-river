@@ -77,9 +77,13 @@ export function RiverExperience() {
       </Canvas>
 
       {/* ---------- 覆盖层（DOM，中文绝对清晰）---------- */}
-      {/* 顶部标题 */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-center justify-between px-8 py-6">
+      {/* 左上角标题 */}
+      <div className="pointer-events-none absolute left-0 top-0 px-8 py-6">
         <span className="text-xl font-semibold tracking-[0.4em] text-white/90">长河</span>
+      </div>
+
+      {/* 右上角：视角切换 + 当前朝代信息 */}
+      <div className="absolute right-8 top-6 flex flex-col items-end gap-5">
         <div className="pointer-events-auto flex items-center gap-2">
           <button
             onClick={() => setMode('fly')}
@@ -94,26 +98,23 @@ export function RiverExperience() {
             侧览全景
           </button>
         </div>
-      </div>
 
-      {/* 左侧：当前朝代大字 */}
-      <div
-        key={activeIdx}
-        className="pointer-events-none absolute bottom-16 left-10 max-w-md animate-[fadeUp_0.6s_ease]"
-      >
-        <div className="text-[13px] tracking-[0.3em] text-sky-300/70">
-          {fmtRange(cur.start, cur.end)}
+        {/* 当前朝代：右上，右对齐 */}
+        <div key={activeIdx} className="pointer-events-none animate-[fadeUp_0.6s_ease] text-right">
+          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">
+            {fmtRange(cur.start, cur.end)}
+          </div>
+          <h2 className="mt-2 text-6xl font-semibold leading-none tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,180,255,0.35)]">
+            {cur.name}
+          </h2>
+          <p className="mt-2 text-sm tracking-wide text-white/50">
+            {hasData(cur.id) ? `${cur.note} · 点击节点进入` : cur.note}
+          </p>
         </div>
-        <h2 className="mt-3 text-7xl font-semibold leading-none tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,180,255,0.35)]">
-          {cur.name}
-        </h2>
-        <p className="mt-3 text-sm tracking-wide text-white/50">
-          {hasData(cur.id) ? `${cur.note} · 点击节点进入` : cur.note}
-        </p>
       </div>
 
       {/* 右侧：进度 */}
-      <div className="pointer-events-none absolute right-10 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
+      <div className="pointer-events-none absolute bottom-24 right-10 flex flex-col items-center gap-3">
         <span className="text-xs tabular-nums text-white/40">{pct}%</span>
         <div className="h-48 w-px bg-white/15">
           <div
