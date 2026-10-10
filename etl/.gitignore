@@ -18,3 +18,5 @@ build/works.jsonl
 #   build/offices.json build/places.json
 #   build/enriched.jsonl build/additions_prom5.json
 __pycache__/
+build/merged_persons.jsonl
+build/kinship_edges.jsonl

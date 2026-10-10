@@ -139,3 +139,46 @@ python3 etl/inspect_schema.py          # 核对表结构（本文档依据）
 python3 etl/build_from_cbdb.py         # 生成 etl/build/*.jsonl
 python3 etl/audit_against_prototype.py # 与 prototype/data.js 校核
 ```
+
+## 8. 合并阶段（硬事实 + 散文）
+
+`etl/merge_dataset.py` 产出 `merged_persons.jsonl`——可直接入库的完整人物库。
+
+### 合并规则
+| 字段 | 来源 | 说明 |
+|---|---|---|
+| 生卒年 | **CBDB** | 原型值与 CBDB 差 >1 年时，原型值作为 `refs` 并列（不覆盖） |
+| 字号/号/谥 | **CBDB** | CBDB 缺时回退原型值 |
+| 亲属/官职/入仕数 | **CBDB** | 记录在 `n_kin/n_office/n_entry` |
+| 籍贯 | **CBDB** | `addr` 数组 |
+| summary（散文） | **原型** | CBDB 无散文，仅有硬事实；原型有则挂上 |
+| id | 原型优先 | CBDB 同名异人时仅首个占用原型 id，其余生成 `姓拼音-cbdbid` |
+
+### 结果（`python3 etl/validate_merged.py`）
+
+```
+记录数: 86655
+✓ 全部通过（id 唯一 / 枚举合法 / 时间合理 / 繁简一致）
+有 summary: 2197   有字: 17686   有号谥: 3618
+有官职: 31806      有亲属: 37754   带 refs: 86655
+```
+
+### 亲属关系表
+`etl/build_kinship.py` 输出 `kinship_edges.jsonl`：132,925 条边（含反向），
+把 CBDB 亲属关系映射到本项目 person id。苏轼→苏洵/苏迈/苏过 均正确解析。
+
+### 清洗规则
+- **女性消歧名**：CBDB `赵氏(赵炅女1)` → 显示名 `赵氏`，原值存 `raw_name`
+- **生年>卒年**（CBDB 源录入错误，2 例）：标 `approx:true` + ref 注记，不静默丢弃
+- **政权误标**（如唐人标五代、元人标宋，2 例）：生卒完全落在 830–1300 外者剔除，计入 `out_of_scope`
+- **CBDB 繁体** → 简体（opencc t2s），保护专名 毕昇/赵孟頫/管道昇
+
+## 9. 尚未执行：写入 prototype/data.js
+
+合并集已就绪，但**尚未灌入 `prototype/data.js`**——因为 A/B/C 呈现策略待定。
+候选方案：
+- **A** 全部 86,655 人入库，用 `prominence` 分层控制 UI 呈现密度（推荐）
+- **B** 仅导入 `prominence>=4`（约 1.0 万人）
+- **C** 仅用 CBDB 校核现有 2,943 人，不扩量
+
+`merged_persons.jsonl` 支持任一方案：`merge_dataset.py --min-prom N` 可调阈值。
