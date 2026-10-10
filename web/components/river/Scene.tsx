@@ -293,7 +293,7 @@ function Starfield() {
   );
 }
 
-/* ---------- 单个朝代节点：能量晶体 ---------- */
+/* ---------- 单个朝代节点：光点 + 光晕（极简） ---------- */
 function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => void }) {
   const d = DYNASTIES[index];
   const usable = hasData(d.id);
@@ -302,92 +302,73 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
   const [hover, setHover] = useState(false);
 
   const coreRef = useRef<THREE.Mesh>(null);
-  const shellRef = useRef<THREE.Mesh>(null);
-  const ringARef = useRef<THREE.Mesh>(null);
-  const ringBRef = useRef<THREE.Mesh>(null);
-  const beamRef = useRef<THREE.Mesh>(null);
+  const haloRef = useRef<THREE.Mesh>(null);
+  const halo2Ref = useRef<THREE.Mesh>(null);
+  const glowRef = useRef<THREE.Sprite>(null);
   const textRef = useRef<THREE.Group>(null);
-  const sparkRef = useRef<THREE.Points>(null);
+  const dustRef = useRef<THREE.Points>(null);
 
   const t = DYNASTY_T[index];
   const base = useMemo(() => pointAt(t), [t]);
-  const col = usable ? accent : [0.35, 0.42, 0.55];
+  const col = usable ? accent : [0.4, 0.46, 0.58];
   const color = new THREE.Color(col[0], col[1], col[2]);
   const color2 = new THREE.Color(accent2[0], accent2[1], accent2[2]);
-  const yNode = usable ? 1.0 : 0.5;
-  const R = usable ? 0.55 : 0.3;
+  const y = usable ? 1.1 : 0.6;
+  const R = usable ? 0.16 : 0.1;
 
-  // 晶体周围的发光微粒
-  const sparkGeom = useMemo(() => {
-    const count = usable ? 90 : 20;
+  // 周围漂浮的尘埃微粒
+  const dustGeom = useMemo(() => {
+    const count = usable ? 60 : 14;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const a = Math.random() * Math.PI * 2;
       const b = Math.acos(Math.random() * 2 - 1);
-      const r = R * (1.6 + Math.random() * 1.8);
+      const r = (usable ? 0.7 : 0.4) + Math.random() * (usable ? 1.2 : 0.5);
       pos[i * 3] = Math.sin(b) * Math.cos(a) * r;
-      pos[i * 3 + 1] = Math.cos(b) * r + yNode;
+      pos[i * 3 + 1] = Math.cos(b) * r + y;
       pos[i * 3 + 2] = Math.sin(b) * Math.sin(a) * r;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     return g;
-  }, [R, yNode, usable]);
+  }, [usable, y]);
 
   useFrame(({ clock, camera }) => {
     const t0 = clock.elapsedTime;
-    const pulse = usable ? 1 + Math.sin(t0 * 2 + index) * 0.12 : 1;
-    // 核心晶体：缓慢自转 + 脉冲缩放
+    // 核心光球：轻微脉冲
     if (coreRef.current) {
-      coreRef.current.rotation.y = t0 * (usable ? 0.5 : 0.1) + index;
-      coreRef.current.rotation.x = Math.sin(t0 * 0.4 + index) * 0.3;
-      coreRef.current.scale.setScalar(pulse);
+      const sc = 1 + Math.sin(t0 * 2 + index) * 0.15 + (hover ? 0.6 : 0);
+      coreRef.current.scale.setScalar(sc);
     }
-    // 外层线框壳反向转
-    if (shellRef.current) {
-      shellRef.current.rotation.y = -t0 * (usable ? 0.3 : 0.08) - index;
-      shellRef.current.rotation.z = t0 * 0.2;
+    // 光晕缓慢扩张淡出（呼吸）
+    if (haloRef.current) {
+      const k = (t0 * 0.35 + index * 0.5) % 1; // 0..1 循环
+      const sc = 1 + k * (usable ? 2.6 : 1.5);
+      haloRef.current.scale.setScalar(sc);
+      const m = haloRef.current.material as THREE.MeshBasicMaterial;
+      m.opacity = (1 - k) * (usable ? 0.45 : 0.12);
     }
-    // 两个环：不同倾角、不同转速
-    if (ringARef.current) {
-      ringARef.current.rotation.z = t0 * (usable ? 0.7 : 0.15);
-      ringARef.current.rotation.x = Math.PI / 2.4;
+    if (halo2Ref.current) {
+      const k = (((t0 * 0.35 + index * 0.5) % 1) + 0.5) % 1;
+      const sc = 1 + k * (usable ? 2.6 : 1.5);
+      halo2Ref.current.scale.setScalar(sc);
+      const m = halo2Ref.current.material as THREE.MeshBasicMaterial;
+      m.opacity = (1 - k) * (usable ? 0.45 : 0.12);
     }
-    if (ringBRef.current) {
-      ringBRef.current.rotation.z = -t0 * (usable ? 0.5 : 0.1);
-      ringBRef.current.rotation.x = Math.PI / 1.6;
-      ringBRef.current.rotation.y = t0 * 0.3;
+    // 外围柔光 Sprite 面向相机
+    if (glowRef.current) {
+      const m = glowRef.current.material as THREE.SpriteMaterial;
+      m.opacity = usable ? (hover ? 0.95 : 0.7) : 0.15;
+      m.rotation = t0 * 0.1;
     }
-    // 光柱呼吸
-    if (beamRef.current) {
-      const m = beamRef.current.material as THREE.MeshBasicMaterial;
-      m.opacity = (usable ? 0.28 : 0.08) * (0.7 + Math.sin(t0 * 2.2 + index) * 0.3);
-    }
-    // 微粒旋转
-    if (sparkRef.current) sparkRef.current.rotation.y = t0 * 0.25 + index;
-    // 文字面向相机
+    if (dustRef.current) dustRef.current.rotation.y = t0 * 0.2 + index;
     if (textRef.current) textRef.current.quaternion.copy(camera.quaternion);
   });
 
   return (
     <group position={base}>
-      {/* 向下光柱：连到河面 */}
-      <mesh ref={beamRef} position={[0, yNode / 2, 0]}>
-        <cylinderGeometry args={[R * 0.28, R * 0.9, yNode, 16, 1, true]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={usable ? 0.28 : 0.08}
-          side={THREE.DoubleSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </mesh>
-
-      {/* 可交互主晶体（含外层线框 + 内发光核心） */}
       <group
-        position={[0, yNode, 0]}
+        position={[0, y, 0]}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
           e.stopPropagation();
           setHover(true);
@@ -402,57 +383,60 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
           if (usable) onPick(index);
         }}
       >
-        {/* 内发光核心 */}
+        {/* 核心光球 */}
         <mesh ref={coreRef}>
-          <octahedronGeometry args={[R, 0]} />
-          <meshStandardMaterial
+          <sphereGeometry args={[R, 24, 24]} />
+          <meshBasicMaterial color={color} toneMapped={false} />
+        </mesh>
+
+        {/* 外围柔光（用星空贴图做 Sprite，始终面向相机） */}
+        <sprite ref={glowRef} scale={[usable ? 2.4 : 1.2, usable ? 2.4 : 1.2, 1]}>
+          <spriteMaterial
+            map={getStarTexture()}
             color={color}
-            emissive={color}
-            emissiveIntensity={usable ? (hover ? 2.2 : 1.1) : 0.15}
-            roughness={0.1}
-            metalness={0.9}
-            toneMapped={false}
-          />
-        </mesh>
-        {/* 外层线框壳 */}
-        <mesh ref={shellRef}>
-          <octahedronGeometry args={[R * 1.5, 0]} />
-          <meshBasicMaterial
-            color={color2}
-            wireframe
             transparent
-            opacity={usable ? 0.5 : 0.12}
+            opacity={usable ? 0.7 : 0.15}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
             toneMapped={false}
           />
-        </mesh>
-        {/* 环 A */}
-        <mesh ref={ringARef}>
-          <torusGeometry args={[R * 1.9, 0.018, 8, 64]} />
+        </sprite>
+
+        {/* 扩散光晕环 1 */}
+        <mesh ref={haloRef} rotation={[Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[R * 1.5, R * 1.75, 48]} />
           <meshBasicMaterial
             color={color}
             transparent
-            opacity={usable ? 0.85 : 0.2}
+            opacity={0.4}
+            side={THREE.DoubleSide}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
             toneMapped={false}
           />
         </mesh>
-        {/* 环 B */}
-        <mesh ref={ringBRef}>
-          <torusGeometry args={[R * 2.35, 0.012, 8, 64]} />
+        {/* 扩散光晕环 2（错相位） */}
+        <mesh ref={halo2Ref} rotation={[Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[R * 1.5, R * 1.75, 48]} />
           <meshBasicMaterial
             color={color2}
             transparent
-            opacity={usable ? 0.6 : 0.15}
+            opacity={0.4}
+            side={THREE.DoubleSide}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
             toneMapped={false}
           />
         </mesh>
-        {/* 微粒 */}
-        <points ref={sparkRef} geometry={sparkGeom}>
+
+        {/* 尘埃微粒 */}
+        <points ref={dustRef} geometry={dustGeom}>
           <pointsMaterial
-            size={0.12}
+            size={0.09}
             map={getStarTextureTight()}
             color={color}
             transparent
-            opacity={usable ? 0.9 : 0.3}
+            opacity={usable ? 0.85 : 0.25}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             sizeAttenuation
@@ -461,11 +445,11 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
         </points>
       </group>
 
-      {/* 名字（billboard，始终面向相机） */}
+      {/* 名字（billboard） */}
       <group ref={textRef}>
         <Text
-          position={[0, yNode + R + 0.85, 0]}
-          fontSize={usable ? 0.46 : 0.32}
+          position={[0, y + R + (usable ? 0.95 : 0.6), 0]}
+          fontSize={usable ? 0.5 : 0.34}
           color={usable ? '#eaf6ff' : '#5e6f88'}
           anchorX="center"
           anchorY="bottom"
@@ -475,7 +459,7 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
           {d.name}
         </Text>
         <Text
-          position={[0, yNode - R - 0.55, 0]}
+          position={[0, y - R - (usable ? 0.7 : 0.45), 0]}
           fontSize={0.22}
           color="#8fa6c4"
           anchorX="center"
