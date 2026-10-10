@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
-import { KinshipGraph } from '@/components/profile/KinshipGraph';
+import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
 
 export default function PersonPage({ params }: { params: Promise<{ id: string; pid: string }> }) {
@@ -90,7 +90,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
 
             {p.kinships.length > 0 && (
               <Section title={`亲属关系（${p.kinships.length}）`}>
-                <KinshipGraph
+                <KinshipGraph3D
                   kinships={p.kinships}
                   onPick={(id, name) => setDrawer({ id, name })}
                 />
