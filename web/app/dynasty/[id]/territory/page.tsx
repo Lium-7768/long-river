@@ -29,28 +29,33 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
 
         {cov ? (
           <>
-            <TerritoryMap dynastyId={id} height={520} />
-            <div className="grid gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm sm:grid-cols-3">
-              {profile && (
-                <>
-                  <div>
-                    <div className="text-xs text-white/40">都城</div>
-                    <div className="mt-1 text-white/80">{profile.territory.capital}</div>
+            {/* 描述信息放上面 */}
+            {profile && (
+              <div className="grid gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm sm:grid-cols-3">
+                <div>
+                  <div className="text-xs text-white/40">都城</div>
+                  <div className="mt-1 text-white/80">{profile.territory.capital}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-white/40">疆域范围</div>
+                  <div className="mt-1 text-white/70">{profile.territory.extent}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-white/40">覆盖省份</div>
+                  <div className="mt-1 text-white/70">{cov.provinces.length} 个（示意）</div>
+                </div>
+                {profile.territory.note && (
+                  <div className="sm:col-span-3">
+                    <div className="text-xs text-white/40">备注</div>
+                    <div className="mt-1 text-white/70">{profile.territory.note}</div>
                   </div>
-                  <div>
-                    <div className="text-xs text-white/40">疆域范围</div>
-                    <div className="mt-1 text-white/70">{profile.territory.extent}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-white/40">覆盖省份</div>
-                    <div className="mt-1 text-white/70">{cov.provinces.length} 个（示意）</div>
-                  </div>
-                </>
-              )}
-            </div>
-            {profile?.territory.note && (
-              <p className="text-sm leading-relaxed text-white/55">※ {profile.territory.note}</p>
+                )}
+              </div>
             )}
+
+            {/* 地图放最下面 */}
+            <TerritoryMap dynastyId={id} height={520} />
+
             <p className="text-xs leading-relaxed text-white/30">
               关于本图：以现代省份轮廓近似古代疆域范围，仅作示意，非精确历史地理边界。
               真实历史边界需 CHGIS 等专业数据源。

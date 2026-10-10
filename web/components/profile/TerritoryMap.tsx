@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -108,16 +108,13 @@ function MapScene({ features, activeSet }: { features: GeoFeature[]; activeSet: 
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
   const inactive = useMemo(() => new THREE.Color('#1a2436'), []);
   const activeColor = useMemo(() => new THREE.Color(accent[0], accent[1], accent[2]), [accent]);
-  const grp = useRef<THREE.Group>(null);
 
-  useFrame((_, dt) => {
-    if (grp.current) grp.current.rotation.z += dt * 0.02;
-  });
+  // 不再自转：保持稳定朝向，便于辨认疆域
 
   // 整体：把 XY 平面转到躺平（-90° X），再加一点倾斜
   return (
     <group scale={1}>
-      <group ref={grp}>
+      <group>
         {features.map((f) => (
           <ProvinceMesh
             key={f.properties.name}
