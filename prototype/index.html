@@ -236,6 +236,18 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
   .hint{display:none}
   .card{width:150px}
 }
+
+/* ---- 组导航条（卡片过多时出现）---- */
+#gnav{ position:fixed; left:0; right:0; top:96px; z-index:40; display:none;
+  gap:8px; padding:0 40px; flex-wrap:wrap; justify-content:flex-start; }
+#gnav.on{ display:flex; }
+.gtab{ --c:#e8c98a; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10);
+  color:#8a949c; font:500 12px/1 var(--serif); letter-spacing:.06em;
+  padding:7px 12px; border-radius:999px; cursor:pointer; transition:all .18s; }
+.gtab em{ font-style:normal; opacity:.5; margin-left:5px; font-size:10px; }
+.gtab:hover{ color:#cdd6dc; border-color:rgba(255,255,255,.2); }
+.gtab.on{ color:#0a0d10; background:var(--c); border-color:var(--c); }
+.gtab.on em{ opacity:.7; }
 </style>
 </head>
 <body>
@@ -294,16 +306,18 @@ const ROOT = (window.LONG_RIVER_DATA||{}).root;
 const COLOR = {
   dynasty:'#5fd6bd', chaos:'#d9a15f', regime:'#d9b47a',
   person:'#e8c98a', event:'#e08a7a', work:'#93a8e8',
-  school:'#a8d8b0', reform:'#d98fb0', treaty:'#8fd0d8', office:'#b8b0d8'
+  school:'#a8d8b0', reform:'#d98fb0', treaty:'#8fd0d8', office:'#b8b0d8',
+  craft:'#c9b8a0'
 };
 const TYPECN = {dynasty:'朝代',chaos:'乱世',regime:'政权',
   person:'人物',event:'事件',work:'作品',
-  school:'学派',reform:'新法',treaty:'盟约',office:'制度'};
+  school:'学派',reform:'新法',treaty:'盟约',office:'制度',craft:'工艺'};
 const BODY = {
   person:'姓名字号 · 生卒 · 郡望与家族 · 入仕途径 · 仕途迁转 · 代表作品 · 参与事件 · 人际关系。',
   event:'年份 · 地点 · 参与人物 · 起因经过影响 · 相关作品 · 因果边。',
   work:'类型 · 作者 · 创作年份 · 原文或摘录 · 创作背景 · 关联人物与事件。',
   regime:'起止年 · 都城 · 帝王纪年轴 · 重大事件 · 代表人物。',
+  craft:'产地 · 兴盛年代 · 工艺特征 · 代表器物 · 相关人物与文献 · 流传。',
   dynasty:'起止年 · 都城 · 分期 · 帝王 · 重大事件 · 代表人物 · 同期并立政权。',
   chaos:'并立政权 · 存续跨度 · 更替关系 · 同期中原王朝。',
   school:'宗旨 · 师承边 · 代表人物 · 代表著作 · 与其他学派的分野。',
@@ -321,6 +335,7 @@ const fam  = document.getElementById('fan');
 const TIERS = ROOT.children;
 const NW = TIERS.length;
 let active = null, leaf = null;
+let currentTier = null, activeGroup = 0;
 
 /* ---------- 一级刻度 ---------- */
 TIERS.forEach((tier,i)=>{
@@ -346,10 +361,10 @@ function anchorPx(tier){
 }
 
 // 分组顺序 + 组名：把一堆条目按类型切成有标题的段
-const GROUP_ORDER = ['regime','person','event','work','school','reform','treaty','office'];
+const GROUP_ORDER = ['regime','person','event','craft','work','school','reform','treaty','office'];
 const GROUP_NAME  = {
   regime:'政权', person:'人物', event:'事件', work:'作品',
-  school:'学派', reform:'新法', treaty:'盟约', office:'制度'
+  school:'学派', reform:'新法', treaty:'盟约', office:'制度', craft:'工艺'
 };
 // 人物过多时按角色再分：帝王 / 名臣 / 文人 / 学者 / 艺技
 const ROLE_ORDER = ['帝王','名臣','文人','学者','艺技'];
@@ -390,35 +405,71 @@ function buildFan(tier){
     return;
   }
 
-  // 预估总高（用于光柱与自适应缩放）
+  // ---- 组导航：卡片过多时，一次只显示一组，其余靠顶部导航切换 ----
+  // 总卡片数超过一屏可容纳量时，进入"分组浏览"模式
+  const totalCards = groups.reduce((a,g)=>a+g.items.length,0);
+  const oneScreen = Math.max(6, Math.floor((window.innerHeight-260)/ROW_H)) * PER;
+  const groupedMode = totalCards > oneScreen;
+
+  // 记住当前 tier 的选中组
+  if(currentTier!==tier){ currentTier=tier; activeGroup=0; }
+  if(groupedMode){
+    buildGroupNav(groups, tier);
+    // 只渲染 activeGroup
+    const g = groups[Math.min(activeGroup, groups.length-1)];
+    renderGroups([g], ax, tier);
+  } else {
+    clearGroupNav();
+    renderGroups(groups, ax, tier);
+  }
+  fam.classList.add('on');
+}
+
+// ---------- 组导航条 ----------
+function buildGroupNav(groups, tier){
+  let nav = document.getElementById('gnav');
+  if(!nav){ nav=document.createElement('div'); nav.id='gnav'; fam.parentNode.insertBefore(nav, fam); }
+  nav.innerHTML='';
+  groups.forEach((g,i)=>{
+    const b=document.createElement('button');
+    b.className='gtab'+(i===activeGroup?' on':'');
+    b.style.setProperty('--c', COLOR[g.type]||COLOR.gold);
+    b.innerHTML=`${g.name}<em>${g.items.length}</em>`;
+    b.onclick=e=>{ e.stopPropagation(); activeGroup=i; buildFan(tier); };
+    nav.appendChild(b);
+  });
+  nav.classList.add('on');
+}
+function clearGroupNav(){
+  const nav=document.getElementById('gnav');
+  if(nav) nav.classList.remove('on');
+}
+
+// ---------- 渲染若干组 ----------
+function renderGroups(groups, ax, tier){
+  fam.innerHTML='';
+  groups = groups.filter(g=>g.items.length);
+  if(!groups.length) return;
+  const CARD_W=172, GAP=18, ROW_H=138, HEAD_H=46;
+  const availW = Math.max(window.innerWidth*0.62, 640) - 40;
+  const PER = Math.max(3, Math.floor((availW + GAP) / (CARD_W + GAP)));
+  // 组内超过 3 行时，压紧行距以适应
   let totalRows = 0;
   groups.forEach(g=> totalRows += 1 + Math.ceil(g.items.length/PER));
   const totalH = totalRows*ROW_H + groups.length*HEAD_H + 40;
 
-  // ---- 纵向适配：仅当仍放不下时才轻微缩放（下限 0.62，保证可读）----
   const avail = window.innerHeight - 170;
   const fit = Math.min(1, Math.max(0.62, avail / Math.max(totalH, 1)));
   fam.style.transformOrigin = `0 0`;
   fam.style.transform = fit < 1 ? `scale(${fit.toFixed(3)})` : '';
-  if(fit < 0.999) {
-    // 缩放后仍超出 → 允许纵向拖动（提示）
-    fam.dataset.scaled = '1';
-  } else {
-    delete fam.dataset.scaled;
-  }
 
   const pil = document.createElement('div');
-  pil.className='pillar'; pil.style.left = ax+'px';
-  pil.style.height = totalH+'px';
+  pil.className='pillar'; pil.style.left = ax+'px'; pil.style.height = totalH+'px';
   fam.appendChild(pil);
 
-  let cursorY = 42;        // 当前行的纵向位置
-  let cardIdx = 0;
-
+  let cursorY = 42, cardIdx = 0;
   groups.forEach(g=>{
     const col = COLOR[g.type] || COLOR.gold;
-
-    // 组标题：贴着左缘，带一条短横线
     const head = document.createElement('div');
     head.className = 'ghead';
     head.style.setProperty('--c', col);
@@ -427,48 +478,32 @@ function buildFan(tier){
     head.innerHTML = `<i></i>${g.name}<em>${g.items.length}</em>`;
     fam.appendChild(head);
     cursorY += HEAD_H;
-
-    // 组内卡片
     g.items.forEach((k,i)=>{
-      const row = Math.floor(i/PER);
-      const inRow = i%PER;
+      const row = Math.floor(i/PER), inRow = i%PER;
       const cnt = Math.min(PER, g.items.length - row*PER);
       const c = COLOR[k.type]||COLOR.gold;
       const y = cursorY + row*ROW_H;
-
       const card = document.createElement('div');
-      card.className='card';
-      card.style.setProperty('--c',c);
+      card.className='card'; card.style.setProperty('--c',c);
       card.innerHTML = `<div class="ct">${TYPECN[k.type]||'条目'}</div>
         <div class="cn">${k.name}</div>
         <div class="cy">${(k.from==null&&k.to==null)?'':fmtY(k.from)+'–'+fmtY(k.to)}</div>`;
       card.addEventListener('click', e=>{ e.stopPropagation(); openDrawer(k); });
-
       const offInRow = (inRow - (cnt-1)/2)*(CARD_W+GAP);
       const rowBias  = row*26;
       const x = ax + offInRow + rowBias - CARD_W/2;
-
-      card.style.left = x+'px';
-      card.style.top  = y+'px';
-
+      card.style.left = x+'px'; card.style.top = y+'px';
       const th=document.createElement('div');
-      th.className='thread';
-      th.style.setProperty('--c',c);
+      th.className='thread'; th.style.setProperty('--c',c);
       const tx = Math.min(ax, x+CARD_W/2);
-      th.style.left = tx+'px';
-      th.style.top  = (y+20)+'px';
+      th.style.left = tx+'px'; th.style.top = (y+20)+'px';
       th.style.width = Math.abs((x+CARD_W/2)-ax)+'px';
-      fam.appendChild(th);
-      fam.appendChild(card);
-
+      fam.appendChild(th); fam.appendChild(card);
       setTimeout(()=>card.classList.add('in'), 10 + cardIdx*22);
       cardIdx++;
     });
-
     cursorY += Math.ceil(g.items.length/PER)*ROW_H + 14;
   });
-
-  fam.classList.add('on');
 }
 
 /* ---------- 进入 / 复位 ---------- */
