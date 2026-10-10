@@ -14,7 +14,7 @@ export default function Page({ params }: { params: Promise<{ id: string; slug: s
 
   if (!dynasty || !s) {
     return (
-      <div className="relative z-10 flex min-h-screen items-center justify-center bg-[#03060f] text-white/50">
+      <div className="flex min-h-screen items-center justify-center bg-[#03060f] text-white/50">
         未找到「{name}」
       </div>
     );

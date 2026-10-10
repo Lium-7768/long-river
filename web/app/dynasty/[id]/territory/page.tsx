@@ -13,7 +13,7 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
   if (!dynasty) notFound();
 
   return (
-    <main className="relative z-10 min-h-screen bg-[#03060f] px-6 py-6 text-white">
+    <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-5xl space-y-6">
         <Breadcrumb
           items={[

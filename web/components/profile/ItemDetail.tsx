@@ -28,7 +28,7 @@ export function ItemDetail({
 }) {
   const k = KIND[data.kind];
   return (
-    <main className="relative z-10 min-h-screen bg-[#03060f] px-6 py-6 text-white">
+    <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-3xl space-y-6">
         <Breadcrumb
           items={[

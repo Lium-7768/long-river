@@ -12,7 +12,7 @@ export default async function DynastyPage({ params }: { params: Promise<{ id: st
   const profile = getProfile(id);
   if (!profile) {
     return (
-      <main className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-4 bg-[#03060f] px-6 text-white">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#03060f] px-6 text-white">
         <h1 className="text-5xl font-semibold">{dynasty.name}</h1>
         <p className="text-white/50">该朝代的档案还在整理中。</p>
         <Link
