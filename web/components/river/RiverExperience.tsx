@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Scene } from './Scene';
+import type { CameraMode } from './cameraModes';
 import { DYNASTIES, DYNASTIES_WITH_DATA, type Dynasty } from '@/content/dynasties';
 
 const hasData = (id: string) => DYNASTIES_WITH_DATA.has(id);
@@ -19,6 +20,7 @@ export function RiverExperience() {
   const target = useRef(0);
   const [picked, setPicked] = useState<Dynasty | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [mode, setMode] = useState<CameraMode>('fly');
 
   // 滚轮 → 目标进度
   useEffect(() => {
@@ -70,14 +72,27 @@ export function RiverExperience() {
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
         dpr={[1, 1.75]}
       >
-        <Scene progress={progress} onPick={(i) => setPicked(DYNASTIES[i])} />
+        <Scene progress={progress} mode={mode} onPick={(i) => setPicked(DYNASTIES[i])} />
       </Canvas>
 
       {/* ---------- 覆盖层（DOM，中文绝对清晰）---------- */}
       {/* 顶部标题 */}
       <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-center justify-between px-8 py-6">
         <span className="text-xl font-semibold tracking-[0.4em] text-white/90">长河</span>
-        <span className="text-xs tracking-widest text-white/40">滚动前行 · 时间流动</span>
+        <div className="pointer-events-auto flex items-center gap-2">
+          <button
+            onClick={() => setMode('fly')}
+            className={`rounded-full px-3 py-1 text-xs tracking-wider transition ${mode === 'fly' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
+          >
+            沿河飞行
+          </button>
+          <button
+            onClick={() => setMode('side')}
+            className={`rounded-full px-3 py-1 text-xs tracking-wider transition ${mode === 'side' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
+          >
+            侧览全景
+          </button>
+        </div>
       </div>
 
       {/* 左侧：当前朝代大字 */}
