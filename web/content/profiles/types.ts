@@ -6,8 +6,22 @@
 
 export interface Institution {
   name: string; // 制度名，如「二府三司」
-  desc: string; // 简述
+  desc: string; // 简述（一句）
   year?: number; // 创立/成型年份（可空）
+  endYear?: number; // 废止/结束年份（可空）
+  category?: InstitutionCategory; // 分类
+  background?: string; // 设立背景 / 为什么
+  impact?: string; // 影响 / 后果
+  figures?: InstitutionFigure[]; // 关键人物（可关联人物页）
+}
+
+/** 制度分类 */
+export type InstitutionCategory = '官制' | '军事' | '财政' | '选官' | '法律' | '其他';
+
+/** 关键人物：name 必填；personId 若有则可跳转人物页 */
+export interface InstitutionFigure {
+  name: string;
+  personId?: string;
 }
 
 export interface HistoricEvent {

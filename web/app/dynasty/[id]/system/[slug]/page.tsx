@@ -21,7 +21,17 @@ export default function Page({ params }: { params: Promise<{ id: string; slug: s
   }
   return (
     <ItemDetail
-      data={{ kind: 'system', name: s.name, year: s.year, desc: s.desc }}
+      data={{
+        kind: 'system',
+        name: s.name,
+        year: s.year,
+        endYear: s.endYear,
+        desc: s.desc,
+        tag: s.category,
+        background: s.background,
+        impact: s.impact,
+        figures: s.figures,
+      }}
       dynastyId={id}
       dynastyName={dynasty.name}
     />
