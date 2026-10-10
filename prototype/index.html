@@ -239,7 +239,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;
 
 /* ---- 组导航条（卡片过多时出现）---- */
 #gnav{ position:fixed; left:0; right:0; top:96px; z-index:40; display:none;
-  gap:8px; padding:0 40px; flex-wrap:wrap; justify-content:flex-start; }
+  gap:8px; padding:0 40px; flex-wrap:wrap; justify-content:flex-start;
+  max-height:76px; overflow-y:auto; }
 #gnav.on{ display:flex; }
 .gtab{ --c:#e8c98a; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10);
   color:#8a949c; font:500 12px/1 var(--serif); letter-spacing:.06em;
@@ -307,17 +308,31 @@ const COLOR = {
   dynasty:'#5fd6bd', chaos:'#d9a15f', regime:'#d9b47a',
   person:'#e8c98a', event:'#e08a7a', work:'#93a8e8',
   school:'#a8d8b0', reform:'#d98fb0', treaty:'#8fd0d8', office:'#b8b0d8',
-  craft:'#c9b8a0'
+  craft:'#c9b8a0', economy:'#b9c9a0', custom:'#d0a8b0', religion:'#a8b0d8',
+  military:'#c9a0a0', edu:'#a0c8c9', exchange:'#c9c0a0', geo:'#9fc0a0',
+  art:'#d8b8c8', literature:'#c8c0e0', sci:'#a0c0d8'
 };
 const TYPECN = {dynasty:'朝代',chaos:'乱世',regime:'政权',
   person:'人物',event:'事件',work:'作品',
-  school:'学派',reform:'新法',treaty:'盟约',office:'制度',craft:'工艺'};
+  school:'学派',reform:'新法',treaty:'盟约',office:'制度',craft:'工艺',economy:'经济',custom:'民俗',religion:'宗教',
+  military:'军事',edu:'教育',exchange:'交流',geo:'地理',
+  art:'艺术',literature:'文学',sci:'科技'};
 const BODY = {
   person:'姓名字号 · 生卒 · 郡望与家族 · 入仕途径 · 仕途迁转 · 代表作品 · 参与事件 · 人际关系。',
   event:'年份 · 地点 · 参与人物 · 起因经过影响 · 相关作品 · 因果边。',
   work:'类型 · 作者 · 创作年份 · 原文或摘录 · 创作背景 · 关联人物与事件。',
   regime:'起止年 · 都城 · 帝王纪年轴 · 重大事件 · 代表人物。',
   craft:'产地 · 兴盛年代 · 工艺特征 · 代表器物 · 相关人物与文献 · 流传。',
+  economy:'类型 · 起止 · 创设者/机构 · 运作方式 · 财政影响 · 相关人物与事件。',
+  custom:'场所/时节 · 盛行年代 · 内容与形式 · 相关文献 · 社会影响。',
+  religion:'宗派 · 传入/创立 · 教义 · 代表人物 · 重要寺观 · 与政权关系。',
+  military:'兵制/兵器 · 起止 · 创立者 · 形制与战法 · 相关战役与将领。',
+  edu:'类型 · 起止 · 创设者 · 学制/课程 · 代表人物 · 影响。',
+  exchange:'方向 · 时间 · 主体 · 路线/对象 · 交换物 · 历史影响。',
+  geo:'性质 · 起止 · 位置 · 建置沿革 · 相关事件与人物。',
+  art:'门类 · 起止 · 代表作者/作品 · 风格 · 机构（画院/教坊）。',
+  literature:'体裁 · 起止 · 代表作家 · 风格流派 · 代表作品 · 影响。',
+  sci:'领域 · 起止 · 代表人物 · 成果/著作 · 历史地位。',
   dynasty:'起止年 · 都城 · 分期 · 帝王 · 重大事件 · 代表人物 · 同期并立政权。',
   chaos:'并立政权 · 存续跨度 · 更替关系 · 同期中原王朝。',
   school:'宗旨 · 师承边 · 代表人物 · 代表著作 · 与其他学派的分野。',
@@ -361,13 +376,16 @@ function anchorPx(tier){
 }
 
 // 分组顺序 + 组名：把一堆条目按类型切成有标题的段
-const GROUP_ORDER = ['regime','person','event','craft','work','school','reform','treaty','office'];
+const GROUP_ORDER = ['regime','person','event','military','economy','craft','geo','exchange','sci','work','school','religion','custom','edu','art','literature','reform','treaty','office'];
 const GROUP_NAME  = {
   regime:'政权', person:'人物', event:'事件', work:'作品',
-  school:'学派', reform:'新法', treaty:'盟约', office:'制度', craft:'工艺'
+  school:'学派', reform:'新法', treaty:'盟约', office:'制度', craft:'工艺',
+  economy:'经济', custom:'民俗', religion:'宗教',
+  military:'军事', edu:'教育', exchange:'交流', geo:'地理',
+  art:'艺术', literature:'文学', sci:'科技'
 };
 // 人物过多时按角色再分：帝王 / 名臣 / 文人 / 学者 / 艺技
-const ROLE_ORDER = ['帝王','名臣','文人','学者','艺技'];
+const ROLE_ORDER = ['帝王','名臣','名将','文人','学者','艺技','宗僧'];
 
 function buildFan(tier){
   fam.innerHTML=''; fam.classList.remove('on');
@@ -442,7 +460,7 @@ function buildGroupNav(groups, tier){
 }
 function clearGroupNav(){
   const nav=document.getElementById('gnav');
-  if(nav) nav.classList.remove('on');
+  if(nav){ nav.classList.remove('on'); nav.innerHTML=''; }
 }
 
 // ---------- 渲染若干组 ----------
