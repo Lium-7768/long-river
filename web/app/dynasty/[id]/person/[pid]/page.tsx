@@ -6,11 +6,13 @@ import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { KinshipGraph } from '@/components/profile/KinshipGraph';
+import { PersonDrawer } from '@/components/profile/PersonDrawer';
 
 export default function PersonPage({ params }: { params: Promise<{ id: string; pid: string }> }) {
   const { id, pid } = use(params);
   const [p, setP] = useState<PersonDetail | null>(null);
   const [state, setState] = useState<'loading' | 'ok' | 'err'>('loading');
+  const [drawer, setDrawer] = useState<{ id: string; name: string } | null>(null);
   const dynasty = DYNASTIES.find((d) => d.id === id);
 
   useEffect(() => {
@@ -76,7 +78,10 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
 
             {p.kinships.length > 0 && (
               <Section title={`亲属关系（${p.kinships.length}）`}>
-                <KinshipGraph kinships={p.kinships} />
+                <KinshipGraph
+                  kinships={p.kinships}
+                  onPick={(id, name) => setDrawer({ id, name })}
+                />
               </Section>
             )}
 
@@ -94,6 +99,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
           </>
         )}
       </div>
+      <PersonDrawer person={drawer} onClose={() => setDrawer(null)} />
     </main>
   );
 }
