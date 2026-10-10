@@ -7,6 +7,7 @@
 export interface Institution {
   name: string; // 制度名，如「二府三司」
   desc: string; // 简述
+  year?: number; // 创立/成型年份（可空）
 }
 
 export interface HistoricEvent {
@@ -19,6 +20,7 @@ export interface CultureItem {
   name: string; // 如「活字印刷」
   desc: string;
   category?: string; // 科技/文学/艺术/思想
+  year?: number; // 出现/兴盛年份（可空）
 }
 
 export interface Territory {
