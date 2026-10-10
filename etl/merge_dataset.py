@@ -106,7 +106,7 @@ def load_prototype():
 
     用括号配对提取每个 person 对象（正则无法可靠处理嵌套字段）。
     """
-    src = open(os.path.join(ROOT, "prototype", "data.js"), encoding="utf-8").read()
+    src = open(os.path.join(ROOT, "asset", "prototype-data.js"), encoding="utf-8").read()
     out = {}
     for m in re.finditer(r"type: 'person'", src):
         start = src.rfind("{", 0, m.start())
