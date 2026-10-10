@@ -351,6 +351,8 @@ const GROUP_NAME  = {
   regime:'政权', person:'人物', event:'事件', work:'作品',
   school:'学派', reform:'新法', treaty:'盟约', office:'制度'
 };
+// 人物过多时按角色再分：帝王 / 名臣 / 文人 / 学者 / 艺技
+const ROLE_ORDER = ['帝王','名臣','文人','学者','艺技'];
 
 function buildFan(tier){
   fam.innerHTML=''; fam.classList.remove('on');
@@ -360,17 +362,26 @@ function buildFan(tier){
   const CARD_W = 172, GAP = 18, ROW_H = 138, HEAD_H = 46;
 
   // ---- 列数自适应：用整个视口宽度排布，避免因纵向过高而缩放 ----
-  // 可用宽度 = 视口宽 - 左边距(锚点在0.32W) - 右留白
   const availW = Math.max(window.innerWidth*0.62, 640) - 40;
   const PER = Math.max(3, Math.floor((availW + GAP) / (CARD_W + GAP)));
 
-  // 按类型分组
+  // 按类型分组；人物超过 12 人时按 role 细分
   const groups = [];
   GROUP_ORDER.forEach(t=>{
     const items = kids.filter(k=>k.type===t);
-    if(items.length) groups.push({type:t, name:GROUP_NAME[t]||'其他', items});
+    if(!items.length) return;
+    if(t==='person' && items.length>12){
+      ROLE_ORDER.forEach(r=>{
+        const sub = items.filter(p=>p.role===r);
+        if(sub.length) groups.push({type:t, name:r, items:sub, sub:true});
+      });
+      // 未标 role 的兜底
+      const rest = items.filter(p=>!ROLE_ORDER.includes(p.role));
+      if(rest.length) groups.push({type:t, name:'其他', items:rest, sub:true});
+    } else {
+      groups.push({type:t, name:GROUP_NAME[t]||'其他', items});
+    }
   });
-  // 未在 ORDER 里的类型兜底
   const other = kids.filter(k=>!GROUP_ORDER.includes(k.type));
   if(other.length) groups.push({type:'other', name:'其他', items:other});
 
