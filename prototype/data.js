@@ -346,7 +346,7 @@ const DATA = {
                 summary: '贬郴州时作，"可堪孤馆闭春寒"为苏轼激赏。' },
               { id: 'huaihai-ji', name: '《淮海居士长短句》', type: 'work', from: 1085, to: 1100 },
             ]},
-          { id: 'liu-yong', name: '柳永', type: 'person', role: '文人', from: 984, to: 1053,
+          { id: 'liu-yong', name: '柳永', type: 'person', approx: true, role: '文人', from: 984, to: 1053,
             zi: '耆卿', hao: ['柳七', '屯田员外郎'], polity: '北宋', entryPath: '科举', entryYear: 1034,
             summary: '慢词开创者。扩大词体、长于铺叙，"凡有井水处，即能歌柳词"。',
             children: [
@@ -368,7 +368,7 @@ const DATA = {
                 zi: '叔原', hao: ['小山'], summary: '晏殊幼子，词与父并称"二晏"，有《小山词》。', children: [] },
             ]},
           /* ---- 书画 ---- */
-          { id: 'fan-kuan', name: '范宽', type: 'person', role: '艺技', from: 950, to: 1032,
+          { id: 'fan-kuan', name: '范宽', type: 'person', approx: true, role: '艺技', from: 950, to: 1032,
             zi: '中立', hao: ['中正'], polity: '北宋',
             summary: '北宋山水画巨匠。与李成、董源并称北宋三大家，画风雄浑，为"北派"山水之极。',
             children: [
@@ -376,7 +376,7 @@ const DATA = {
                 summary: '台北故宫镇馆之宝。巨峰壁立，飞瀑千尺，为宋代山水第一神品。' },
               { id: 'xueshan-xiaosi', name: '《雪山萧寺图》', type: 'work', from: 1000, to: 1030 },
             ]},
-          { id: 'guo-xi', name: '郭熙', type: 'person', role: '艺技', from: 1000, to: 1090,
+          { id: 'guo-xi', name: '郭熙', type: 'person', approx: true, role: '艺技', from: 1000, to: 1090,
             zi: '淳夫', polity: '北宋',
             summary: '神宗朝画院艺学。山水画论与创作并臻，创"三远法"，影响后世画学至深。',
             children: [
@@ -385,7 +385,7 @@ const DATA = {
               { id: 'linquan-gaozhi', name: '《林泉高致》', type: 'work', from: 1080, to: 1090,
                 summary: '郭思辑其父画论，提出高远、深远、平远"三远法"，为中国山水画理论奠基之作。' },
             ]},
-          { id: 'zhang-zeduan', name: '张择端', type: 'person', role: '艺技', from: 1085, to: 1145,
+          { id: 'zhang-zeduan', name: '张择端', type: 'person', approx: true, role: '艺技', from: 1085, to: 1145,
             zi: '正道', polity: '北宋',
             summary: '北宋画院画师。以一幅《清明上河图》名垂千古，为风俗画高峰。',
             children: [
@@ -431,7 +431,7 @@ const DATA = {
               { id: 'bencao-tujing', name: '《本草图经》', type: 'work', from: 1058, to: 1061,
                 summary: '宋代官修本草，附药图九百余幅。' },
             ]},
-          { id: 'wang-wei-yi', name: '王惟一', type: 'person', role: '艺技', from: 987, to: 1067,
+          { id: 'wang-wei-yi', name: '王惟一', type: 'person', approx: true, role: '艺技', from: 987, to: 1067,
             polity: '北宋',
             summary: '针灸学家。铸针灸铜人，撰《铜人腧穴针灸图经》，开针灸标准化之先。',
             children: [
@@ -700,14 +700,14 @@ const DATA = {
               { id: 'fengboting', name: '风波亭之狱', type: 'event', from: 1141, to: 1142 },
               { id: 'manjianghong', name: '《满江红》', type: 'work', from: 1136, to: 1140 },
             ]},
-          { id: 'wang-xiumeng', name: '王希孟', type: 'person', role: '艺技', from: 1096, to: 1119,
+          { id: 'wang-xiumeng', name: '王希孟', type: 'person', approx: true, role: '艺技', from: 1096, to: 1119,
             polity: '北宋',
             summary: '徽宗画院学生。十八岁作《千里江山图》，为中国青绿山水巅峰，二十余岁早逝。',
             children: [
               { id: 'qianli-jiangshan', name: '《千里江山图》', type: 'work', from: 1113, to: 1113,
                 summary: '长近十二米，以石青石绿重彩绘江山万里，藏故宫博物院，为青绿山水第一名迹。' },
             ]},
-          { id: 'ma-yuan', name: '马远', type: 'person', role: '艺技', from: 1140, to: 1225,
+          { id: 'ma-yuan', name: '马远', type: 'person', approx: true, role: '艺技', from: 1140, to: 1225,
             zi: '遥父', hao: ['钦山'], polity: '南宋',
             summary: '南宋画院待诏。构图多取一角半边，世称"马一角"，与夏圭并称"马夏"。',
             children: [
@@ -715,13 +715,13 @@ const DATA = {
               { id: 'shuitu', name: '《水图》', type: 'work', from: 1200, to: 1210,
                 summary: '十二段画水之百态，为画水之极致。' },
             ]},
-          { id: 'xia-gui', name: '夏圭', type: 'person', role: '艺技', from: 1180, to: 1230,
+          { id: 'xia-gui', name: '夏圭', type: 'person', approx: true, role: '艺技', from: 1180, to: 1230,
             zi: '禹玉', polity: '南宋',
             summary: '南宋画院待诏。善用秃笔水墨，构图偏侧，世称"夏半边"。',
             children: [
               { id: 'xishan-qingyuan', name: '《溪山清远图》', type: 'work', from: 1200, to: 1230 },
             ]},
-          { id: 'liang-kai', name: '梁楷', type: 'person', role: '艺技', from: 1150, to: 1225,
+          { id: 'liang-kai', name: '梁楷', type: 'person', approx: true, role: '艺技', from: 1150, to: 1225,
             hao: ['梁疯子'], polity: '南宋',
             summary: '南宋画院待诏。创减笔画，寥寥数笔而神完气足，开写意人物画先河。',
             children: [
@@ -830,7 +830,7 @@ const DATA = {
               { id: 'wujun-zhi', name: '《吴郡志》', type: 'work', from: 1190, to: 1192,
                 summary: '范成大所撰苏州地方志，为宋志名作。' },
             ]},
-          { id: 'jiang-kui', name: '姜夔', type: 'person', role: '文人', from: 1155, to: 1221,
+          { id: 'jiang-kui', name: '姜夔', type: 'person', approx: true, role: '文人', from: 1155, to: 1221,
             zi: '尧章', hao: ['白石道人'], polity: '南宋',
             summary: '格律词派宗师。词风清空骚雅，精音律，自度曲旁注工尺谱，为今存宋词乐谱之珍。',
             children: [

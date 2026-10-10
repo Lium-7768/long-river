@@ -547,9 +547,10 @@ function openDrawer(node){
   if(node._d===0 && node!==active){ enterTier(node); }
   document.getElementById('d-tag').textContent = TYPECN[node.type]||'条目';
   document.getElementById('d-name').textContent = node.name;
+  const ap = node.approx ? '约 ' : '';
   document.getElementById('d-life').textContent =
     (node.from!=null || node.to!=null)
-      ? (node.from!=null ? fmtY(node.from)+' — '+fmtY(node.to)
+      ? (node.from!=null ? ap+fmtY(node.from)+' — '+ap+fmtY(node.to)
                          : '生年无考　卒 '+fmtY(node.to))
       : '';
 
