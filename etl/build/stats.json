@@ -1,13 +1,13 @@
 {
   "cbdb_source": "cbdb_20261003.sqlite3",
-  "persons": 86474,
+  "persons": 86488,
   "with_birth_death": 5233,
-  "with_office": 31807,
-  "with_kin": 37755,
+  "with_office": 31809,
+  "with_kin": 37756,
   "with_zi": 17577,
   "with_entry": 40535,
   "with_works": 3917,
-  "kinship_edges": 92301,
+  "kinship_edges": 92302,
   "offices": 3468,
   "places": 2230,
   "prominence_tiers": {
@@ -15,9 +15,9 @@
     "5": 3721,
     "4": 5180,
     "3": 10460,
-    "2": 17870,
-    "1": 43292,
-    "0": 4635
+    "2": 17871,
+    "1": 43293,
+    "0": 4647
   },
   "tier_ge5": 5037,
   "tier_ge4": 10217,
@@ -30,6 +30,7 @@
     "后蜀": 81,
     "南汉": 19,
     "闽": 101,
-    "金": 799
+    "金": 799,
+    "西夏": 14
   }
 }

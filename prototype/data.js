@@ -11787,5 +11787,122 @@ summary: '韩世忠妻。黄天荡之战亲执桴鼓助战，为南宋著名女�
   ]
 };
 
+/* ============================================================
+   CBDB 数据合并（数据层；不涉及 UI）
+   来源：China Biographical Database, cbdb_20261003
+   由 etl/write_prototype_data.py 生成 data-cbdb.js
+   ============================================================ */
+(function mergeCBDB() {
+  var list = (typeof CBDB_PERSONS !== 'undefined') ? CBDB_PERSONS
+           : (typeof globalThis !== 'undefined' && globalThis.CBDB_PERSONS) ? globalThis.CBDB_PERSONS
+           : null;
+  if (!list) return;
+
+  // 收集政权容器
+  function findByName(node, name) {
+    if (!node || typeof node !== 'object') return null;
+    if (node.name === name) return node;
+    var ch = node.children || [];
+    for (var i = 0; i < ch.length; i++) {
+      var r = findByName(ch[i], name);
+      if (r) return r;
+    }
+    return null;
+  }
+  var north = findByName(DATA.root, '北宋');
+  var south = findByName(DATA.root, '南宋');
+  var liao  = findByName(DATA.root, '辽');
+  var jin   = findByName(DATA.root, '金');
+  var xixia = findByName(DATA.root, '西夏');
+  if (!north || !south) return;
+
+  // 「年份不详」容器：CBDB 中 90% 人物无生卒年，不臆断归朝。
+  // 作为北宋的同级兄弟节点挂在中国之下，承载有档案但年份不明者。
+  var undated = findByName(DATA.root, '年份不详');
+  if (!undated) {
+    var trunk = north.parent || null;
+    // 找「中国」trunk 节点
+    var china = findByName(DATA.root, '中国') || DATA.root.children[0];
+    undated = { id: 'undated', name: '年份不详', type: 'regime', children: [] };
+    if (china && china.children) china.children.push(undated);
+  }
+
+  // 已有 id 集合（去重）
+  var seen = {};
+  (function collect(n) {
+    if (!n || typeof n !== 'object') return;
+    if (n.id) seen[n.id] = 1;
+    (n.children || []).forEach(collect);
+  })(DATA.root);
+
+  // id → 节点索引，便于对已存在者补充 CBDB 硬事实
+  var byId = {};
+  (function index(n) {
+    if (!n || typeof n !== 'object') return;
+    if (n.id) byId[n.id] = n;
+    (n.children || []).forEach(index);
+  })(DATA.root);
+
+  var added = { north: 0, south: 0, liao: 0, jin: 0, xixia: 0, undated: 0, enriched: 0, skipped: 0 };
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    if (!p || !p.id) { added.skipped++; continue; }
+
+    // 已存在者：用 CBDB 硬事实补充（不覆盖原有散文/地名）
+    if (byId[p.id]) {
+      var ex = byId[p.id];
+      if (ex.source === undefined && p.source) ex.source = p.source;
+      if (ex.prominence === undefined && p.prominence !== undefined) ex.prominence = p.prominence;
+      if (ex.nOffice === undefined && p.nOffice) ex.nOffice = p.nOffice;
+      if (ex.nKin === undefined && p.nKin) ex.nKin = p.nKin;
+      if (ex.shi === undefined && p.shi) ex.shi = p.shi;
+      if (ex.addr === undefined && p.addr) ex.addr = p.addr;
+      added.enriched++;
+      continue;
+    }
+
+    var entry = { id: p.id, name: p.name, type: 'person', role: p.role || '名臣',
+                  from: (p.from === undefined ? null : p.from),
+                  to: (p.to === undefined ? null : p.to) };
+    if (p.polity) entry.polity = p.polity;
+    if (p.zi) entry.zi = p.zi;
+    if (p.hao) entry.hao = p.hao;
+    if (p.shi) entry.shi = p.shi;
+    if (p.source) entry.source = p.source;
+    if (p.prominence !== undefined) entry.prominence = p.prominence;
+    if (p.approx) entry.approx = p.approx;
+    if (p.nOffice) entry.nOffice = p.nOffice;
+    if (p.nKin) entry.nKin = p.nKin;
+    if (p.addr) entry.addr = p.addr;
+    if (p.summary) entry.summary = p.summary;
+
+    // 路由：只在有确凿年份时才判定北宋/南宋；
+    // 年份不详者不臆断归入某一朝，统一放入「年份不详」容器，
+    // 由 UI 的年份分组逻辑处理（对齐"不隐藏、不臆造"原则）。
+    var target = null;
+    if (p.polity === '辽' && liao) target = liao;
+    else if (p.polity === '金' && jin) target = jin;
+    else if (p.polity === '西夏' && xixia) target = xixia;
+    else if (p.from !== null && p.from !== undefined) {
+      target = (p.from < 1127) ? north : south;
+    } else if (p.to !== null && p.to !== undefined) {
+      target = (p.to <= 1127) ? north : south;
+    } else {
+      target = undated;   // 无任何年份 → 年份不详
+    }
+
+    seen[p.id] = 1;
+    target.children = target.children || [];
+    target.children.push(entry);
+    if (target === north) added.north++;
+    else if (target === south) added.south++;
+    else if (target === liao) added.liao++;
+    else if (target === jin) added.jin++;
+    else if (target === xixia) added.xixia++;
+    else if (target === undated) added.undated++;
+  }
+  DATA._cbdbMergeStats = added;
+})();
+
 if (typeof window !== 'undefined') window.LONG_RIVER_DATA = DATA;
 if (typeof module !== 'undefined') module.exports = DATA;
