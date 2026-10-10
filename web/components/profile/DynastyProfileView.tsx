@@ -40,8 +40,8 @@ export function DynastyProfileView({
     router.push(`/dynasty/${dynasty.id}/${kind}/${itemSlug(name)}`);
 
   return (
-    <main className="relative z-10 min-h-screen bg-[#03060f] px-6 py-6 text-white">
-      <div className="mx-auto max-w-4xl space-y-6">
+    <main className="relative z-10 min-h-screen px-6 py-10 text-white">
+      <div className="mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[#04070e]/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
         <Breadcrumb items={[{ label: '长河', href: '/' }, { label: dynasty.name }]} />
 
         {/* 页头 */}
