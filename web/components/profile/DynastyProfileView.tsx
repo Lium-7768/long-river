@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import type { DynastyProfile } from '@/content/profiles/types';
-import { fmtRange, fmtYear } from '@/components/river/year';
+import { fmtRange, fmtRangeBP, fmtYear, fmtYearBP } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
@@ -250,7 +250,14 @@ function Card({
 }
 
 function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => void }) {
-  const life =
+  // 卡片位置紧张：用短格式（不带公元），title 里放完整
+  const lifeShort =
+    person.birth && person.death
+      ? fmtRangeBP(person.birth, person.death)
+      : person.birth
+        ? fmtYearBP(person.birth)
+        : '';
+  const lifeFull =
     person.birth && person.death
       ? fmtRange(person.birth, person.death)
       : person.birth
@@ -281,7 +288,11 @@ function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => v
         <span className="truncate text-base text-white/40">
           {person.zi ? `字${person.zi}` : ''}
         </span>
-        {life && <span className="shrink-0 text-base tabular-nums text-white/35">{life}</span>}
+        {lifeShort && (
+          <span className="shrink-0 text-base tabular-nums text-white/35" title={lifeFull}>
+            {lifeShort}
+          </span>
+        )}
       </div>
     </button>
   );
