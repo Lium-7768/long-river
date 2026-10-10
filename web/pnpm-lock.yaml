@@ -26,6 +26,9 @@ dependencies:
   next:
     specifier: 15.1.6
     version: 15.1.6(react-dom@19.0.0)(react@19.0.0)
+  postprocessing:
+    specifier: ^6.39.5
+    version: 6.39.5(three@0.171.0)
   react:
     specifier: 19.0.0
     version: 19.0.0

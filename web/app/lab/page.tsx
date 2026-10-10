@@ -11,6 +11,12 @@ import { Suspense } from 'react';
 import { DYNASTIES } from '@/content/dynasties';
 
 const variants = {
+  glass: dynamic(() => import('@/components/lab/GlassRiver').then((m) => m.GlassRiver), {
+    ssr: false,
+  }),
+  luminous: dynamic(() => import('@/components/lab/Luminous').then((m) => m.Luminous), {
+    ssr: false,
+  }),
   river: dynamic(() => import('@/components/lab/River').then((m) => m.River), { ssr: false }),
   carousel: dynamic(() => import('@/components/lab/Carousel').then((m) => m.Carousel), {
     ssr: false,
@@ -23,6 +29,8 @@ const variants = {
 };
 
 const INFO: Record<string, { name: string; desc: string }> = {
+  glass: { name: 'F · 玻璃长卷', desc: '玻璃碑+镜面河（研究报告推荐）' },
+  luminous: { name: 'E · 光河', desc: '粒子流体+辉光，朝代=河中光涡（全新方向）' },
   river: { name: 'A · 时间长河', desc: '45°俯瞰，朝代如河心浮岛，向远方延伸' },
   carousel: { name: 'B · 时间转轮', desc: '环形赛道，相机绕行，像操作一台仪表盘' },
   constellation: { name: 'C · 星汉', desc: '朝代=星辰，按时间排布于深空，连线成星座' },
@@ -31,8 +39,8 @@ const INFO: Record<string, { name: string; desc: string }> = {
 
 function LabInner() {
   const sp = useSearchParams();
-  const v = sp.get('v') || 'river';
-  const Comp = variants[v as keyof typeof variants] || variants.river;
+  const v = sp.get('v') || 'luminous';
+  const Comp = variants[v as keyof typeof variants] || variants.luminous;
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">
