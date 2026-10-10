@@ -47,7 +47,7 @@ export default function Preview() {
 
         {/* ① 代表人物 */}
         <Block title="代表人物" sub="按生年排序 · 点击进入关系图">
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2">
             {people.map((per) => (
               <PersonCard key={per.id} person={per} />
             ))}
@@ -161,16 +161,17 @@ function PersonCard({ person }: { person: PersonBrief }) {
       : person.birth
         ? `${fmtYearShort(person.birth)}—`
         : '';
+
   return (
-    <div className="group rounded-xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-sky-400/40 hover:bg-sky-400/[0.06]">
-      <div className="flex items-baseline justify-between">
-        <span className="text-lg font-medium text-white/90">{person.name}</span>
-        <span className="text-xs tabular-nums text-white/40">{life}</span>
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 transition hover:border-sky-400/40 hover:bg-sky-400/[0.06]">
+      <div className="flex items-baseline gap-3">
+        <span className="text-base font-medium text-white/90">{person.name}</span>
+        {person.zi && <span className="text-xs text-white/40">字{person.zi}</span>}
       </div>
-      {person.role && <div className="mt-1 text-xs text-sky-300/60">{person.role}</div>}
-      {person.summary && (
-        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/50">{person.summary}</p>
-      )}
+      <div className="flex items-baseline gap-3 text-right">
+        {person.top_office && <span className="text-xs text-sky-300/70">{person.top_office}</span>}
+        {life && <span className="text-xs tabular-nums text-white/35">{life}</span>}
+      </div>
     </div>
   );
 }

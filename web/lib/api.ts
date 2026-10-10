@@ -36,6 +36,7 @@ export interface PersonBrief {
   polity?: string | null;
   dynasty_id?: string | null;
   fame_score?: number | null;
+  top_office?: string | null;
   zi?: string | null;
   role?: string | null;
   prominence?: number | null;
