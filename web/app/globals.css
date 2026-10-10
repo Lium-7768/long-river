@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   长河主题系统
+   ------------------------------------------------------------
+   两套主题：
+     1. theme-deep  深空 · 科技感（默认，深色）
+     2. theme-ink   水墨 · 素雅（浅色）
+   所有色值为 "R G B" 三元组，供 Tailwind 与 Three.js 共用。
+   切换：<html class="theme-deep|theme-ink">
+   ============================================================ */
+
+@layer base {
+  /* ---------- 主题一：深空（科技感）---------- */
+  :root,
+  .theme-deep {
+    --lr-bg: 5 7 13;
+    --lr-surface: 13 18 30;
+    --lr-fg: 226 232 240;
+    --lr-muted: 120 132 156;
+    --lr-line: 40 52 78;
+    --lr-accent: 0 229 255; /* 青 */
+    --lr-accent-2: 124 77 255; /* 紫 */
+
+    /* 朝代色：冷调、高饱和、发光感 */
+    --lr-dynasty-xia: 138 115 85;
+    --lr-dynasty-shang: 156 122 91;
+    --lr-dynasty-zhou: 176 137 104;
+    --lr-dynasty-qin: 122 106 90;
+    --lr-dynasty-han: 168 136 106;
+    --lr-dynasty-sanguo: 136 153 170;
+    --lr-dynasty-jin: 153 170 187;
+    --lr-dynasty-nanbei: 136 153 170;
+    --lr-dynasty-sui: 106 138 154;
+    --lr-dynasty-tang: 201 150 60;
+    --lr-dynasty-wudai: 176 136 80;
+    --lr-dynasty-song: 62 123 94;
+    --lr-dynasty-liao: 94 143 168;
+    --lr-dynasty-xixia: 168 104 110;
+    --lr-dynasty-jin2: 142 107 138;
+    --lr-dynasty-yuan: 90 122 154;
+    --lr-dynasty-ming: 176 86 60;
+    --lr-dynasty-qing: 106 122 74;
+
+    color-scheme: dark;
+  }
+
+  /* ---------- 主题二：水墨（素雅）---------- */
+  .theme-ink {
+    --lr-bg: 244 241 234;
+    --lr-surface: 252 250 245;
+    --lr-fg: 30 30 30;
+    --lr-muted: 110 106 98;
+    --lr-line: 214 208 196;
+    --lr-accent: 176 86 60; /* 朱 */
+    --lr-accent-2: 106 122 74; /* 黛 */
+
+    /* 朝代色：水墨风、低饱和 */
+    --lr-dynasty-xia: 120 104 84;
+    --lr-dynasty-shang: 134 112 88;
+    --lr-dynasty-zhou: 150 124 96;
+    --lr-dynasty-qin: 104 92 80;
+    --lr-dynasty-han: 142 120 96;
+    --lr-dynasty-sanguo: 118 128 140;
+    --lr-dynasty-jin: 130 140 152;
+    --lr-dynasty-nanbei: 118 128 140;
+    --lr-dynasty-sui: 96 118 132;
+    --lr-dynasty-tang: 178 138 72;
+    --lr-dynasty-wudai: 156 126 82;
+    --lr-dynasty-song: 72 118 92;
+    --lr-dynasty-liao: 90 130 148;
+    --lr-dynasty-xixia: 148 100 104;
+    --lr-dynasty-jin2: 124 100 122;
+    --lr-dynasty-yuan: 84 110 134;
+    --lr-dynasty-ming: 156 84 64;
+    --lr-dynasty-qing: 98 112 74;
+
+    color-scheme: light;
+  }
+
+  * {
+    border-color: rgb(var(--lr-line));
+  }
+
+  html,
+  body {
+    height: 100%;
+    background: rgb(var(--lr-bg));
+    color: rgb(var(--lr-fg));
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+  }
+
+  /* 科技感底纹：网格 + 渐晕 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgb(var(--lr-line) / 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--lr-line) / 0.25) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 78%);
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 12px rgb(var(--lr-accent) / 0.6);
+  }
+  .gear-border {
+    border: 1px solid rgb(var(--lr-accent) / 0.35);
+    box-shadow:
+      inset 0 0 18px rgb(var(--lr-accent) / 0.08),
+      0 0 18px rgb(var(--lr-accent) / 0.12);
+  }
+}
