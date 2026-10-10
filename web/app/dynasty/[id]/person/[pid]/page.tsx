@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
-import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
+import { fmtRange, fmtYear } from '@/components/river/year';
 import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
@@ -55,7 +55,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 {p.hao?.length ? <span>号{p.hao.join('、')}</span> : null}
                 {p.shi?.length ? <span>谥{p.shi.join('、')}</span> : null}
                 {(p.birth || p.death) && (
-                  <span className="tabular-nums">{fmtRangeBP(p.birth ?? 0, p.death ?? 0)}</span>
+                  <span className="tabular-nums">{fmtRange(p.birth ?? 0, p.death ?? 0)}</span>
                 )}
                 {p.addr?.length ? <span>{p.addr.join(' · ')}</span> : null}
               </div>
@@ -89,7 +89,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                       key={i}
                       className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base tabular-nums text-white/70"
                     >
-                      {e.year ? fmtYearShort(e.year) : '—'} {e.entry ?? ''}
+                      {e.year ? fmtYear(e.year) : '—'} {e.entry ?? ''}
                     </span>
                   ))}
                 </div>

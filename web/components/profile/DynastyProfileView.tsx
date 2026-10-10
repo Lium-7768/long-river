@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import type { DynastyProfile } from '@/content/profiles/types';
-import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
+import { fmtRange, fmtYear } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
@@ -50,7 +50,7 @@ export function DynastyProfileView({
           <div className="mt-2 flex items-baseline gap-4">
             <h1 className="text-6xl font-semibold tracking-tight">{dynasty.name}</h1>
             <div className="text-lg tabular-nums text-white/45">
-              {fmtRangeBP(dynasty.start, dynasty.end)}
+              {fmtRange(dynasty.start, dynasty.end)}
             </div>
           </div>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
@@ -239,7 +239,7 @@ function Card({
       <div className="flex items-baseline gap-2">
         <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
         {year != null && (
-          <span className="text-base tabular-nums text-white/45">{fmtYearShort(year)}</span>
+          <span className="text-base tabular-nums text-white/45">{fmtYear(year)}</span>
         )}
         <span className="font-medium text-white/90">{name}</span>
         {tag && <span className={`text-base ${c.tag}`}>{tag}</span>}
@@ -252,9 +252,9 @@ function Card({
 function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => void }) {
   const life =
     person.birth && person.death
-      ? `${fmtYearShort(person.birth)}–${fmtYearShort(person.death)}`
+      ? fmtRange(person.birth, person.death)
       : person.birth
-        ? `${fmtYearShort(person.birth)}—`
+        ? fmtYear(person.birth)
         : '';
   return (
     <button

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { api, type PersonDetail } from '@/lib/api';
-import { fmtRangeBP } from '@/components/river/year';
+import { fmtRange } from '@/components/river/year';
 
 /** 人物抽屉：点关系图姓名时滑出，显示那个人自己的详情。 */
 export function PersonDrawer({
@@ -34,8 +34,7 @@ export function PersonDrawer({
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const life =
-    data && (data.birth || data.death) ? fmtRangeBP(data.birth ?? 0, data.death ?? 0) : '';
+  const life = data && (data.birth || data.death) ? fmtRange(data.birth ?? 0, data.death ?? 0) : '';
 
   return (
     <>
