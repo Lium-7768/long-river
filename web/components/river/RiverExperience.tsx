@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Scene } from './Scene';
 import type { CameraMode } from './cameraModes';
+import { fmtRange } from './year';
 import { DYNASTIES, DYNASTIES_WITH_DATA, type Dynasty } from '@/content/dynasties';
 
 const hasData = (id: string) => DYNASTIES_WITH_DATA.has(id);
@@ -101,9 +102,7 @@ export function RiverExperience() {
         className="pointer-events-none absolute bottom-16 left-10 max-w-md animate-[fadeUp_0.6s_ease]"
       >
         <div className="text-[13px] tracking-[0.3em] text-sky-300/70">
-          {cur.start < 0 ? `公元前 ${-cur.start}` : `公元 ${cur.start}`}
-          {' — '}
-          {cur.end < 0 ? `公元前 ${-cur.end}` : `公元 ${cur.end}`}
+          {fmtRange(cur.start, cur.end)}
         </div>
         <h2 className="mt-3 text-7xl font-semibold leading-none tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,180,255,0.35)]">
           {cur.name}
@@ -140,8 +139,7 @@ export function RiverExperience() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-xs tracking-[0.3em] text-sky-300/70">
-              {picked.start < 0 ? `公元前 ${-picked.start}` : `公元 ${picked.start}`} —{' '}
-              {picked.end < 0 ? `公元前 ${-picked.end}` : `公元 ${picked.end}`}
+              {fmtRange(picked.start, picked.end)}
             </div>
             <h3 className="mt-4 text-5xl font-semibold text-white">{picked.name}</h3>
             <p className="mt-4 text-sm text-white/60">{picked.note}</p>
