@@ -40,7 +40,7 @@ export function DynastyProfileView({
     router.push(`/dynasty/${dynasty.id}/${kind}/${itemSlug(name)}`);
 
   return (
-    <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
+    <main className="relative z-10 min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
         <Breadcrumb items={[{ label: '长河', href: '/' }, { label: dynasty.name }]} />
 
