@@ -26,6 +26,19 @@ import os
 import sqlite3
 import sys
 
+try:
+    from opencc import OpenCC
+    _T2S = OpenCC("t2s")
+except ImportError:
+    _T2S = None
+
+
+def t2s(x):
+    """繁体→简体（CBDB 源为繁体；项目统一简体）。"""
+    if not x:
+        return x
+    return _T2S.convert(x) if _T2S else x
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 宋段相关政权：宋15 辽16 金17 + 并入宋的十国
@@ -139,11 +152,11 @@ def main():
         if not person or not r["c_office_chn"]:
             continue
         person["office"].append({
-            "office": r["c_office_chn"], "from": r["c_firstyear"], "to": r["c_lastyear"],
+            "office": t2s(r["c_office_chn"]), "from": r["c_firstyear"], "to": r["c_lastyear"],
         })
         oid = r["c_office_id"]
         if oid not in offices_used:
-            offices_used[oid] = r["c_office_chn"]
+            offices_used[oid] = t2s(r["c_office_chn"])
 
     # ---------- 5. 籍贯 / 地址 ----------
     print("==> BIOG_ADDR_DATA")
@@ -174,7 +187,7 @@ def main():
     """):
         p = persons.get(r["c_personid"])
         if p:
-            p["entry"].append({"type": r["c_entry_desc_chn"], "year": r["c_year"]})
+            p["entry"].append({"type": t2s(r["c_entry_desc_chn"]), "year": r["c_year"]})
 
     # ---------- 7. 著作 ----------
     print("==> BIOG_TEXT_DATA")

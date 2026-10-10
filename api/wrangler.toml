@@ -1,0 +1,9 @@
+name = "long-river-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# D1 绑定：库 lr-song
+[[d1_databases]]
+binding = "DB"
+database_name = "lr-song"
+database_id = "b9ebcbd7-95c0-4405-ab71-77518550d0bd"
