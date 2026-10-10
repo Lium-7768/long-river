@@ -11,10 +11,12 @@ export interface ItemDetailData {
   endYear?: number;
   desc: string;
   tag?: string;
-  /** 制度专用 */
+  /** 制度/事件/文化共用 */
   background?: string;
+  outcome?: string;
   impact?: string;
   figures?: { name: string; personId?: string }[];
+  works?: string[];
 }
 
 const KIND = {
@@ -73,9 +75,30 @@ export function ItemDetail({
           </Section>
         )}
 
+        {data.outcome && (
+          <Section title="经过 / 结果">
+            <p className="text-base leading-relaxed text-white/70">{data.outcome}</p>
+          </Section>
+        )}
+
         {data.impact && (
           <Section title="影响 / 后果">
             <p className="text-base leading-relaxed text-white/70">{data.impact}</p>
+          </Section>
+        )}
+
+        {data.works && data.works.length > 0 && (
+          <Section title="代表作品">
+            <div className="flex flex-wrap gap-2">
+              {data.works.map((w, i) => (
+                <span
+                  key={i}
+                  className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base text-white/70"
+                >
+                  {w}
+                </span>
+              ))}
+            </div>
           </Section>
         )}
 
