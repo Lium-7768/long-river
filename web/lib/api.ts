@@ -34,6 +34,8 @@ export interface PersonBrief {
   birth?: number | null;
   death?: number | null;
   polity?: string | null;
+  dynasty_id?: string | null;
+  fame_score?: number | null;
   zi?: string | null;
   role?: string | null;
   prominence?: number | null;
@@ -80,7 +82,14 @@ export const api = {
   stats: () => get<{ ok: true; data: Record<string, number | string> }>('/api/stats'),
   polities: () => get<{ ok: true; data: { polity: string; n: number }[] }>('/api/polities'),
   persons: (
-    p: { q?: string; polity?: string; min_prom?: number; limit?: number; offset?: number } = {},
+    p: {
+      q?: string;
+      polity?: string;
+      dynasty?: string;
+      min_prom?: number;
+      limit?: number;
+      offset?: number;
+    } = {},
   ) => get<Paged<PersonBrief>>('/api/persons', p),
   person: (id: string) =>
     get<{ ok: true; data: PersonDetail }>(`/api/persons/${encodeURIComponent(id)}`),

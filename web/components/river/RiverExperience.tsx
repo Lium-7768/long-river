@@ -16,7 +16,7 @@ const hasData = (id: string) => DYNASTIES_WITH_DATA.has(id);
  * 用 ref 传 progress 给 R3F（避免每帧重渲染 React）。
  * 覆盖层用 DOM 渲染中文（清晰）。
  */
-export function RiverExperience() {
+export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynasty) => void }) {
   const progress = useRef(0);
   const target = useRef(0);
   const [picked, setPicked] = useState<Dynasty | null>(null);
@@ -73,7 +73,14 @@ export function RiverExperience() {
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
         dpr={[1, 1.75]}
       >
-        <Scene progress={progress} mode={mode} onPick={(i) => setPicked(DYNASTIES[i])} />
+        <Scene
+          progress={progress}
+          mode={mode}
+          onPick={(i) => {
+            if (onEnterDynasty) onEnterDynasty(DYNASTIES[i]);
+            else setPicked(DYNASTIES[i]);
+          }}
+        />
       </Canvas>
 
       {/* ---------- 覆盖层（DOM，中文绝对清晰）---------- */}
