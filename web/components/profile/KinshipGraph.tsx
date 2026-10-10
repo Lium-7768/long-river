@@ -4,60 +4,45 @@ import { useMemo, useRef, useState } from 'react';
 import type { Kinship } from '@/lib/api';
 
 /**
- * 亲属关系图（径向星座式 + 可交互）。
- * - 拖拽平移 / 滚轮缩放 / 双击复位
- * - 点节点 → 回调 onPick(id, name)（由父级打开抽屉）
- * 数据是扁平 (rel, name) 对，非树，故用分类 + 径向布局。
+ * 亲属关系图：放射状布局 + 连线。
+ * 节点「只展示文字」——不画圆点，直接用彩色姓名（颜色 = 关系类别）。
+ * 可拖拽平移 / 滚轮缩放 / 双击复位；点文字查看详情。
  */
 
 type Category = 'ancestor' | 'descendant' | 'sibling' | 'spouse' | 'affine' | 'other';
 
-const CAT_META: Record<Category, { label: string; color: string; glow: string }> = {
-  ancestor: { label: '长辈 / 祖先', color: '#7dd3fc', glow: 'rgba(125,211,252,0.5)' },
-  descendant: { label: '晚辈 / 后裔', color: '#6ee7b7', glow: 'rgba(110,231,183,0.5)' },
-  sibling: { label: '同辈 / 兄弟', color: '#fbbf24', glow: 'rgba(251,191,36,0.5)' },
-  spouse: { label: '配偶', color: '#f472b6', glow: 'rgba(244,114,182,0.5)' },
-  affine: { label: '姻亲', color: '#a78bfa', glow: 'rgba(167,139,250,0.5)' },
-  other: { label: '其他亲属', color: '#94a3b8', glow: 'rgba(148,163,184,0.4)' },
+const CAT_META: Record<Category, { label: string; color: string }> = {
+  ancestor: { label: '长辈 / 祖先', color: '#7dd3fc' },
+  descendant: { label: '晚辈 / 后裔', color: '#6ee7b7' },
+  sibling: { label: '同辈 / 兄弟', color: '#fbbf24' },
+  spouse: { label: '配偶', color: '#f472b6' },
+  affine: { label: '姻亲', color: '#a78bfa' },
+  other: { label: '其他亲属', color: '#94a3b8' },
 };
 
-function classify(rel: string): { cat: Category; label: string } {
-  const r = rel
+function classify(rel: string): Category {
+  const t = rel
     .replace(/[（(]反向[）)]/g, '')
     .split(';')[0]
-    .trim();
-  const t = r.replace(/從/g, '从').replace(/姪/g, '侄').replace(/孫/g, '孙');
-  if (/父|母|祖|曾祖|高祖|太曾|先祖|直系祖先/.test(t)) return { cat: 'ancestor', label: short(t) };
-  if (/子|孙|後?后裔|裔|女$/.test(t) && !/妻|父/.test(t))
-    return { cat: 'descendant', label: short(t) };
-  if (/兄|弟|姊妹|姐|从兄|从弟|表/.test(t)) return { cat: 'sibling', label: short(t) };
-  if (/妻|丈夫|夫|妾|继室|正室/.test(t)) return { cat: 'spouse', label: short(t) };
-  if (/岳|丈人|女婿|媳|妻父|姻/.test(t)) return { cat: 'affine', label: short(t) };
-  return { cat: 'other', label: short(t) };
+    .trim()
+    .replace(/從/g, '从')
+    .replace(/姪/g, '侄')
+    .replace(/孫/g, '孙');
+  if (/父|母|祖|曾祖|高祖|太曾|先祖|直系祖先/.test(t)) return 'ancestor';
+  if (/子|孙|後?后裔|裔|女$/.test(t) && !/妻|父/.test(t)) return 'descendant';
+  if (/兄|弟|姊妹|姐|从兄|从弟|表/.test(t)) return 'sibling';
+  if (/妻|丈夫|夫|妾|继室|正室/.test(t)) return 'spouse';
+  if (/岳|丈人|女婿|媳|妻父|姻/.test(t)) return 'affine';
+  return 'other';
 }
 
-function short(t: string): string {
-  const m: Record<string, string> = {
-    直系祖先: '先祖',
-    直系后裔: '后裔',
-    从子: '侄子',
-    从祖: '伯叔祖',
-    伯叔祖: '伯叔祖',
-    从父: '叔伯',
-    伯叔父: '叔伯',
-    从兄: '从兄',
-    从弟: '从弟',
-    姨表兄弟: '表兄弟',
-    第一任妻父: '岳父',
-    妻父: '岳父',
-  };
-  return m[t] ?? t;
+function validName(name: string): boolean {
+  return !!name && !/^[A-Za-z0-9?？]{1,2}$/.test(name) && !name.includes('?');
 }
 
 interface Pt {
   id: string;
   name: string;
-  label: string;
   cat: Category;
   x: number;
   y: number;
@@ -77,16 +62,12 @@ export function KinshipGraph({
   const { points, cats } = useMemo(() => {
     const byCat = new Map<Category, Kinship[]>();
     for (const k of kinships) {
-      const { cat } = classify(k.rel);
-      if (!byCat.has(cat)) byCat.set(cat, []);
-      byCat.get(cat)!.push(k);
+      const c = classify(k.rel);
+      if (!byCat.has(c)) byCat.set(c, []);
+      byCat.get(c)!.push(k);
     }
-    const clean = (arr: Kinship[]) =>
-      arr.filter((k) => k.name && !/^[A-Za-z0-9?？]{1,2}$/.test(k.name) && !k.name.includes('?'));
-
     const CX = 200;
     const CY = 200;
-    const R = 150;
     const order: Category[] = ['ancestor', 'descendant', 'sibling', 'spouse', 'affine', 'other'];
     const present = order.filter((c) => byCat.has(c));
     const pts: Pt[] = [];
@@ -94,20 +75,19 @@ export function KinshipGraph({
 
     present.forEach((cat, ci) => {
       const all = byCat.get(cat)!;
-      const items = clean(all);
       catInfo.push({ cat, count: all.length });
-      const show = items.slice(0, 18);
-      const n = show.length || 1;
+      const items = all.filter((k) => validName(k.name)).slice(0, 15);
+      const n = items.length || 1;
       const sectorCenter = (ci / present.length) * Math.PI * 2 - Math.PI / 2;
-      const sectorSpan = ((Math.PI * 2) / present.length) * 0.82;
-      show.forEach((k, i) => {
+      const sectorSpan = ((Math.PI * 2) / present.length) * 0.85;
+      items.forEach((k, i) => {
         const t = n === 1 ? 0.5 : i / (n - 1);
         const ang = sectorCenter + (t - 0.5) * sectorSpan;
-        const rr = R * (0.92 + (i % 3) * 0.03);
+        // 分层半径，避免文字重叠
+        const rr = 110 + (i % 3) * 42;
         pts.push({
           id: k.id,
           name: k.name,
-          label: classify(k.rel).label,
           cat,
           x: CX + Math.cos(ang) * rr,
           y: CY + Math.sin(ang) * rr,
@@ -117,26 +97,23 @@ export function KinshipGraph({
     return { points: pts, cats: catInfo };
   }, [kinships]);
 
-  const colorOf = (c: Category) => CAT_META[c].color;
-
-  // 拖拽平移
   const onDown = (e: React.PointerEvent) => {
     drag.current = { sx: e.clientX, sy: e.clientY, vx: view.x, vy: view.y };
-    (e.target as Element).setPointerCapture?.(e.pointerId);
   };
   const onMove = (e: React.PointerEvent) => {
     if (!drag.current) return;
-    const dx = e.clientX - drag.current.sx;
-    const dy = e.clientY - drag.current.sy;
-    setView((v) => ({ ...v, x: drag.current!.vx + dx, y: drag.current!.vy + dy }));
+    setView((v) => ({
+      ...v,
+      x: drag.current!.vx + (e.clientX - drag.current!.sx),
+      y: drag.current!.vy + (e.clientY - drag.current!.sy),
+    }));
   };
   const onUp = () => {
     drag.current = null;
   };
   const onWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-    setView((v) => ({ ...v, k: Math.min(4, Math.max(0.5, v.k * factor)) }));
+    const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+    setView((v) => ({ ...v, k: Math.min(4, Math.max(0.6, v.k * factor)) }));
   };
   const reset = () => setView({ x: 0, y: 0, k: 1 });
 
@@ -148,7 +125,7 @@ export function KinshipGraph({
             <span key={cat} className="flex items-center gap-1.5">
               <span
                 className="inline-block h-2 w-2 rounded-full"
-                style={{ background: colorOf(cat) }}
+                style={{ background: CAT_META[cat].color }}
               />
               <span className="text-white/50">
                 {CAT_META[cat].label} {count}
@@ -166,7 +143,7 @@ export function KinshipGraph({
 
       <svg
         viewBox="0 0 400 400"
-        className="mx-auto w-full max-w-[520px] cursor-grab touch-none select-none active:cursor-grabbing"
+        className="mx-auto w-full max-w-[620px] cursor-grab touch-none select-none active:cursor-grabbing"
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -175,7 +152,7 @@ export function KinshipGraph({
         onDoubleClick={reset}
       >
         <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
-          {/* 连接线 */}
+          {/* 连线 */}
           {points.map((pt, i) => (
             <line
               key={`l${i}`}
@@ -183,39 +160,40 @@ export function KinshipGraph({
               y1="200"
               x2={pt.x}
               y2={pt.y}
-              stroke={colorOf(pt.cat)}
-              strokeWidth="0.5"
-              opacity={hover && hover !== pt.id ? 0.12 : 0.25}
+              stroke={CAT_META[pt.cat].color}
+              strokeWidth="0.4"
+              opacity={hover && hover !== pt.id ? 0.08 : 0.25}
             />
           ))}
           {/* 本人 */}
-          <circle cx="200" cy="200" r="16" fill="#0b1120" stroke="#38bdf8" strokeWidth="1.5" />
-          <circle
-            cx="200"
-            cy="200"
-            r="22"
-            fill="none"
-            stroke="#38bdf8"
-            strokeWidth="0.6"
-            opacity="0.4"
-          />
           <text
             x="200"
             y="200"
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize="7"
-            fill="#7dd3fc"
+            fontSize="11"
+            fill="#38bdf8"
+            fontWeight="600"
           >
             本人
           </text>
-          {/* 亲属节点 */}
+          {/* 亲属：只展示文字，无圆点 */}
           {points.map((pt, i) => {
             const active = hover === pt.id;
             return (
-              <g
-                key={`n${i}`}
+              <text
+                key={`t${i}`}
+                x={pt.x}
+                y={pt.y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={active ? 9.5 : 8}
+                fontWeight={active ? 600 : 400}
+                fill={active ? '#ffffff' : CAT_META[pt.cat].color}
                 className="cursor-pointer"
+                style={
+                  active ? { filter: `drop-shadow(0 0 4px ${CAT_META[pt.cat].color})` } : undefined
+                }
                 onPointerEnter={() => setHover(pt.id)}
                 onPointerLeave={() => setHover(null)}
                 onClick={(e) => {
@@ -223,33 +201,14 @@ export function KinshipGraph({
                   onPick?.(pt.id, pt.name);
                 }}
               >
-                {/* 放大点击热区 */}
-                <circle cx={pt.x} cy={pt.y} r="9" fill="transparent" />
-                <circle
-                  cx={pt.x}
-                  cy={pt.y}
-                  r={active ? 5 : 3.5}
-                  fill={colorOf(pt.cat)}
-                  style={{
-                    filter: `drop-shadow(0 0 ${active ? 6 : 3}px ${CAT_META[pt.cat].glow})`,
-                  }}
-                />
-                <text
-                  x={pt.x}
-                  y={pt.y - 6}
-                  textAnchor="middle"
-                  fontSize={active ? 8 : 7}
-                  fill={active ? '#fff' : 'rgba(255,255,255,0.72)'}
-                >
-                  {pt.name}
-                </text>
-              </g>
+                {pt.name}
+              </text>
             );
           })}
         </g>
       </svg>
       <div className="mt-1 text-center text-[11px] text-white/30">
-        共 {kinships.length} 条亲属 · 拖拽平移 / 滚轮缩放 / 双击复位 · 点击查看详情
+        共 {kinships.length} 条亲属 · 拖拽平移 / 滚轮缩放 / 双击复位 · 点击姓名查看详情
       </div>
     </div>
   );
