@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react';
 import { SONG_W } from '@/content/profiles/song-w';
-import { fmtYearShort } from '@/components/river/year';
+import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { useDynastyPersons } from '@/components/persons/use-persons';
 import type { PersonBrief } from '@/lib/api';
 
 const p = SONG_W;
-const START = 960;
-const END = 1127;
+const YEAR_A = 960;
+const YEAR_B = 1127;
 
 export default function Preview() {
   const { persons } = useDynastyPersons('song-w', 12);
@@ -28,12 +28,13 @@ export default function Preview() {
         {/* 页头 */}
         <header>
           <div className="text-[13px] tracking-[0.3em] text-sky-300/70">朝代 · 预览</div>
-          <h1 className="mt-2 text-6xl font-semibold tracking-tight">北宋</h1>
-          <div className="mt-1 text-sm tabular-nums text-white/45">
-            {fmtYearShort(START)} — {fmtYearShort(END)}
+          {/* 标题 + 年份 同行，其间留明显间隔 */}
+          <div className="mt-3 flex items-baseline gap-4">
+            <h1 className="text-6xl font-semibold tracking-tight">北宋</h1>
+            <div className="text-lg tabular-nums text-white/45">{fmtRangeBP(YEAR_A, YEAR_B)}</div>
           </div>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/70">{p.overview}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">{p.overview}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
             {p.keywords.map((k) => (
               <span
                 key={k}
