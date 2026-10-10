@@ -1,0 +1,35 @@
+{
+  "cbdb_source": "cbdb_20261003.sqlite3",
+  "persons": 86474,
+  "with_birth_death": 5233,
+  "with_office": 31807,
+  "with_kin": 37755,
+  "with_zi": 17577,
+  "with_entry": 40535,
+  "with_works": 3917,
+  "kinship_edges": 92301,
+  "offices": 3468,
+  "places": 2230,
+  "prominence_tiers": {
+    "6": 1316,
+    "5": 3721,
+    "4": 5180,
+    "3": 10460,
+    "2": 17870,
+    "1": 43292,
+    "0": 4635
+  },
+  "tier_ge5": 5037,
+  "tier_ge4": 10217,
+  "polity_counts": {
+    "宋": 83373,
+    "辽": 341,
+    "南唐": 277,
+    "五代": 1346,
+    "吴越": 137,
+    "后蜀": 81,
+    "南汉": 19,
+    "闽": 101,
+    "金": 799
+  }
+}
