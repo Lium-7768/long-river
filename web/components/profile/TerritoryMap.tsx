@@ -139,16 +139,7 @@ function CameraLook() {
   return null;
 }
 
-export function TerritoryMap({
-  dynastyId,
-  compact = false,
-  height = 360,
-}: {
-  dynastyId: string;
-  compact?: boolean;
-  height?: number;
-}) {
-  const h = compact ? 260 : height;
+export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; height?: number }) {
   const [features, setFeatures] = useState<GeoFeature[] | null>(null);
   const cov = getCoverage(dynastyId);
 
@@ -171,7 +162,7 @@ export function TerritoryMap({
 
   return (
     <div className="overflow-hidden rounded-xl border border-white/10 bg-[#05080f]">
-      <div className="w-full" style={{ height: h }}>
+      <div className="w-full" style={{ height }}>
         {features ? (
           <Canvas
             camera={{ position: [0.8, 0, 11.5], fov: 45 }}
