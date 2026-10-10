@@ -104,8 +104,8 @@
     pointer-events: none;
     z-index: 0;
     background-image:
-      linear-gradient(rgb(var(--lr-line) / 0.16) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--lr-line) / 0.16) 1px, transparent 1px);
+      linear-gradient(rgb(var(--lr-line) / 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--lr-line) / 0.25) 1px, transparent 1px);
     background-size: 44px 44px;
     mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 78%);
   }
