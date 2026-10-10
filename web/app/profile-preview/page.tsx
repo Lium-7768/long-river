@@ -23,8 +23,8 @@ export default function Preview() {
   );
 
   return (
-    <main className="min-h-screen bg-[#03060f] px-6 py-14 text-white">
-      <div className="mx-auto max-w-4xl space-y-20">
+    <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
+      <div className="mx-auto max-w-4xl space-y-6">
         {/* 页头 */}
         <header>
           <div className="text-[13px] tracking-[0.3em] text-sky-300/70">朝代 · 预览</div>
@@ -113,7 +113,7 @@ function Block({
 }) {
   return (
     <section>
-      <div className="mb-6 flex items-baseline gap-3 border-b border-white/10 pb-3">
+      <div className="mb-4 flex items-baseline gap-2 border-b border-white/10 pb-2">
         <h2 className="text-2xl font-semibold tracking-wide text-white/90">{title}</h2>
         {sub && <span className="text-xs text-white/35">{sub}</span>}
       </div>
@@ -159,14 +159,18 @@ function PersonCard({ person }: { person: PersonBrief }) {
         : '';
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 transition hover:border-sky-400/40 hover:bg-sky-400/[0.06]">
-      <div className="flex items-baseline gap-3">
-        <span className="text-base font-medium text-white/90">{person.name}</span>
-        {person.zi && <span className="text-xs text-white/40">字{person.zi}</span>}
+    <div className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 transition hover:border-sky-400/40 hover:bg-sky-400/[0.06]">
+      {/* 第一行：名字（左） 官位（右） */}
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="truncate text-sm font-medium text-white/90">{person.name}</span>
+        {person.top_office && (
+          <span className="shrink-0 text-xs text-sky-300/70">{person.top_office}</span>
+        )}
       </div>
-      <div className="flex items-baseline gap-3 text-right">
-        {person.top_office && <span className="text-xs text-sky-300/70">{person.top_office}</span>}
-        {life && <span className="text-xs tabular-nums text-white/35">{life}</span>}
+      {/* 第二行：字（左） 年（右） */}
+      <div className="mt-1 flex items-baseline justify-between gap-2">
+        <span className="truncate text-xs text-white/40">{person.zi ? `字${person.zi}` : ''}</span>
+        {life && <span className="shrink-0 text-xs tabular-nums text-white/35">{life}</span>}
       </div>
     </div>
   );
