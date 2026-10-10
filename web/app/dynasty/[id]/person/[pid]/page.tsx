@@ -1,12 +1,12 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-import Link from 'next/link';
 import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
+import { Breadcrumb } from '@/components/profile/Breadcrumb';
 
 export default function PersonPage({ params }: { params: Promise<{ id: string; pid: string }> }) {
   const { id, pid } = use(params);
@@ -28,15 +28,20 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
   return (
     <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
-        <Link
-          href={`/dynasty/${id}`}
-          className="inline-block rounded-full border border-white/15 px-3 py-1 text-xs text-white/60 transition hover:bg-white/10 hover:text-white"
-        >
-          ← 返回{dynasty?.name ?? '朝代'}
-        </Link>
+        <Breadcrumb
+          items={[
+            { label: '长河', href: '/' },
+            { label: dynasty?.name ?? '朝代', href: `/dynasty/${id}` },
+            { label: p?.name ?? '人物' },
+          ]}
+        />
 
-        {state === 'loading' && <div className="py-20 text-center text-white/40">加载中…</div>}
-        {state === 'err' && <div className="py-20 text-center text-white/40">未找到该人物</div>}
+        {state === 'loading' && (
+          <div className="py-20 text-center text-base text-white/40">加载中…</div>
+        )}
+        {state === 'err' && (
+          <div className="py-20 text-center text-base text-white/40">未找到该人物</div>
+        )}
 
         {state === 'ok' && p && (
           <>
@@ -45,7 +50,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 <h1 className="text-6xl font-semibold tracking-tight">{p.name}</h1>
                 {p.top_office && <span className="text-lg text-sky-300/80">{p.top_office}</span>}
               </div>
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-white/50">
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-base text-white/50">
                 {p.zi && <span>字{p.zi}</span>}
                 {p.hao?.length ? <span>号{p.hao.join('、')}</span> : null}
                 {p.shi?.length ? <span>谥{p.shi.join('、')}</span> : null}
@@ -55,7 +60,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 {p.addr?.length ? <span>{p.addr.join(' · ')}</span> : null}
               </div>
               {p.summary && (
-                <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/75">
+                <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">
                   {p.summary}
                 </p>
               )}
@@ -63,11 +68,11 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
 
             {p.offices.length > 0 && (
               <Section title={`历任官职（${p.offices.length}）`}>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {p.offices.map((o, i) => (
                     <span
                       key={i}
-                      className="rounded bg-white/[0.05] px-2 py-0.5 text-xs text-white/65"
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base text-white/70"
                     >
                       {o.office}
                     </span>
@@ -78,9 +83,12 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
 
             {p.entries.length > 0 && (
               <Section title="科第 / 条目">
-                <div className="flex flex-wrap gap-2 text-xs text-white/60">
+                <div className="flex flex-wrap gap-2">
                   {p.entries.map((e, i) => (
-                    <span key={i} className="rounded bg-white/[0.05] px-2 py-0.5 tabular-nums">
+                    <span
+                      key={i}
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base tabular-nums text-white/70"
+                    >
                       {e.year ? fmtYearShort(e.year) : '—'} {e.entry ?? ''}
                     </span>
                   ))}
@@ -92,7 +100,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               <Section title={`亲属关系（${p.kinships.length}）`}>
                 <KinshipGraph3D
                   kinships={p.kinships}
-                  onPick={(id, name) => setDrawer({ id, name })}
+                  onPick={(pid2, name) => setDrawer({ id: pid2, name })}
                 />
               </Section>
             )}
@@ -107,9 +115,9 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="mb-4 border-b border-white/10 pb-2 text-lg font-semibold text-white/80">
-        {title}
-      </h2>
+      <div className="mb-4 flex items-baseline gap-2 border-b border-white/10 pb-2">
+        <h2 className="text-2xl font-semibold tracking-wide text-white/90">{title}</h2>
+      </div>
       {children}
     </section>
   );

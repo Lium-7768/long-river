@@ -17,7 +17,7 @@ export default async function DynastyPage({ params }: { params: Promise<{ id: st
         <p className="text-white/50">该朝代的档案还在整理中。</p>
         <Link
           href="/"
-          className="rounded-full border border-white/15 px-4 py-1.5 text-xs text-white/60 transition hover:bg-white/10"
+          className="rounded-full border border-white/15 px-4 py-1.5 text-base text-white/60 transition hover:bg-white/10"
         >
           ← 返回长河
         </Link>

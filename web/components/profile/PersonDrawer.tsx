@@ -64,29 +64,29 @@ export function PersonDrawer({
           <>
             <div className="pr-8">
               <h3 className="text-2xl font-semibold text-white">{data.name}</h3>
-              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/50">
+              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-base text-white/50">
                 {data.zi && <span>字{data.zi}</span>}
                 {data.hao?.length ? <span>号{data.hao.join('、')}</span> : null}
                 {data.shi?.length ? <span>谥{data.shi.join('、')}</span> : null}
               </div>
-              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/40">
+              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-base text-white/40">
                 {life && <span className="tabular-nums">{life}</span>}
                 {data.top_office && <span className="text-sky-300/70">{data.top_office}</span>}
               </div>
             </div>
             {data.summary && (
-              <p className="mt-4 text-sm leading-relaxed text-white/70">{data.summary}</p>
+              <p className="mt-4 text-base leading-relaxed text-white/70">{data.summary}</p>
             )}
             {data.offices.length > 0 && (
               <div className="mt-5">
-                <div className="mb-2 text-xs font-medium tracking-wider text-white/40">
+                <div className="mb-2 text-base font-medium tracking-wider text-white/40">
                   历任官职（{data.offices.length}）
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {data.offices.slice(0, 30).map((o, i) => (
                     <span
                       key={i}
-                      className="rounded bg-white/[0.05] px-2 py-0.5 text-xs text-white/65"
+                      className="rounded bg-white/[0.05] px-2 py-0.5 text-base text-white/65"
                     >
                       {o.office}
                     </span>

@@ -119,7 +119,7 @@ export function KinshipGraph({
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-base">
         <div className="flex flex-wrap gap-3">
           {cats.map(({ cat, count }) => (
             <span key={cat} className="flex items-center gap-1.5">
@@ -207,7 +207,7 @@ export function KinshipGraph({
           })}
         </g>
       </svg>
-      <div className="mt-1 text-center text-[11px] text-white/30">
+      <div className="mt-1 text-center text-base text-white/30">
         共 {kinships.length} 条亲属 · 拖拽平移 / 滚轮缩放 / 双击复位 · 点击姓名查看详情
       </div>
     </div>
