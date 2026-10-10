@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
-import { KinshipGraph } from '@/components/profile/KinshipGraph';
+import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
 
 export default function PersonPage({ params }: { params: Promise<{ id: string; pid: string }> }) {
@@ -76,15 +76,6 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               </Section>
             )}
 
-            {p.kinships.length > 0 && (
-              <Section title={`亲属关系（${p.kinships.length}）`}>
-                <KinshipGraph
-                  kinships={p.kinships}
-                  onPick={(id, name) => setDrawer({ id, name })}
-                />
-              </Section>
-            )}
-
             {p.entries.length > 0 && (
               <Section title="科第 / 条目">
                 <div className="flex flex-wrap gap-2 text-xs text-white/60">
@@ -94,6 +85,15 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                     </span>
                   ))}
                 </div>
+              </Section>
+            )}
+
+            {p.kinships.length > 0 && (
+              <Section title={`亲属关系（${p.kinships.length}）`}>
+                <KinshipGraph3D
+                  kinships={p.kinships}
+                  onPick={(id, name) => setDrawer({ id, name })}
+                />
               </Section>
             )}
           </>
