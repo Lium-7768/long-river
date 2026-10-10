@@ -96,6 +96,22 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               </Section>
             )}
 
+            {p.works.length > 0 && (
+              <Section title={`著作（${p.works.length}）`}>
+                <div className="flex flex-wrap gap-2">
+                  {p.works.map((w, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-1 text-base text-amber-100/80"
+                      title={w.category ? `类别：${w.category}` : undefined}
+                    >
+                      {w.title}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            )}
+
             {p.kinships.length > 0 && (
               <Section title={`亲属关系（${p.kinships.length}）`}>
                 <KinshipGraph3D

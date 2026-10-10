@@ -54,6 +54,82 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
               </div>
             )}
 
+            {/* 四至 */}
+            {profile?.territory.bounds && (
+              <div>
+                <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
+                  四至
+                </h2>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(
+                    [
+                      ['东', profile.territory.bounds.east],
+                      ['南', profile.territory.bounds.south],
+                      ['西', profile.territory.bounds.west],
+                      ['北', profile.territory.bounds.north],
+                    ] as const
+                  )
+                    .filter(([, v]) => v)
+                    .map(([k, v]) => (
+                      <div
+                        key={k}
+                        className="flex gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+                      >
+                        <span className="shrink-0 font-medium text-sky-300/80">{k}至</span>
+                        <span className="text-base text-white/70">{v}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {/* 面积 / 人口 */}
+            {(profile?.territory.area || profile?.territory.population) && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {profile?.territory.area && (
+                  <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <div className="text-base text-white/40">大致面积</div>
+                    <div className="mt-1 text-white/70">{profile.territory.area}</div>
+                  </div>
+                )}
+                {profile?.territory.population && (
+                  <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <div className="text-base text-white/40">大致人口</div>
+                    <div className="mt-1 text-white/70">{profile.territory.population}</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 行政区划 */}
+            {profile?.territory.divisions && profile.territory.divisions.length > 0 && (
+              <div>
+                <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
+                  行政区划
+                </h2>
+                <p className="text-base leading-relaxed text-white/70">
+                  {profile.territory.divisions.join(' · ')}
+                </p>
+              </div>
+            )}
+
+            {/* 邻国关系 */}
+            {profile?.territory.neighbors && profile.territory.neighbors.length > 0 && (
+              <div>
+                <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
+                  邻国 / 周边关系
+                </h2>
+                <div className="space-y-2">
+                  {profile.territory.neighbors.map((n) => (
+                    <div key={n.name} className="flex gap-3 text-base">
+                      <span className="w-16 shrink-0 font-medium text-white/80">{n.name}</span>
+                      <span className="text-white/60">{n.relation}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* 地图放最下面 */}
             <TerritoryMap dynastyId={id} height={520} />
 

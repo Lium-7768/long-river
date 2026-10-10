@@ -27,20 +27,41 @@ export interface InstitutionFigure {
 export interface HistoricEvent {
   year: number; // 年份（负数=公元前）
   name: string; // 事件名
-  desc: string; // 简述
+  desc: string; // 简述（一句）
+  category?: EventCategory; // 分类
+  background?: string; // 背景 / 起因
+  outcome?: string; // 经过 / 结果
+  impact?: string; // 影响
+  figures?: InstitutionFigure[]; // 关键人物（可关联人物页）
 }
+
+/** 事件分类 */
+export type EventCategory = '战争' | '改革' | '外交' | '政变' | '建设' | '其他';
 
 export interface CultureItem {
   name: string; // 如「活字印刷」
   desc: string;
-  category?: string; // 科技/文学/艺术/思想
+  category?: string; // 科技/文学/艺术/思想/经济
   year?: number; // 出现/兴盛年份（可空）
+  background?: string; // 背景 / 为何此时兴盛
+  impact?: string; // 影响 / 历史地位
+  figures?: InstitutionFigure[]; // 代表人物（可关联人物页）
+  works?: string[]; // 代表作品
 }
 
 export interface Territory {
   capital: string; // 都城
-  extent: string; // 疆域范围
+  extent: string; // 疆域范围（一句）
   note?: string;
+  /** 四至：东西南北边界 */
+  bounds?: { east?: string; west?: string; south?: string; north?: string };
+  /** 行政区划（如北宋「路」） */
+  divisions?: string[];
+  /** 与邻政权关系 */
+  neighbors?: { name: string; relation: string }[];
+  /** 大致面积 / 人口（史家估数，注来源不确定） */
+  area?: string;
+  population?: string;
 }
 
 export interface DynastyProfile {

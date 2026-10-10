@@ -63,6 +63,12 @@ def main():
     print(f"kinships: {len(rows)}")
 
     # ---- offices / entries / works：复用 load_d1_facts 的 cbdb_id→project-id 映射 ----
+    # 载入 work_titles：textid → 标题文本（works.jsonl 只有 textid，需回填 title）
+    work_titles = {}
+    wt_path = os.path.join(BUILD, "work_titles.json")
+    if os.path.exists(wt_path):
+        work_titles = json.load(open(wt_path, encoding="utf-8"))
+
     idmap = {}
     with open(os.path.join(BUILD, "merged_persons.jsonl"), encoding="utf-8") as f:
         for line in f:
@@ -86,7 +92,14 @@ def main():
             if not pid:
                 continue
             if table == "works":
-                rows.append((pid, r.get("title"), r.get("category")))
+                title = r.get("title")
+                if not title:
+                    tid = r.get("textid")
+                    title = work_titles.get(str(tid)) if tid is not None else None
+                rows.append((pid, title, r.get("category")))
+            elif table == "entries":
+                # entries.jsonl 的字段名是 type（科举/学校等），不是 entry
+                rows.append((pid, r.get("type") or r.get("entry"), r.get("year")))
             else:
                 rows.append((pid, r.get(cols[0]), r.get("year")))
         ph = ",".join(["?"] * len(rows[0]))
