@@ -1,43 +1,65 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
-import { SONG_W } from '@/content/profiles/song-w';
+import type { DynastyProfile } from '@/content/profiles/types';
 import { fmtRangeBP, fmtYearShort } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
-import { DetailDrawer, type DetailPayload } from '@/components/profile/DetailDrawer';
 import { TerritoryMap } from '@/components/profile/TerritoryMap';
+import { itemSlug } from '@/content/profiles/slug';
 import type { PersonBrief } from '@/lib/api';
+import type { Dynasty } from '@/content/dynasties';
 
-const p = SONG_W;
-const YEAR_A = 960;
-const YEAR_B = 1127;
-
-export default function Preview() {
-  const { persons } = useDynastyPersons('song-w', 24);
-  const [detail, setDetail] = useState<DetailPayload | null>(null);
+/**
+ * 第二层：朝代档案（分块）。
+ * 人物 / 制度 / 事件 / 文化 / 疆域 各一块。点格子 → 第三层独立页。
+ */
+export function DynastyProfileView({
+  dynasty,
+  profile,
+}: {
+  dynasty: Dynasty;
+  profile: DynastyProfile;
+}) {
+  const router = useRouter();
+  const { persons } = useDynastyPersons(dynasty.id, 24);
   const { results, run, q } = usePersonSearch();
 
   const searching = q.trim().length > 0;
-  const list = searching ? results.filter((x) => typeof x.birth === 'number' || x.name) : persons;
+  const base = searching ? results : persons;
   const people = useMemo(
-    () => [...list].sort((a, b) => (a.birth ?? 9999) - (b.birth ?? 9999)),
-    [list],
+    () => [...base].sort((a, b) => (a.birth ?? 9999) - (b.birth ?? 9999)),
+    [base],
   );
+
+  const goPerson = (p: PersonBrief) => router.push(`/dynasty/${dynasty.id}/person/${p.id}`);
+  const goItem = (kind: 'event' | 'system' | 'culture', name: string) =>
+    router.push(`/dynasty/${dynasty.id}/${kind}/${itemSlug(name)}`);
 
   return (
     <main className="min-h-screen bg-[#03060f] px-6 py-6 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
+        {/* 返回 */}
+        <button
+          onClick={() => router.push('/')}
+          className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/60 transition hover:bg-white/10 hover:text-white"
+        >
+          ← 返回长河
+        </button>
+
         {/* 页头 */}
         <header>
-          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">朝代 · 预览</div>
-          <div className="mt-3 flex items-baseline gap-4">
-            <h1 className="text-6xl font-semibold tracking-tight">北宋</h1>
-            <div className="text-lg tabular-nums text-white/45">{fmtRangeBP(YEAR_A, YEAR_B)}</div>
+          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">朝代档案</div>
+          <div className="mt-2 flex items-baseline gap-4">
+            <h1 className="text-6xl font-semibold tracking-tight">{dynasty.name}</h1>
+            <div className="text-lg tabular-nums text-white/45">
+              {fmtRangeBP(dynasty.start, dynasty.end)}
+            </div>
           </div>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">{p.overview}</p>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">{profile.overview}</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            {p.keywords.map((k) => (
+            {profile.keywords.map((k) => (
               <span
                 key={k}
                 className="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-xs text-sky-200"
@@ -48,10 +70,10 @@ export default function Preview() {
           </div>
         </header>
 
-        {/* ① 代表人物 + 搜索 */}
+        {/* ① 代表人物 */}
         <Block
           title="代表人物"
-          sub={searching ? `${people.length} 个结果` : '按生年排序 · 点击查看详情'}
+          sub={searching ? `${people.length} 个结果` : '按生年排序 · 点击进入'}
           action={
             <div className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5">
               <Search className="h-3.5 w-3.5 text-white/40" />
@@ -66,55 +88,47 @@ export default function Preview() {
         >
           <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2">
             {people.map((per) => (
-              <PersonCard
-                key={per.id}
-                person={per}
-                onClick={() => setDetail({ kind: 'person', id: per.id, name: per.name })}
-              />
+              <PersonCard key={per.id} person={per} onClick={() => goPerson(per)} />
             ))}
           </div>
         </Block>
 
         {/* ② 政治制度 */}
-        <Block title="政治制度" sub="按确立年份排序 · 点击查看详情">
+        <Block title="政治制度" sub="按确立年份排序 · 点击进入">
           <CardGrid>
-            {p.institutions.map((it) => (
+            {profile.institutions.map((it) => (
               <Card
                 key={it.name}
                 year={it.year}
                 name={it.name}
                 desc={it.desc}
                 color="amber"
-                onClick={() =>
-                  setDetail({ kind: 'institution', year: it.year, name: it.name, desc: it.desc })
-                }
+                onClick={() => goItem('system', it.name)}
               />
             ))}
           </CardGrid>
         </Block>
 
         {/* ③ 重大事件 */}
-        <Block title="重大事件" sub="按年份排序 · 点击查看详情">
+        <Block title="重大事件" sub="按年份排序 · 点击进入">
           <CardGrid>
-            {p.events.map((e) => (
+            {profile.events.map((e) => (
               <Card
                 key={e.name}
                 year={e.year}
                 name={e.name}
                 desc={e.desc}
                 color="rose"
-                onClick={() =>
-                  setDetail({ kind: 'event', year: e.year, name: e.name, desc: e.desc })
-                }
+                onClick={() => goItem('event', e.name)}
               />
             ))}
           </CardGrid>
         </Block>
 
         {/* ④ 文化成就 */}
-        <Block title="文化成就" sub="按出现年份排序 · 点击查看详情">
+        <Block title="文化成就" sub="按出现年份排序 · 点击进入">
           <CardGrid>
-            {p.culture.map((c) => (
+            {profile.culture.map((c) => (
               <Card
                 key={c.name}
                 year={c.year}
@@ -122,45 +136,27 @@ export default function Preview() {
                 desc={c.desc}
                 tag={c.category}
                 color="emerald"
-                onClick={() =>
-                  setDetail({
-                    kind: 'culture',
-                    year: c.year,
-                    name: c.name,
-                    desc: c.desc,
-                    tag: c.category,
-                  })
-                }
+                onClick={() => goItem('culture', c.name)}
               />
             ))}
           </CardGrid>
         </Block>
 
         {/* ⑤ 疆域地理 */}
-        <Block title="疆域地理">
-          <div className="space-y-4">
-            <TerritoryMap dynastyId={p.id} />
-            <div className="space-y-2 text-sm">
-              <div className="flex gap-3">
-                <span className="w-14 shrink-0 text-white/40">都城</span>
-                <span className="text-white/80">{p.territory.capital}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="w-14 shrink-0 text-white/40">疆域</span>
-                <span className="text-white/70">{p.territory.extent}</span>
-              </div>
-              {p.territory.note && (
-                <div className="flex gap-3">
-                  <span className="w-14 shrink-0 text-white/40">备注</span>
-                  <span className="text-white/60">{p.territory.note}</span>
-                </div>
-              )}
-            </div>
-          </div>
+        <Block
+          title="疆域地理"
+          action={
+            <button
+              onClick={() => router.push(`/dynasty/${dynasty.id}/territory`)}
+              className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/60 transition hover:bg-white/10 hover:text-white"
+            >
+              放大查看 →
+            </button>
+          }
+        >
+          <TerritoryMap dynastyId={dynasty.id} compact />
         </Block>
       </div>
-
-      <DetailDrawer payload={detail} onClose={() => setDetail(null)} />
     </main>
   );
 }
