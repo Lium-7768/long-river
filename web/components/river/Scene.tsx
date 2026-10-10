@@ -3,9 +3,11 @@
 import { useRef, useMemo, useEffect, useState } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { DYNASTIES, DYNASTIES_WITH_DATA } from '@/content/dynasties';
 import { riverCurve, DYNASTY_T, pointAt } from './curve';
+import { fmtYear } from './year';
 import { computeCamera, type CameraMode } from './cameraModes';
 import { useThemeColor } from '@/lib/use-theme-color';
 
@@ -118,7 +120,7 @@ function Starfield() {
 
   // 2) 银河带：一条斜跨天空的密集星云带
   const galaxyGeom = useMemo(() => {
-    const count = 6000;
+    const count = 10000;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const c1 = new THREE.Color(accent2[0], accent2[1], accent2[2]);
@@ -137,7 +139,7 @@ function Starfield() {
       pos[i * 3 + 1] = v * Math.sin(1.05) * R + band;
       pos[i * 3 + 2] = v * Math.cos(1.05) * R - 30;
       const c = c1.clone().lerp(c2, Math.random());
-      const dim = 0.4 + Math.random() * 0.6;
+      const dim = 0.7 + Math.random() * 0.5;
       col[i * 3] = c.r * dim;
       col[i * 3 + 1] = c.g * dim;
       col[i * 3 + 2] = c.b * dim;
@@ -324,7 +326,7 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
           outlineWidth={0.006}
           outlineColor="#03060f"
         >
-          {`${d.start < 0 ? '前' + -d.start : d.start}`}
+          {fmtYear(d.start)}
         </Text>
       </group>
     </group>
@@ -391,6 +393,16 @@ export function Scene({
         <DynastyNode key={i} index={i} onPick={onPick} />
       ))}
       <CameraRig progress={progress} mode={mode} />
+      <EffectComposer multisampling={0}>
+        <Bloom
+          intensity={1.1}
+          luminanceThreshold={0.35}
+          luminanceSmoothing={0.4}
+          mipmapBlur
+          radius={0.75}
+        />
+        <Vignette eskil={false} offset={0.32} darkness={0.78} />
+      </EffectComposer>
     </>
   );
 }
