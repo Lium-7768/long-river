@@ -98,8 +98,10 @@ export function DynastyProfileView({
               <Card
                 key={it.name}
                 year={it.year}
+                endYear={it.endYear}
                 name={it.name}
                 desc={it.desc}
+                tag={it.category}
                 color="amber"
                 onClick={() => goItem('system', it.name)}
               />
@@ -217,6 +219,7 @@ function CardGrid({ children }: { children: React.ReactNode }) {
 
 function Card({
   year,
+  endYear,
   name,
   desc,
   tag,
@@ -224,6 +227,7 @@ function Card({
   onClick,
 }: {
   year?: number;
+  endYear?: number;
   name: string;
   desc: string;
   tag?: string;
@@ -239,7 +243,9 @@ function Card({
       <div className="flex items-baseline gap-2">
         <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
         {year != null && (
-          <span className="text-base tabular-nums text-white/45">{fmtYear(year)}</span>
+          <span className="shrink-0 text-base tabular-nums text-white/45">
+            {endYear != null ? fmtRangeBP(year, endYear) : fmtYear(year)}
+          </span>
         )}
         <span className="font-medium text-white/90">{name}</span>
         {tag && <span className={`text-base ${c.tag}`}>{tag}</span>}
