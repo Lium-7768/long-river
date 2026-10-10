@@ -1,6 +1,6 @@
 'use client';
 
-import { fmtYearShort } from '@/components/river/year';
+import { fmtYear } from '@/components/river/year';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 
 export interface ItemDetailData {
@@ -43,7 +43,7 @@ export function ItemDetail({
           <div className="mt-2 flex items-baseline gap-4">
             <h1 className="text-5xl font-semibold tracking-tight">{data.name}</h1>
             {data.year != null && (
-              <span className="text-lg tabular-nums text-white/45">{fmtYearShort(data.year)}</span>
+              <span className="text-lg tabular-nums text-white/45">{fmtYear(data.year)}</span>
             )}
           </div>
           {data.tag && <div className="mt-2 text-base text-white/40">{data.tag}</div>}
