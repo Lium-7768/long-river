@@ -82,10 +82,10 @@ def main():
             pid = f"sj-{py}-{created}"
             con.execute(
                 """INSERT INTO persons
-                   (id,cbdb_id,name,surname,birth,death,dynasty,polity,zi,hao,shi,addr,
+                   (id,cbdb_id,name,surname,birth,death,polity,zi,hao,shi,addr,
                     role,prominence,summary,source,dynasty_id,fame_score)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                (pid, None, nm, nm[0], None, None, r["dynasty"], None,
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (pid, None, nm, nm[0], None, None, None,
                  json.dumps([zi], ensure_ascii=False) if zi else "[]", "[]", "[]",
                  json.dumps([addr], ensure_ascii=False) if addr else "[]",
                  None, r.get("prominence", 6), desc, r["source"], r["dynasty"],

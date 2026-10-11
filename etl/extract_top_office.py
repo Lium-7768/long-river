@@ -6,7 +6,10 @@ db = sqlite3.connect(DB)
 
 cols = [r[1] for r in db.execute("PRAGMA table_info(persons)")]
 if 'top_office' not in cols:
-    db.execute("ALTER TABLE persons ADD COLUMN top_office TEXT")
+    try:
+        db.execute("ALTER TABLE persons ADD COLUMN top_office TEXT")
+    except Exception:
+        pass  # 列已存在
     print("✓ 新增 top_office")
 
 # 官职等级（高→低），取第一个命中

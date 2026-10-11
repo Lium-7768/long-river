@@ -43,7 +43,10 @@ def main():
     # 加字段
     cols = [r[1] for r in db.execute("PRAGMA table_info(persons)")]
     if 'dynasty_id' not in cols:
-        db.execute("ALTER TABLE persons ADD COLUMN dynasty_id TEXT")
+        try:
+            db.execute("ALTER TABLE persons ADD COLUMN dynasty_id TEXT")
+        except Exception:
+            pass  # 列已存在
         print("✓ 新增 dynasty_id 字段")
 
     # 1. 先给已有明确 polity 的直接映射

@@ -11,7 +11,10 @@ t0=time.time()
 
 cols = [r[1] for r in db.execute("PRAGMA table_info(persons)")]
 if 'fame_score' not in cols:
-    db.execute("ALTER TABLE persons ADD COLUMN fame_score INTEGER")
+    try:
+        db.execute("ALTER TABLE persons ADD COLUMN fame_score INTEGER")
+    except Exception:
+        pass  # 列已存在
     print("✓ 新增 fame_score 字段")
 
 # 聚合计数（每个表扫一遍）

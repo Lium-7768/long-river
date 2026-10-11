@@ -15,14 +15,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA = """
 CREATE TABLE persons (
   id TEXT PRIMARY KEY, cbdb_id INTEGER, name TEXT NOT NULL, surname TEXT,
-  birth INTEGER, death INTEGER, dynasty TEXT, polity TEXT, zi TEXT,
+  birth INTEGER, death INTEGER, polity TEXT, zi TEXT,
   hao TEXT, shi TEXT, addr TEXT, role TEXT, prominence INTEGER,
-  summary TEXT, source TEXT);
+  summary TEXT, source TEXT, dynasty_id TEXT, fame_score INTEGER, top_office TEXT);
 CREATE TABLE kinships (a TEXT, b TEXT, rel TEXT, source TEXT);
 CREATE TABLE offices (person_id TEXT, office TEXT, year INTEGER);
 CREATE TABLE entries (person_id TEXT, entry TEXT, year INTEGER);
 CREATE TABLE works (person_id TEXT, title TEXT, category TEXT);
-CREATE INDEX idx_persons_dynasty ON persons(dynasty);
+CREATE INDEX idx_persons_dynasty_id ON persons(dynasty_id);
 CREATE INDEX idx_persons_name ON persons(name);
 CREATE INDEX idx_persons_prom ON persons(prominence);
 CREATE INDEX idx_kinships_a ON kinships(a);
@@ -126,8 +126,9 @@ def main():
             (r.get("zi") or [None])[0] if isinstance(r.get("zi"), list) else r.get("zi"),
             jdump(r.get("hao")), jdump(r.get("shi")), jdump(r.get("addr_names")),
             None, r.get("prominence"), None, "CBDB cbdb_20261003",
+            None, None,
         ))
-    con.executemany("INSERT INTO persons VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", rows)
+    con.executemany("INSERT INTO persons VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", rows)
     print(f"persons: {len(rows)}")
 
     # ---- kinships（cbdb_id → project id）----

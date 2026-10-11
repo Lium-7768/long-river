@@ -38,7 +38,7 @@ for r in rows:
         continue
     ins.append((
         pid, None, r["name"], r.get("surname"),
-        r.get("birth"), r.get("death"), dy, r.get("polity"),
+        r.get("birth"), r.get("death"), r.get("polity"),
         None, "[]", "[]", "[]",
         None, r.get("prominence", 5),
         r.get("desc"), r.get("source"),
@@ -47,9 +47,9 @@ for r in rows:
 
 db.executemany(
     """INSERT INTO persons
-       (id,cbdb_id,name,surname,birth,death,dynasty,polity,zi,hao,shi,addr,
+       (id,cbdb_id,name,surname,birth,death,polity,zi,hao,shi,addr,
         role,prominence,summary,source,dynasty_id,fame_score)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", ins)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", ins)
 db.commit()
 print(f"✓ 插入 {len(ins)}，跳过 {skipped}（已存在/同名）")
 
