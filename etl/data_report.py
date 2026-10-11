@@ -28,7 +28,9 @@ def main():
     L.append("## 一、表规模\n")
     L.append("| 表 | 行数 |")
     L.append("|---|---:|")
-    for t in ["persons", "kinships", "offices", "office_addrs", "entries", "works", "assocs", "texts"]:
+    for t in ["persons", "kinships", "offices", "office_addrs", "entries", "works",
+              "assocs", "institutions", "events", "event_persons", "poems", "poem_authors",
+              "evid", "texts"]:
         try:
             L.append(f"| {t} | {q(f'SELECT COUNT(*) FROM {t}'):,} |")
         except Exception:

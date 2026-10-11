@@ -95,6 +95,8 @@ def main():
     txt = "\n".join(L) + "\n"
     open(OUT, "w", encoding="utf-8").write(txt)
     print(txt)
+    con.execute("DROP TABLE IF EXISTS tmp_claims")  # 清理临时表
+    con.commit()
     print(f"\n✓ 报告写入 {OUT}")
     con.close()
 
