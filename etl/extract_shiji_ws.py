@@ -25,9 +25,16 @@ def strip_notes(s):
     return s
 
 
+PREFIX = r"(?:大將軍|大将军|丞相|太尉|御史大夫|大司馬|大司马|上將軍|上将军|將軍|将军|大行|中郎|侍中|廷尉|少府|中尉|衛尉|衛将军|驃騎將軍|车骑将军|車騎將軍)?"
+
+
 def parse_bio(seg):
     """从传记首句提取 (name, zi, addr)"""
     seg = seg.strip()
+    seg = re.sub(r"^" + PREFIX, "", seg)
+    # 官职中缀：蕭相國何者 → 蕭何者；留侯張良者 → 張良者
+    seg = re.sub(r"^([\u4e00-\u9fff])[\u4e00-\u9fff]{1,3}(?:相國|丞相|太尉|將軍|侯|君|公)([\u4e00-\u9fff])者", r"\1\2者", seg)
+    seg = re.sub(r"^[\u4e00-\u9fff]{1,3}侯([\u4e00-\u9fff]{2,4})者", r"\1者", seg)
     # ① XX者，YY人也，字Z
     m = re.match(r"^([\u4e00-\u9fff]{2,4})者[，,]([\u4e00-\u9fff]{2,12}?)人也[，,]?\s*字\s*([\u4e00-\u9fff]{1,3})", seg)
     if m:
