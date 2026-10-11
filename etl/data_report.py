@@ -30,7 +30,8 @@ def main():
     L.append("|---|---:|")
     for t in ["persons", "kinships", "offices", "office_addrs", "entries", "works",
               "assocs", "institutions", "events", "event_persons", "poems", "poem_authors",
-              "evid", "texts"]:
+              "mourning", "nianhao", "editions", "person_notes", "possessions", "addr_belongs",
+              "text_types", "evid", "texts"]:
         try:
             L.append(f"| {t} | {q(f'SELECT COUNT(*) FROM {t}'):,} |")
         except Exception:
