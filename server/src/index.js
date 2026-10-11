@@ -214,14 +214,14 @@ function handle(pathname, searchParams) {
     // 代表作：优先人工核验的名篇（famous=1），不足再补流行短篇
     let featured = db.prepare(
       `SELECT id, title, author, genre, n_lines, substr(content,1,120) AS excerpt
-       FROM poems WHERE poem_dynasty = ? AND famous = 1
+       FROM poems WHERE poem_dynasty = ? AND famous = 1 AND genre IN ('诗','词','曲')
        ORDER BY n_lines DESC LIMIT 12`
     ).all(dynasty);
     if (featured.length < 12) {
       const more = db.prepare(
         `SELECT p.id, p.title, p.author, p.genre, p.n_lines, substr(p.content,1,120) AS excerpt
          FROM poems p
-         WHERE p.poem_dynasty = ? AND p.famous = 0
+         WHERE p.poem_dynasty = ? AND p.famous = 0 AND p.genre IN ('诗','词','曲')
            AND p.n_lines BETWEEN 2 AND 8
            AND p.title NOT LIKE '%乐章%' AND p.title NOT LIKE '%歌辞%'
            AND p.title NOT LIKE '%郊庙%' AND p.title NOT LIKE '%鼓吹%'
