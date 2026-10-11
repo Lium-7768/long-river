@@ -30,6 +30,30 @@ def main(db="data/lr-song.sqlite3"):
     n7=con.execute(q,LEGAL).rowcount
     con.commit()
     print(f"✓ 修复: birth0={n1} death0={n2} 越界={n3+n4} 颠倒={n5} ziJSON={n6} 非法朝代={n7}")
+
+    # 6. 籍贯占位符（未详/不知何许）→ 清空
+    bad_kw=['未详','不詳','不详','不知何','无考','未詳']
+    n8=0
+    for pid,addr in con.execute("SELECT id,addr FROM persons WHERE addr IS NOT NULL").fetchall():
+        try: arr=json.loads(addr)
+        except Exception: continue
+        keep=[a for a in arr if not any(k in str(a) for k in bad_kw)]
+        if len(keep)!=len(arr):
+            con.execute("UPDATE persons SET addr=? WHERE id=?",
+                        (json.dumps(keep,ensure_ascii=False) if keep else '[]',pid)); n8+=1
+    # 7. summary 过长 → 截到首句（≤60）
+    n9=0
+    for pid,s_ in con.execute("SELECT id,summary FROM persons WHERE summary IS NOT NULL AND LENGTH(summary)>60").fetchall():
+        cut=-1
+        for i,ch in enumerate(s_):
+            if ch in '。；' and 10<=i<=60: cut=i; break
+        con.execute("UPDATE persons SET summary=? WHERE id=?",(s_[:cut+1] if cut>0 else s_[:60],pid)); n9+=1
+    # 8. 晚近朝代极小年份（<200 且>0）→ NULL
+    n10=con.execute("UPDATE persons SET death=NULL WHERE dynasty_id IN ('yuan','ming','qing','song-w','song-e') AND death IS NOT NULL AND death<200 AND death>0").rowcount
+    # 9. song-w 南宋遗民（death 1279-1400）→ song-e
+    n11=con.execute("UPDATE persons SET dynasty_id='song-e' WHERE dynasty_id='song-w' AND death IS NOT NULL AND death BETWEEN 1279 AND 1400").rowcount
+    print(f"✓ 扩展修复: 籍贯占位={n8} summary截断={n9} 极小年={n10} 南宋迁移={n11}")
+
     con.close()
 
 if __name__=="__main__": main()
