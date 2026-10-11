@@ -57,8 +57,10 @@ def main():
         desc = r.get("desc")
 
         if nm in existing:
-            # 补全：只填空字段
-            for rec in existing[nm]:
+            # 补全：只填空字段，且**仅限同朝代**记录（避免同名跨朝代污染）
+            same_dy = [x for x in existing[nm] if x["dynasty_id"] == r["dynasty"]]
+            targets = same_dy if same_dy else []
+            for rec in targets:
                 sets, args = [], []
                 if zi:
                     cur = con.execute("SELECT zi FROM persons WHERE id=?", (rec["id"],)).fetchone()[0]
