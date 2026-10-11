@@ -79,7 +79,7 @@ function handle(pathname, searchParams) {
       `SELECT k.rel, k.b AS id, p.name FROM kinships k
        JOIN persons p ON p.id = k.b WHERE k.a = ? LIMIT 200`
     ).all(id);
-    const offices = db.prepare('SELECT office, year FROM offices WHERE person_id = ? ORDER BY year').all(id);
+    const offices = db.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year').all(id);
     const entries = db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year').all(id);
     const works = db.prepare('SELECT title, category FROM works WHERE person_id = ?').all(id);
     const assocs = db.prepare(
