@@ -261,6 +261,23 @@ function handle(pathname, searchParams) {
     return ok(rows, { total: cnt, q });
   }
 
+  if (p === '/api/person-geo') {
+    const dynasty = searchParams.get('dynasty');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '300', 10), 1000);
+    // 按朝代聚合籍贯坐标（地名去重，计数）
+    const rows = dynasty
+      ? db.prepare(
+          `SELECT g.addr AS name, g.lon, g.lat, COUNT(DISTINCT g.person_id) n
+           FROM person_geo g JOIN persons p ON p.id = g.person_id
+           WHERE p.dynasty_id = ? GROUP BY g.addr ORDER BY n DESC LIMIT ?`
+        ).all(dynasty, limit)
+      : db.prepare(
+          `SELECT addr AS name, lon, lat, COUNT(DISTINCT person_id) n
+           FROM person_geo GROUP BY addr ORDER BY n DESC LIMIT ?`
+        ).all(limit);
+    return ok(rows, { dynasty });
+  }
+
   if (p === '/api/stats') {
     const s = db.prepare(
       `SELECT
