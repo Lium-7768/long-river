@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { api, type PersonBrief } from '@/lib/api';
 
 export interface PersonsState {
@@ -44,28 +44,66 @@ export function useDynastyPersons(dynastyId: string | null, limit = 80) {
   return state;
 }
 
-/** 搜索人物（跨全部朝代） */
-export function usePersonSearch() {
+export interface PersonSearchState {
+  results: PersonBrief[];
+  loading: boolean;
+  error: string | null;
+  q: string;
+  run: (query: string) => void;
+}
+
+/**
+ * 搜索人物（跨全部朝代）。
+ * - 300ms 防抖，避免每次击键都发请求。
+ * - 竞态保护：仅采纳最后一次请求的结果。
+ * - 区分「无结果」与「请求失败」。
+ */
+export function usePersonSearch(): PersonSearchState {
   const [results, setResults] = useState<PersonBrief[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
+  const seq = useRef(0);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const run = useCallback(async (query: string) => {
+  const run = useCallback((query: string) => {
     setQ(query);
-    if (!query.trim()) {
+    const trimmed = query.trim();
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+
+    if (!trimmed) {
+      seq.current++;
       setResults([]);
+      setLoading(false);
+      setError(null);
       return;
     }
+
+    const mySeq = ++seq.current;
     setLoading(true);
-    try {
-      const r = await api.search(query.trim());
-      setResults(r.data);
-    } catch {
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
+    setError(null);
+
+    timer.current = setTimeout(async () => {
+      try {
+        const r = await api.search(trimmed);
+        if (mySeq !== seq.current) return;
+        setResults(r.data);
+        setLoading(false);
+      } catch (e) {
+        if (mySeq !== seq.current) return;
+        setResults([]);
+        setError(String((e as { message?: string })?.message || e));
+        setLoading(false);
+      }
+    }, 300);
   }, []);
 
-  return { results, loading, q, run };
+  useEffect(() => {
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, []);
+
+  return { results, loading, error, q, run };
 }

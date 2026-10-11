@@ -26,3 +26,29 @@ export function fmtYearBP(y: number): string {
 export function fmtRangeBP(start: number, end: number): string {
   return `${fmtYearBP(start)} — ${fmtYearBP(end)}`;
 }
+
+/* ------------------------------------------------------------------ *
+ *  以下为“缺失值安全”变体。人物/事件常缺生卒年，直接传 0 会错误地
+ *  显示成「公元0」。这些函数在缺值时返回占位符，避免误导性年份。
+ * ------------------------------------------------------------------ */
+
+/** 单年，缺值时返回占位符（默认「不详」）。 */
+export function fmtYearOr(y: number | null | undefined, fallback = '不详'): string {
+  return y == null ? fallback : fmtYear(y);
+}
+
+/**
+ * 时间范围，缺值优雅降级：
+ *  - 双缺 → 「不详」
+ *  - 缺起 → 「？ — 公元x」
+ *  - 缺止 → 「公元前x — ？」
+ */
+export function fmtRangeOr(
+  start: number | null | undefined,
+  end: number | null | undefined,
+): string {
+  if (start == null && end == null) return '不详';
+  if (start == null) return `？ — ${fmtYear(end as number)}`;
+  if (end == null) return `${fmtYear(start)} — ？`;
+  return fmtRange(start, end);
+}

@@ -109,6 +109,52 @@
     background-size: 44px 44px;
     mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 78%);
   }
+
+  /* 键盘焦点在所有可交互元素上清晰可见 */
+  :focus-visible {
+    outline: 2px solid rgb(var(--lr-accent));
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgb(var(--lr-accent) / 0.3);
+  }
+}
+
+@layer components {
+  /* 共享按钮：固定深色界面上统一的主/次操作样式。
+     首页与内容页都处于深色底，故用固定白系，不随主题变浅。 */
+  .lr-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem; /* 44px 点击目标 */
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    padding: 0.5rem 1.125rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.9);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .lr-button:hover {
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(255 255 255);
+  }
+
+  .lr-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 @layer utilities {
@@ -120,6 +166,18 @@
     box-shadow:
       inset 0 0 18px rgb(var(--lr-accent) / 0.08),
       0 0 18px rgb(var(--lr-accent) / 0.12);
+  }
+}
+
+/* 尊重“减少动态效果”偏好：全站禁用不必要的动效 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
