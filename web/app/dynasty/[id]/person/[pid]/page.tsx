@@ -66,6 +66,21 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               )}
             </header>
 
+            {p.sources?.length ? (
+              <Section title="史料来源">
+                <div className="flex flex-wrap gap-2">
+                  {p.sources.map((s, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1 text-base text-emerald-100/80"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
+
             {p.offices.length > 0 && (
               <Section title={`历任官职（${p.offices.length}）`}>
                 <div className="flex flex-wrap gap-2">

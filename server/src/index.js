@@ -88,6 +88,7 @@ function handle(pathname, searchParams) {
       hao: parseJsonArr(person.hao),
       shi: parseJsonArr(person.shi),
       addr: parseJsonArr(person.addr),
+      sources: parseJsonArr(person.sources),
       kinships, offices, entries, works,
     });
   }

@@ -65,6 +65,7 @@ export interface PersonDetail extends PersonBrief {
   hao: string[];
   shi: string[];
   addr: string[];
+  sources: string[];
   kinships: Kinship[];
   offices: Office[];
   entries: Entry[];
