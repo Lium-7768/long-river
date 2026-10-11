@@ -19,6 +19,12 @@ def main():
             if not re.fullmatch(r'[\u4e00-\u9fff]{2,4}',name): continue
             if name[-1] in '也不之者而以其於所为与则且乃乎哉焉了得着':
                 continue
+            # 籍贯须像地名：以 州/縣/府/郡/邑/衛/所/人 或 常见地名尾 结尾
+            addr=m.group(3)
+            if addr and not (addr[-1] in '州縣府郡邑衛所陽陰寧安平昌慶興武昌平' or len(addr)<=3):
+                continue
+            # 名字不能是「大數」类（含数字/量词）
+            if any(c in name for c in '一二三四五六七八九十百千萬'): continue
             rec=recs.setdefault(name,{'name':name,'dynasty':dy,'polity':None,
                 'birth':None,'death':None,'zi':[],'hao':[],'shi':[],'addr_names':[],
                 'office':[],'kin':[],'entry':[],'works':[],'desc':None,'source':srcname,
