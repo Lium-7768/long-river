@@ -122,6 +122,13 @@ export interface PersonDetail extends PersonBrief {
   offices: Office[];
   entries: Entry[];
   works: Work[];
+  qid?: string | null;
+  birth_exact?: string | null;
+  death_exact?: string | null;
+  aliases?: { alias: string; type_desc: string }[];
+  occupations?: string[];
+  birthplaces?: string[];
+  network?: { n_out: number; n_in: number; n_types: number } | null;
 }
 
 export interface Paged<T> {

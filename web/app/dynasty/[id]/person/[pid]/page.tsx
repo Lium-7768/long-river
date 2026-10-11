@@ -62,10 +62,28 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                   </span>
                 )}
                 {p.addr?.length ? <span>{p.addr.join(' · ')}</span> : null}
+                {p.birthplaces?.length ? <span>籍贯 {p.birthplaces.join('、')}</span> : null}
                 {p.ethnicity && p.ethnicity !== '汉' ? <span>民族 {p.ethnicity}</span> : null}
                 {p.household ? <span>{p.household}</span> : null}
                 {p.death_age ? <span>享年 {p.death_age}</span> : null}
+                {p.network && p.network.n_out + p.network.n_in > 0 ? (
+                  <span>
+                    社会关系 {p.network.n_out + p.network.n_in} 条（{p.network.n_types} 类）
+                  </span>
+                ) : null}
               </div>
+              {p.occupations?.length ? (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {p.occupations.map((o, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-1 text-base text-amber-100/80"
+                    >
+                      {o}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               {p.summary && (
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">
                   {p.summary}
@@ -82,6 +100,22 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                       className="rounded-lg border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1 text-base text-emerald-100/80"
                     >
                       {s}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
+
+            {p.aliases?.length ? (
+              <Section title={`别名 / 字·号·行第·谥（${p.aliases.length}）`}>
+                <div className="flex flex-wrap gap-2">
+                  {p.aliases.map((a, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1 text-base text-white/75"
+                    >
+                      {a.alias}
+                      <span className="ml-2 text-white/40">{a.type_desc}</span>
                     </span>
                   ))}
                 </div>
