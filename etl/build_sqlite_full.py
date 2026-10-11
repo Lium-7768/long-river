@@ -89,18 +89,29 @@ def main():
     cbdb2id = {}
     rows = []
     def fix_dynasty(r):
-        """c_dy=2 是「秦漢」合并，按生卒/index_year 细分 qin/han-w/han-e。"""
+        """细分朝代：
+        - c_dy=2(秦汉) → qin / han-w / han-e（按生卒）
+        - c_dy=15(宋)  → song-w(960-1127) / song-e(1127-1279)（按生卒，缺则留 song-w）
+        """
         dy = r.get("dynasty")
-        if dy != "qin":  # 仅 2(秦汉) 需细分
-            return dy
         yr = r.get("birth") or r.get("death")
-        if yr is None:
-            return "qin"
-        if yr < -206:
-            return "qin"
-        if yr <= 9:
-            return "han-w"
-        return "han-e"
+        if dy == "qin":  # 秦汉合并桶
+            if yr is None:
+                return None
+            if yr < -206:
+                return "qin"
+            if yr <= 9:
+                return "han-w"
+            return "han-e"
+        if dy == "song-w":  # 宋需拆南北
+            if yr is None:
+                return "song-w"
+            if yr < 1127:
+                return "song-w"
+            if yr <= 1279:
+                return "song-e"
+            return "song-w"
+        return dy
 
     for line in open(os.path.join(B, "persons.jsonl"), encoding="utf-8"):
         r = json.loads(line)
