@@ -42,12 +42,27 @@ def t2s(x):
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 宋段相关政权：宋15 辽16 金17 + 并入宋的十国
-DY_INCLUDE = (15, 16, 17, 78, 8, 10, 11, 12, 13, 7)
+# 宋代及其并立政权 + 秦汉唐明清（本次扩展）
+# 15宋 16辽 17金 78西夏 8后蜀 10南唐 11吴越 12闽 13南汉 7五代
+# 2秦汉 6唐 19明 20清 29西汉 25东汉
+DY_INCLUDE = (15, 16, 17, 78, 8, 10, 11, 12, 13, 7, 2, 6, 19, 20, 29, 25)
 
 # CBDB 政权 code → 本项目 polity 枚举
 DY2POLITY = {
     15: "宋", 16: "辽", 17: "金", 78: "西夏",
     8: "后蜀", 10: "南唐", 11: "吴越", 12: "闽", 13: "南汉", 7: "五代",
+    2: "秦汉", 6: "唐", 19: "明", 20: "清", 29: "西汉", 25: "东汉",
+}
+
+# 本项目朝代 id（dynasties.ts）← CBDB 朝代码
+DY2DYNASTY = {
+    2: "qin",       # 秦汉（CBDB 未细分，暂归 qin；后续可按 c_index_year 细分）
+    6: "tang",
+    19: "ming",
+    20: "qing",
+    29: "han-w",
+    25: "han-e",
+    15: "song-w",   # 宋：本项目已拆宋北宋南，此处仅占位
 }
 
 
@@ -92,6 +107,7 @@ def main():
             "death": r["c_deathyear"],
             "dy": r["c_dy"],
             "polity": DY2POLITY.get(r["c_dy"], "宋"),
+            "dynasty": DY2DYNASTY.get(r["c_dy"]),
             "choronym_code": r["c_choronym_code"],
             "female": bool(r["c_female"]),
             "zi": [], "hao": [], "shi": [], "other_names": [],
