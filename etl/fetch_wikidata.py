@@ -30,8 +30,8 @@ DYNASTIES = {
     "zhou-e":  {"qid": "Q307066", "name": "东周",     "range": (-770, -221)},
     "xin":     {"qid": "Q504769", "name": "新朝",     "range": (0, 30)},
     "wudai":   {"qid": "Q242115", "name": "五代十国", "range": (860, 980)},
-    "sanguo":  {"qid": "Q185072", "name": "三国",     "range": (180, 290)},
-    "xixia":   {"qid": "Q742998", "name": "西夏",     "range": (1000, 1230)},
+    "sanguo":  {"qid": "Q185043", "name": "三国",     "range": (155, 300)},
+    "xixia":   {"qid": "Q7427",   "name": "西夏",     "range": (1038, 1227)},
 }
 
 
@@ -71,6 +71,8 @@ WD_STATES = {
     "wudai": ["Q783489", "Q1143126", "Q1154540", "Q1069829", "Q1154556",
               "Q9061288", "Q1326742", "Q571453", "Q526507", "Q1198071",
               "Q1192067", "Q504759", "Q1325075", "Q1141471"],
+    # 三国：曹魏 / 蜀汉 / 东吴
+    "sanguo": ["Q320930", "Q320925", "Q274488"],
 }
 
 
@@ -106,7 +108,8 @@ def fetch_by_p27(qid):
 
 
 def fetch_by_range(lo, hi):
-    """兜底：中国人 + 生卒落在 [lo,hi]（负=公元前）。"""
+    """严格兜底：中国(或中国历史) + 生卒落在 [lo,hi] + 至少有 1 个 sitelink。
+    注意：此查询易跨朝代误抓，故仅在 P27 命中 < 5 时用。"""
     def iso(y):
         return f"{'-' if y < 0 else ''}{abs(y):04d}-01-01T00:00:00Z".replace("--", "-")
     q = f"""SELECT ?p ?pLabel ?pDesc ?birth ?death (COUNT(?sl) AS ?links) WHERE {{
@@ -187,8 +190,8 @@ def main():
                 "zi": [], "hao": [], "shi": [], "addr_names": [],
                 "office": [], "kin": [], "entry": [], "works": [],
             }
-        # 兜底时间范围（仅当 P27 太少时）
-        if len(got) < 20:
+        # 兜底时间范围（仅当 P27 几乎无命中时）
+        if len(got) < 5:
             try:
                 lo, hi = meta["range"]
                 for b in fetch_by_range(lo, hi):
@@ -196,6 +199,8 @@ def main():
                     name = val(b, "pLabel")
                     if not name or name.startswith("Q") or qid in got:
                         continue
+                    if int(val(b, "links") or 0) < 1:
+                        continue  # 无 sitelink 不予兜底收录
                     got[qid] = {
                         "cbdb_id": None, "wikidata_qid": qid, "name": _t2s(name),
                         "surname": None,
