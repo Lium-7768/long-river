@@ -31,7 +31,7 @@ def main():
     for t in ["persons", "kinships", "offices", "office_addrs", "entries", "works",
               "assocs", "institutions", "events", "event_persons", "poems", "poem_authors",
               "mourning", "nianhao", "editions", "person_notes", "possessions", "addr_belongs",
-              "text_types", "lineage", "addr_geo", "evid", "texts"]:
+              "text_types", "lineage", "poem_persons", "addr_geo", "evid", "texts"]:
         try:
             L.append(f"| {t} | {q(f'SELECT COUNT(*) FROM {t}'):,} |")
         except Exception:
