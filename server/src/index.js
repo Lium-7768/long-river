@@ -54,6 +54,8 @@ function handle(pathname, searchParams) {
     if (q) { where.push('(name LIKE ? OR zi LIKE ?)'); binds.push(`%${q}%`, `%${q}%`); }
     if (polity) { where.push('polity = ?'); binds.push(polity); }
     if (dynastyId) { where.push('dynasty_id = ?'); binds.push(dynastyId); }
+    const female = searchParams.get('female');
+    if (female === '1') { where.push('female = 1'); }
     if (minProm >= 0) { where.push('prominence >= ?'); binds.push(minProm); }
     const wsql = where.length ? ' WHERE ' + where.join(' AND ') : '';
 
@@ -103,6 +105,18 @@ function handle(pathname, searchParams) {
     const nPoems = db.prepare(
       `SELECT COUNT(*) n FROM poems WHERE author = ?`
     ).get(person.name).n;
+    const aliases = db.prepare(
+      `SELECT alias, type_desc FROM aliases WHERE person_id = ? LIMIT 50`
+    ).all(id);
+    const occupations = db.prepare(
+      `SELECT occupation FROM person_occupations WHERE person_id = ? LIMIT 20`
+    ).all(id).map((r) => r.occupation);
+    const birthplaces = db.prepare(
+      `SELECT place FROM person_birthplace WHERE person_id = ? LIMIT 10`
+    ).all(id).map((r) => r.place);
+    const network = db.prepare(
+      `SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?`
+    ).get(id) || null;
 
     return ok({
       ...person,
@@ -118,6 +132,10 @@ function handle(pathname, searchParams) {
       notes,
       possessions,
       institutions: insts,
+      aliases,
+      occupations,
+      birthplaces,
+      network,
     });
   }
 
@@ -221,6 +239,18 @@ function handle(pathname, searchParams) {
     return ok(rows);
   }
 
+  if (p === '/api/bibliography') {
+    const q = searchParams.get('q');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10), 200);
+    const w = q ? 'WHERE title LIKE ?' : '';
+    const b = q ? [`%${q}%`] : [];
+    const cnt = db.prepare(`SELECT COUNT(*) n FROM bibliography ${w}`).get(...b).n;
+    const rows = db.prepare(
+      `SELECT text_id, title, text_year FROM bibliography ${w} ORDER BY text_year LIMIT ?`
+    ).all(...b, limit);
+    return ok(rows, { total: cnt, q });
+  }
+
   if (p === '/api/stats') {
     const s = db.prepare(
       `SELECT
@@ -232,10 +262,15 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM poems) AS poems,
          (SELECT COUNT(DISTINCT author) FROM poems) AS poem_authors,
          (SELECT COUNT(*) FROM events) AS events,
+         (SELECT COUNT(*) FROM aliases) AS aliases,
+         (SELECT COUNT(*) FROM bibliography) AS bibliography,
+         (SELECT COUNT(*) FROM lineage) AS lineage,
+         (SELECT COUNT(*) FROM persons WHERE qid IS NOT NULL) AS with_qid,
+         (SELECT COUNT(*) FROM persons WHERE female = 1) AS female,
          (SELECT COUNT(*) FROM persons WHERE summary IS NOT NULL) AS with_summary,
          (SELECT COUNT(*) FROM persons WHERE prominence >= 5) AS prom5`
     ).get();
-    return ok({ ...s, source: 'CBDB cbdb_20261003', backend: 'local-sqlite' });
+    return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + CHGIS + 维基文库', backend: 'local-sqlite' });
   }
 
   return err('not found', 404);
