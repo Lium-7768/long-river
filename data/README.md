@@ -1,27 +1,76 @@
-# 数据备份
+# 数据备份与重建
 
-## 文件
+> **本地 SQLite 是唯一数据源。** 已弃用 D1 接入方式。
+
+## 主库
+
 | 文件 | 大小 | 进 git | 说明 |
 |---|---|---|---|
-| `lr-song.sql.gz` | ~3.7 MB | ✅ | 宋辽金夏库的压缩 SQL 备份（权威快照） |
-| `lr-song.sqlite3` | ~33 MB | ❌ | 解压后的本地 SQLite（`.gitignore`，随时重建） |
+| `lr-song.sqlite3` | ~844 MB | ❌ | **主数据库**（本地唯一数据源）|
+| `lr-song.sql.gz.part-aa` | ~90 MB | ✅ | 备份分卷 1（SQL 压缩）|
+| `lr-song.sql.gz.part-ab` | ~40 MB | ✅ | 备份分卷 2 |
 
-## 为什么同时留两份
-- **`.sql.gz`（3.7MB）**：压缩后进 git，clone 即得备份；体积小，可版本化
-- **`.sqlite3`（33MB）**：直接可用，但不进 git（避免仓库历史膨胀）；由 `.sql.gz` 恢复
+`.sqlite3` 不进 git（体积大）。备份 **分卷**（每卷 <100MB，绕开 GitHub 单文件上限）。
+
+## 主库内容（84 表）
+
+### 加工表（6）— 前端/后端直接用
+| 表 | 行数 | 说明 |
+|---|---|---|
+| `persons` | 64 万 | 人物（CBDB + Wikidata + 正史补全）|
+| `kinships` | 54 万 | 亲属关系 |
+| `offices` | 59 万 | 任官记录 |
+| `entries` | 26 万 | 科举/入仕 |
+| `works` | 4.9 万 | 著作 |
+| `texts` | 2443 卷 | 公版史书全文（2348 万字）|
+
+### CBDB 原始表（78）— `cbdb_` 前缀
+CBDB 全库零丢失并入，可随时补新字段。
+关键表：`cbdb_BIOG_MAIN`(66万)、`cbdb_KIN_DATA`(56万)、`cbdb_POSTED_TO_OFFICE_DATA`(59万)、
+`cbdb_ASSOC_DATA`(19万,社会关系)、`cbdb_STATUS_DATA`(7.4万,身份)、`cbdb_BIOG_ADDR_DATA`(46万,籍贯)。
 
 ## 恢复本地 SQLite
+
 ```bash
-gunzip -c data/lr-song.sql.gz | sqlite3 data/lr-song.sqlite3
+cat data/lr-song.sql.gz.part-* | gunzip -c | sqlite3 data/lr-song.sqlite3
 ```
 
-## 从 D1 重新导出（当 D1 有更新时）
+## 备份主库（自动分卷）
+
 ```bash
-CLOUDFLARE_API_TOKEN=xxx bash etl/dump_db.sh lr-song
-# 然后重新生成压缩备份：
-sqlite3 data/lr-song.sqlite3 ".dump" | gzip -9 > data/lr-song.sql.gz
+bash etl/backup_db.sh                 # → data/lr-song.sql.gz.part-aa / -ab
 ```
 
-## 用途
-D1 是线上部署副本；本地 SQLite 是**权威备份**。若 D1 出问题（额度/故障），
-可用本地库重建，或改后端指向本地 SQLite。
+## 从 CBDB 源库重建（完整流水线）
+
+```bash
+# 1. CBDB 源库（560MB，需自备，不入 git）
+#    → etl/data/cbdb_20261003.sqlite3
+
+# 2. 从 CBDB 构建加工表（persons/kinships/offices/entries/works）
+python3 etl/build_from_cbdb.py
+python3 etl/build_sqlite_full.py
+
+# 3. 并入 CBDB 全部 78 原始表（cbdb_ 前缀）
+python3 etl/import_cbdb_tables.py etl/data/cbdb_20261003.sqlite3 data/lr-song.sqlite3
+
+# 4. Wikidata 扩充
+python3 etl/fetch_wikidata.py
+python3 etl/merge_wikidata.py data/lr-song.sqlite3 etl/build/wikidata_persons.jsonl
+
+# 5. 公版史书全文入库（需先下载到 /tmp，见下表来源）
+python3 etl/import_texts.py data/lr-song.sqlite3
+
+# 6. 结构修复（幂等）
+python3 etl/fix_structure.py
+```
+
+## 原典全文来源（公版，可重新下载）
+| 书 | 卷数 | 来源 |
+|---|---|---|
+| 史记 | 114 | github.com/the-quizzman/shiji |
+| 资治通鉴 | 293 | github.com/the-quizzman/zizhitongjian |
+| 汉书 / 后汉书 | 117 / 132 | the-quizzman/hanshu, houhanshu |
+| 明史 / 清史稿 | 319 / 470 | zh.wikisource.org |
+| 宋史 / 元史 / 辽史 / 金史 / 新五代史 | 466 / 204 / 109 / 133 / 74 | zh.wikisource.org |
+| 春秋左氏传 | 12 | zh.wikisource.org |
