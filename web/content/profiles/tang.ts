@@ -17,6 +17,7 @@ export const TANG: DynastyProfile = {
       year: 618,
       endYear: 907,
       desc: '中书出令、门下审议、尚书执行，下设吏户礼兵刑工六部，权责划分而相制衡。',
+      source: '《旧唐书·职官志》《新唐书·百官志》',
       background:
         '隋创三省六部，唐承而完善之。为防宰相专权、提高行政效率，将决策与执行分属三省：中书取旨草诏，门下封驳审议，尚书总领六部贯彻，政事堂为宰相议政之所。',
       impact:
@@ -29,6 +30,7 @@ export const TANG: DynastyProfile = {
       year: 618,
       endYear: 907,
       desc: '以考试取士，设进士、明经诸科，寒门得由科举入仕。',
+      source: '《新唐书·选举志》《唐摭言》',
       background:
         '隋创科举以破魏晋以来门阀垄断之九品中正；唐承之并大加发展，太宗、武后、玄宗朝均扩大取士，进士科渐成士人入仕正途（「三十老明经，五十少进士」）。',
       impact:
@@ -41,6 +43,7 @@ export const TANG: DynastyProfile = {
       year: 618,
       endYear: 780,
       desc: '国家按丁口授田（口分田、永业田），受田者承担租庸调。',
+      source: '《旧唐书·食货志》《通典·田制》',
       background:
         '承北魏、隋之均田制，唐初地广人稀，国家将官田按丁男授之，以「均田」为赋税基础，稳定自耕小农。',
       impact:
@@ -53,6 +56,7 @@ export const TANG: DynastyProfile = {
       year: 618,
       endYear: 780,
       desc: '以均田为基础，征租（粟）、调（绢布）、庸（可纳绢代役），负担较均。',
+      source: '《旧唐书·食货志》',
       background: '与均田制配套，「有田则有租，有身则有庸，有户则有调」，是唐前期主要赋役制度。',
       impact: '征纳简明、负担较轻，利于小农恢复；均田瓦解后失效，代之以两税法。',
       figures: [],
@@ -63,6 +67,7 @@ export const TANG: DynastyProfile = {
       year: 618,
       endYear: 749,
       desc: '府兵平时农耕、战时出征，兵农合一，折冲府统领，装备自备。',
+      source: '《新唐书·兵志》《通典·兵典》',
       background:
         '承西魏、北周之府兵，唐初设折冲府六百余，集兵权于中央，兵将平日不相统属，防将帅拥兵。',
       impact:
@@ -75,6 +80,7 @@ export const TANG: DynastyProfile = {
       year: 780,
       endYear: 907,
       desc: '杨炎建议：以资产为宗，分夏秋两次征税，赋税由人丁转向财产。',
+      source: '《旧唐书·杨炎传》（780年）',
       background:
         '安史之乱后均田、租庸调崩坏，户籍失实、税源枯竭，杨炎遂倡两税法，废租庸调，按田亩与资产定税，分夏、秋两征。',
       impact:
@@ -87,6 +93,7 @@ export const TANG: DynastyProfile = {
       year: 711,
       endYear: 907,
       desc: '边地设节度使掌一镇军政财赋，权重势大，渐成半独立割据。',
+      source: '《新唐书·藩镇传》《旧唐书·地理志》',
       background:
         '为防边疆，睿宗、玄宗于缘边置节度使（安西、范阳、平卢等十镇），授以军、政、财权；募兵既行，节度使遂握重兵。',
       impact:
@@ -99,6 +106,7 @@ export const TANG: DynastyProfile = {
       year: 637,
       endYear: 907,
       desc: '以《唐律疏议》为核心的法典体系，为东亚法系之典范。',
+      source: '《旧唐书·刑法志》《唐律疏议》',
       background:
         '唐初在隋《开皇律》基础上订《武德律》《贞观律》，高宗时撰《律疏》，合成《唐律疏议》。',
       impact: '体例严谨、科条简要，「一准乎礼」，为唐后历代刑法及日本、朝鲜、越南律法之蓝本。',
@@ -111,6 +119,7 @@ export const TANG: DynastyProfile = {
       name: '李渊建唐',
       category: '政变',
       desc: '李渊于太原起兵，入长安，逼隋恭帝禅位，建立唐朝。',
+      source: '《旧唐书·高祖本纪》（618年）',
       background: '隋炀帝滥用民力、三征高丽致天下大乱，李渊时任太原留守，乘乱起兵。',
       outcome: '617年李渊入长安立杨侑为帝，618年炀帝被杀于江都，李渊废恭帝称帝，国号唐。',
       impact: '开启三百年大唐基业；此后太宗、高宗陆续平群雄、灭诸国，再造统一。',
@@ -121,6 +130,7 @@ export const TANG: DynastyProfile = {
       name: '玄武门之变',
       category: '政变',
       desc: '秦王李世民伏杀太子建成、齐王元吉，追父禅位，是为太宗。',
+      source: '《旧唐书·太宗本纪》（626年）',
       background:
         '李渊诸子中，太子建成与秦王世民争位激烈。世民屡立战功、府僚众多，建成与元吉联手相图。',
       outcome: '626年六月四日，世民伏兵玄武门，杀建成、元吉；高祖立世民为太子，旋禅位。',
@@ -132,6 +142,7 @@ export const TANG: DynastyProfile = {
       name: '贞观之治',
       category: '改革',
       desc: '太宗纳谏、任贤、轻徭薄赋，政治清明、社会安定，誉为治世典范。',
+      source: '《旧唐书·太宗本纪》《贞观政要》',
       background:
         '太宗惩隋亡之鉴，虚心纳谏（魏徵等），精简机构、轻徭薄赋，行均田、府兵、科举之制。',
       outcome:
@@ -144,6 +155,7 @@ export const TANG: DynastyProfile = {
       name: '文成公主入藏',
       category: '外交',
       desc: '唐以文成公主和亲吐蕃松赞干布，唐蕃结好，中原文明传入西藏。',
+      source: '《旧唐书·吐蕃传》（641年）',
       background: '吐蕃松赞干布统一高原、求婚于唐，太宗许以宗女文成公主。',
       outcome:
         '641年文成公主入吐蕃，携佛像、典籍、工匠、种子，唐蕃「和同为一家」，松赞干布为公主筑城。',
@@ -156,6 +168,7 @@ export const TANG: DynastyProfile = {
       name: '武则天称帝',
       category: '政变',
       desc: '武后废唐立周，自称「圣神皇帝」，为中国唯一正统女皇帝。',
+      source: '《旧唐书·则天皇后本纪》（690年）',
       background:
         '武后自高宗朝即以「二圣」临朝，历废中宗、睿宗，稳固权势；以科举、酷吏、告密手段打压李唐宗室。',
       outcome:
@@ -169,6 +182,7 @@ export const TANG: DynastyProfile = {
       name: '开元盛世',
       category: '改革',
       desc: '玄宗前期励精图治，任姚崇、宋璟为相，国势臻于全盛。',
+      source: '《旧唐书·玄宗本纪》',
       background: '中宗、睿宗朝政局动荡，玄宗即位后锐意改革，任姚崇、宋璟、张九龄等贤相。',
       outcome:
         '政治清明、经济繁荣、人口增至五千余万，长安为国际都会，「稻米流脂粟米白」；武功亦盛，疆域极广。',
@@ -181,6 +195,7 @@ export const TANG: DynastyProfile = {
       name: '安史之乱',
       category: '战争',
       desc: '安禄山、史思明举兵反唐，八年战乱，唐由盛转衰。',
+      source: '《旧唐书·安禄山传》《通鉴》唐纪（755–763年）',
       background:
         '玄宗晚年宠信杨国忠、李林甫，边镇节度使安禄山身兼范阳、平卢、河东三镇，拥兵近二十万，与中央矛盾激化。',
       outcome:
@@ -193,6 +208,7 @@ export const TANG: DynastyProfile = {
       name: '两税法改革',
       category: '改革',
       desc: '杨炎主行两税法，按资产分夏秋征税，赋税制度重大转折。',
+      source: '《旧唐书·杨炎传》《食货志》',
       background: '安史乱后均田、租庸调崩溃，户籍紊乱、财政困窘，德宗从杨炎议行两税法。',
       outcome: '废租庸调，量出为入，按田亩资产定税，分夏（六月）、秋（十一月）两次征收。',
       impact: '中国赋税由「税人」转「税地」，简化税制、缓解财政危机，深刻影响后世税制。',
@@ -203,6 +219,7 @@ export const TANG: DynastyProfile = {
       name: '黄巢起义',
       category: '政变',
       desc: '黄巢率众起义，转战大江南北，一度攻陷长安称帝，唐室再受重创。',
+      source: '《旧唐书·黄巢传》（875–884年）',
       background: '唐末赋役苛重、连年灾荒，王仙芝、黄巢先后起兵，历时近十年。',
       outcome: '黄巢军流动作战，881年攻入长安称「大齐」皇帝，旋败；唐借沙陀兵平之，然元气大伤。',
       impact: '唐廷赖以制衡藩镇的中央兵力尽失，朱温等军阀坐大，唐名存实亡。',
@@ -213,6 +230,7 @@ export const TANG: DynastyProfile = {
       name: '朱温灭唐',
       category: '政变',
       desc: '朱温逼哀帝禅位，建后梁，唐亡，中国进入五代十国。',
+      source: '《旧唐书·哀帝本纪》（907年）',
       background: '黄巢降将朱温据汴、侵吞中原，尽诛唐室与朝臣，终行篡代。',
       outcome: '907年朱温废哀帝自立，国号梁（后梁），唐历289年而亡。',
       impact: '结束大唐三百年，中国进入五代十国的分裂时期，直至宋初重归一统。',
@@ -224,6 +242,7 @@ export const TANG: DynastyProfile = {
       name: '唐诗',
       category: '文学',
       desc: '唐诗为中国古典诗歌巅峰，李白、杜甫、白居易等名家辈出，体裁大备。',
+      source: '《全唐诗》《新唐书·艺文志》',
       background: '科举试诗赋、国力强盛、南北文风交融与西域乐舞输入，共同催生唐诗的黄金时代。',
       impact:
         '清人所编《全唐诗》收诗四万八千余首、作者两千二百余人，为中华文学的巅峰，亦是民族精神的载体。',
@@ -234,6 +253,7 @@ export const TANG: DynastyProfile = {
       name: '唐三彩',
       category: '艺术',
       desc: '以黄、绿、白釉着色低温烧制的陶器，造型生动、色彩绚烂。',
+      source: '唐代窑址考古（巩义等）',
       background: '厚葬之风与中外交流，推动陶塑艺术繁荣；唐三彩多为贵族随葬明器。',
       impact: '釉色流变、造型丰美，是唐代工艺与审美的代表，远播朝鲜、日本。',
       figures: [],
@@ -243,6 +263,7 @@ export const TANG: DynastyProfile = {
       name: '雕版印刷',
       category: '科技',
       desc: '唐代出现成熟雕版印刷，大量印制佛经、历书、诗文。',
+      source: '《旧唐书·文宗本纪》（大和九年）',
       background: '佛教兴盛需大量经典，纸张普及、雕版技术成熟，遂有印刷术应用。',
       impact:
         '为世界最早的可实用印刷技术之一，咸通九年《金刚经》为现存最早有明确纪年的雕版印刷品，后经宋、传入世界。',
@@ -253,6 +274,7 @@ export const TANG: DynastyProfile = {
       name: '佛教与玄奘取经',
       category: '思想',
       desc: '佛教鼎盛，玄奘西行取经、译经，创立唯识宗；禅宗亦大兴。',
+      source: '《大唐大慈恩寺三藏法师传》《旧唐书·方伎传》',
       background:
         '唐代兼容并包，佛教诸宗（天台、华严、法相、禅、净土）俱盛，玄奘于贞观年间西行求法。',
       impact:
@@ -264,6 +286,7 @@ export const TANG: DynastyProfile = {
       name: '书法黄金时代',
       category: '艺术',
       desc: '楷书、行书、草书并盛，欧阳询、颜真卿、柳公权、张旭、怀素各领风骚。',
+      source: '《新唐书·艺文志》《宣和书谱》',
       background: '唐代重书法（科举、官府文书），帝王提倡（太宗好王羲之），遂成书法盛世。',
       impact: '确立楷书法度（颜筋柳骨）与狂草新境，颜真卿楷书成为后世典范。',
       figures: [{ name: '颜真卿' }, { name: '柳公权' }, { name: '张旭' }],
@@ -273,6 +296,7 @@ export const TANG: DynastyProfile = {
       name: '敦煌艺术',
       category: '艺术',
       desc: '莫高窟壁画与彩塑极盛，融汇中原与西域风格。',
+      source: '敦煌莫高窟唐代壁画与藏经洞文献',
       background: '丝路繁盛、佛教大兴，敦煌作为咽喉重镇，洞窟营建达到顶峰。',
       impact: '敦煌壁画、彩塑是世界艺术宝库，见证中外艺术交融与丝路文明。',
       figures: [],
@@ -282,6 +306,7 @@ export const TANG: DynastyProfile = {
       name: '火药与炼丹',
       category: '科技',
       desc: '唐代炼丹术实践中发现火药配方，并渐用于军事。',
+      source: '《新唐书·艺文志》孙思邈《丹经》',
       background: '道士炼丹遇硫黄、硝石、木炭合燃之性，火药配方在唐代被记载、应用。',
       impact: '火药为四大发明之一，唐后期始用于战事，后经宋、元成熟并西传，改变世界战争史。',
       figures: [{ name: '孙思邈' }],
@@ -322,5 +347,10 @@ export const TANG: DynastyProfile = {
     area: '约 1200 万平方公里（极盛时，史家估数，含羁縻）',
     population: '约 8000 万–9000 万（天宝年间，各家估数，户口约千九百万、口五千余万为登籍数）',
   },
+  sources: [
+    '《旧唐书》《新唐书》（本纪、职官志、食货志、地理志、兵志）',
+    '《资治通鉴》唐纪',
+    '《唐会要》《通典》《唐律疏议》',
+  ],
   completeness: 'draft',
 };

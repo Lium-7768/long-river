@@ -137,6 +137,20 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
               关于本图：以现代省份轮廓近似古代疆域范围，仅作示意，非精确历史地理边界。
               真实历史边界需 CHGIS 等专业数据源。
             </p>
+
+            {/* 史料来源 */}
+            {profile?.sources && profile.sources.length > 0 && (
+              <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+                <div className="mb-2 text-base tracking-[0.2em] text-sky-300/70">史料来源</div>
+                <ul className="space-y-1">
+                  {profile.sources.map((s) => (
+                    <li key={s} className="text-base leading-relaxed text-white/60">
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         ) : (
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-10 text-center text-white/40">

@@ -17,6 +17,7 @@ export const HAN_E: DynastyProfile = {
       year: 25,
       endYear: 220,
       desc: '光武帝扩大尚书台职权，使三公形同虚设，中枢实权归尚书。',
+      source: '《后汉书·仲长统传》',
       background:
         '光武惩西汉外朝权臣（如王莽）之弊，将机要政务归尚书台，由皇帝近臣领之，三公仅备位。',
       impact:
@@ -29,6 +30,7 @@ export const HAN_E: DynastyProfile = {
       year: 25,
       endYear: 220,
       desc: '承西汉察举、征辟之制，然渐重门第与清议，形成累世公卿的门阀。',
+      source: '《后汉书·左雄传》',
       background: '东汉选举操于地方大族与士人之手，「孝廉」多出世家；清议品评人物之风盛行。',
       impact:
         '选官为重名望的门阀所把持，如弘农杨氏、汝南袁氏四世三公，为魏晋门阀「九品中正」之先声。',
@@ -40,6 +42,7 @@ export const HAN_E: DynastyProfile = {
       year: 39,
       endYear: 220,
       desc: '光武下令核实天下垦田与户口，以均赋税、抑豪强隐匿。',
+      source: '《后汉书·光武帝纪》（建武十五年）',
       background: '天下初定，豪强兼并、隐瞒田产户口，赋税不均。光武下度田令，遣官检核州郡。',
       impact:
         '遭豪强大族激烈反抗，光武虽诛戮失职官吏高压推行，然终难彻底，「度田不实」成东汉难解之弊。',
@@ -51,6 +54,7 @@ export const HAN_E: DynastyProfile = {
       year: 74,
       endYear: 175,
       desc: '重设西域都护府与戊己校尉，经略西域、复通丝路。',
+      source: '《后汉书·西域传》',
       background:
         '王莽时西域与中原断绝，匈奴复控其地。明帝时班超等西征，追灭匈奴所立之莎车、龟兹势力。',
       impact: '「投笔从戎」的班超经营西域三十年，丝路复通；然东汉对西域控制时断时续，随国势起伏。',
@@ -62,6 +66,7 @@ export const HAN_E: DynastyProfile = {
       year: 188,
       endYear: 220,
       desc: '改刺史为州牧，授以兵权、民政，州由监察区变为行政军事区。',
+      source: '《后汉书·刘焉传》',
       background: '黄巾乱起，地方动荡，刘焉建言「选清名重臣以为牧伯」，以镇安州郡。',
       impact: '州牧手握一州军政，尾大不掉，成为汉末群雄割据（如袁绍、刘表、刘璋）的制度温床。',
       figures: [{ name: '刘焉' }, { name: '汉灵帝' }],
@@ -73,6 +78,7 @@ export const HAN_E: DynastyProfile = {
       name: '东汉建立·光武中兴',
       category: '政变',
       desc: '刘秀平定群雄，称帝建东汉，定都洛阳，扫除割据、恢复汉室。',
+      source: '《后汉书·光武帝纪》（25年）',
       background:
         '新莽末年天下大乱，刘秀起兵于南阳，昆阳之战大破王莽军，后经十余年征战平定关东、陇右、巴蜀。',
       outcome: '公元25年刘秀于鄗城称帝，沿用「汉」国号，定都洛阳；至36年平定公孙述，全国一统。',
@@ -85,6 +91,7 @@ export const HAN_E: DynastyProfile = {
       name: '班超出使西域',
       category: '外交',
       desc: '班超投笔从戎，出使西域，经营三十一年，重通丝路、威服诸国。',
+      source: '《后汉书·班超传》（73年）',
       background: '明帝欲复通西域、断匈奴右臂，班超随窦固出击后奉命出使西域。',
       outcome:
         '班超以「不入虎穴，焉得虎子」之勇袭杀匈奴使者，使鄯善归汉，后历定莎车、龟兹、疏勒，官至西域都护。',
@@ -96,6 +103,7 @@ export const HAN_E: DynastyProfile = {
       name: '外戚宦官交替专权',
       category: '政变',
       desc: '和帝以下诸帝多幼年即位，外戚与宦官交替把持朝政，循环倾轧。',
+      source: '《后汉书·宦者列传》',
       background:
         '和帝幼立，窦太后临朝，窦宪专权；和帝长成后借宦官郑众诛窦宪。此后如邓、阎、梁诸外戚与宦官反复争权。',
       outcome: '窦宪、梁冀等外戚嚣张一时，宦官五侯亦擅权乱政，皇帝多短寿，权柄屡易其手。',
@@ -107,6 +115,7 @@ export const HAN_E: DynastyProfile = {
       name: '党锢之祸',
       category: '政变',
       desc: '士大夫与宦官冲突，李膺等名士被诬「共为部党」，遭禁锢终身。',
+      source: '《后汉书·党锢列传》',
       background: '宦官乱政，士人清议抨击，太学生以「天下楷模李元礼」相标榜，与宦官势成水火。',
       outcome:
         '桓帝时李膺等被诬下狱，后虽赦而「禁锢终身」；灵帝时再兴党狱，李膺、范滂等百余人死狱中，党人门生故吏悉遭禁锢。',
@@ -118,6 +127,7 @@ export const HAN_E: DynastyProfile = {
       name: '黄巾起义',
       category: '政变',
       desc: '张角以太平道聚众数十万起义，「苍天已死，黄天当立」，八州并起。',
+      source: '《后汉书·皇甫嵩传》（184年）',
       background:
         '朝政腐败、赋役繁重、灾荒频仍，张角借道教（太平道）符水治病、聚徒传教十余年，信徒遍布青徐幽冀等八州。',
       outcome:
@@ -130,6 +140,7 @@ export const HAN_E: DynastyProfile = {
       name: '董卓之乱',
       category: '政变',
       desc: '董卓带兵入洛，废少帝、立献帝，焚洛阳、迁长安，天下由此大乱。',
+      source: '《后汉书·董卓传》（189年）',
       background:
         '灵帝崩，何进谋诛宦官，召董卓等外兵入京；何进反为宦官所杀，袁绍等尽诛宦官，董卓乘乱擅权。',
       outcome: '董卓废少帝立献帝，纵兵劫掠，焚洛阳、掘帝陵，挟献帝西迁长安，关东诸侯遂结盟讨董。',
@@ -141,6 +152,7 @@ export const HAN_E: DynastyProfile = {
       name: '官渡之战',
       category: '战争',
       desc: '曹操以少胜多大破袁绍，奠定统一北方之基。',
+      source: '《三国志·武帝纪》（200年）',
       background: '董卓乱后群雄割据，袁绍据河北势盛，曹操挟献帝都许，与袁绍对峙于官渡。',
       outcome: '曹操火烧乌巢袁军粮屯，袁军大溃，绍仅以身免；曹操遂渐平河北。',
       impact: '北方归属奠定，为曹魏代汉铺路，「挟天子以令诸侯」之效大显。',
@@ -151,6 +163,7 @@ export const HAN_E: DynastyProfile = {
       name: '曹丕代汉',
       category: '政变',
       desc: '曹丕逼献帝禅位，改国号魏，东汉灭亡，三国时代开启。',
+      source: '《三国志·文帝纪》（220年）',
       background: '曹操挟献帝、平北方，权倾天下；曹操死后，子曹丕嗣魏王。',
       outcome: '汉献帝被迫「禅让」，曹丕称帝建魏；次年刘备称帝于蜀，孙权建吴，三国鼎立。',
       impact: '两汉四百年帝业终结，中国历史进入三国魏晋南北朝分裂时期。',
@@ -163,6 +176,7 @@ export const HAN_E: DynastyProfile = {
       category: '科技',
       year: 105,
       desc: '蔡伦以树皮、麻头、破布、旧渔网造纸，改良并推广书写材料。',
+      source: '《后汉书·蔡伦传》',
       background: '此前文字书于竹简、缣帛，笨重昂贵；蔡伦总结民间经验，以植物纤维造纸。',
       impact: '「蔡侯纸」轻便廉价，极大推动文化传播，被视为中国古代四大发明之一。',
       figures: [{ name: '蔡伦' }],
@@ -173,6 +187,7 @@ export const HAN_E: DynastyProfile = {
       category: '文学',
       year: 82,
       desc: '班固著中国第一部纪传体断代史，记西汉一代之事。',
+      source: '《后汉书·班固传》',
       background: '班固承父班彪之遗稿撰《汉书》，历二十余年；后由其妹班昭续成。',
       impact: '开创「断代史」体例，为后世正史所宗，与《史记》并称。',
       figures: [{ name: '班固' }, { name: '班昭' }],
@@ -183,6 +198,7 @@ export const HAN_E: DynastyProfile = {
       category: '科技',
       year: 132,
       desc: '张衡制候风地动仪测地震方位，又作浑天仪、著《灵宪》论天文。',
+      source: '《后汉书·张衡传》',
       background: '东汉地震频仍，天文历法需求推动观测仪器发展。',
       impact: '地动仪是世界最早的验震仪器，标志中国古代天文学与机械制造的高度。',
       figures: [{ name: '张衡' }],
@@ -193,6 +209,7 @@ export const HAN_E: DynastyProfile = {
       category: '思想',
       year: 100,
       desc: '许慎著中国第一部系统分析字形、考究字源的字典。',
+      source: '《后汉书·许慎传》',
       background: '东汉古文经学兴盛，为解经而重文字训诂，许慎遂集大成著此书。',
       impact: '首创部首检字法，收录九千余字，为文字学（小学）奠基之作。',
       figures: [{ name: '许慎' }],
@@ -202,6 +219,7 @@ export const HAN_E: DynastyProfile = {
       name: '《伤寒杂病论》',
       category: '科技',
       desc: '张仲景著，确立辨证论治原则，被誉为「医圣」之作。',
+      source: '《后汉书·张机传》',
       background: '汉末疫病流行、十室九空，张仲景遂精研医术，著书济世。',
       impact: '奠定中医临床医学基础，与《黄帝内经》同为中医经典，影响东亚医学千余年。',
       figures: [{ name: '张仲景' }],
@@ -211,6 +229,7 @@ export const HAN_E: DynastyProfile = {
       name: '佛教东传',
       category: '思想',
       desc: '明帝时「永平求法」，佛教正式传入，洛阳建白马寺。',
+      source: '《后汉书·西域传》（永平求法）',
       background: '汉明帝夜梦金人，遣使西域求法，迎天竺僧摄摩腾、竺法兰及佛经至洛阳。',
       impact: '佛教自此在中土扎根，与儒道交融，深刻塑造中古以降的中国思想与文化。',
       figures: [{ name: '汉明帝' }],
@@ -220,6 +239,7 @@ export const HAN_E: DynastyProfile = {
       name: '汉末建安文学',
       category: '文学',
       desc: '建安年间「三曹」「七子」开一代文风，慷慨悲凉、气韵遒劲。',
+      source: '《后汉书·孔融传》',
       background: '汉末乱世，文人感时伤乱，托诗言志，形成「建安风骨」。',
       impact: '开创文人自觉创作的新风气，为魏晋文学自觉与诗歌发展奠基。',
       figures: [{ name: '曹操' }, { name: '曹植' }],
@@ -266,5 +286,6 @@ export const HAN_E: DynastyProfile = {
     area: '约 350 万平方公里（史家估数）',
     population: '约 5000 万（东汉中期，[汉书]与[后汉书]记载峰值逾五千万）',
   },
+  sources: ['《后汉书》（光武帝纪、班超传、党锢列传、宦者列传、张衡传、蔡伦传）', '《三国志》'],
   completeness: 'draft',
 };
