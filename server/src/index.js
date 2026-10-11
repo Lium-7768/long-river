@@ -93,6 +93,13 @@ function handle(pathname, searchParams) {
     const evid = db.prepare(
       `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
     ).all(id);
+    const poems = db.prepare(
+      `SELECT id, title, genre, substr(content,1,120) AS excerpt, n_lines
+       FROM poems WHERE author = ? ORDER BY n_lines DESC LIMIT 200`
+    ).all(person.name);
+    const nPoems = db.prepare(
+      `SELECT COUNT(*) n FROM poems WHERE author = ?`
+    ).get(person.name).n;
 
     return ok({
       ...person,
@@ -103,6 +110,8 @@ function handle(pathname, searchParams) {
       kinships, offices, entries, works, assocs,
       officeAddrs: officeAddrs.map((r) => r.addr),
       evid,
+      poems,
+      nPoems,
     });
   }
 
@@ -117,6 +126,43 @@ function handle(pathname, searchParams) {
        ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC LIMIT 100`
     ).all(`%${q}%`, `%${q}%`, `%${q}%`);
     return ok(rows, { q });
+  }
+
+  if (p === '/api/poems') {
+    const q = searchParams.get('q');
+    const author = searchParams.get('author');
+    const dynasty = searchParams.get('dynasty');
+    const genre = searchParams.get('genre');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10), 200);
+    const offset = parseInt(searchParams.get('offset') || '0', 10);
+    const w = [];
+    const b = [];
+    if (author) { w.push('author = ?'); b.push(author); }
+    if (dynasty) { w.push('dynasty = ?'); b.push(dynasty); }
+    if (genre) { w.push('genre = ?'); b.push(genre); }
+    if (q) { w.push('(title LIKE ? OR content LIKE ?)'); b.push(`%${q}%`, `%${q}%`); }
+    const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
+    const cnt = db.prepare(`SELECT COUNT(*) n FROM poems ${wsql}`).get(...b).n;
+    const rows = db.prepare(
+      `SELECT id,title,author,dynasty,genre,n_lines,substr(content,1,200) AS excerpt
+       FROM poems ${wsql} ORDER BY id LIMIT ? OFFSET ?`
+    ).all(...b, limit, offset);
+    return ok(rows, { total: cnt, limit, offset });
+  }
+
+  const mPoem = p.match(/^\/api\/poems\/(\d+)$/);
+  if (mPoem) {
+    const poem = db.prepare('SELECT * FROM poems WHERE id = ?').get(parseInt(mPoem[1], 10));
+    if (!poem) return err('poem not found', 404);
+    return ok(poem);
+  }
+
+  if (p === '/api/poem-authors') {
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500);
+    const rows = db.prepare(
+      `SELECT name, dynasty, n_poems FROM poem_authors ORDER BY n_poems DESC LIMIT ?`
+    ).all(limit);
+    return ok(rows);
   }
 
   if (p === '/api/polities') {
@@ -136,6 +182,9 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM offices) AS offices,
          (SELECT COUNT(*) FROM entries) AS entries,
          (SELECT COUNT(*) FROM works) AS works,
+         (SELECT COUNT(*) FROM poems) AS poems,
+         (SELECT COUNT(DISTINCT author) FROM poems) AS poem_authors,
+         (SELECT COUNT(*) FROM events) AS events,
          (SELECT COUNT(*) FROM persons WHERE summary IS NOT NULL) AS with_summary,
          (SELECT COUNT(*) FROM persons WHERE prominence >= 5) AS prom5`
     ).get();

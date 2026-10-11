@@ -67,6 +67,23 @@ export interface Evidence {
   src_pages: string | null;
 }
 
+export interface Poem {
+  id: number;
+  title: string;
+  author?: string;
+  dynasty?: string;
+  genre?: string;
+  content?: string;
+  excerpt?: string;
+  n_lines: number;
+}
+
+export interface PoemAuthor {
+  name: string;
+  dynasty: string | null;
+  n_poems: number;
+}
+
 export interface PersonDetail extends PersonBrief {
   hao: string[];
   shi: string[];
@@ -76,6 +93,8 @@ export interface PersonDetail extends PersonBrief {
   death_evid?: string | null;
   officeAddrs?: string[];
   evid?: Evidence[];
+  poems?: Poem[];
+  nPoems?: number;
   kinships: Kinship[];
   offices: Office[];
   entries: Entry[];
@@ -106,4 +125,17 @@ export const api = {
   person: (id: string) =>
     get<{ ok: true; data: PersonDetail }>(`/api/persons/${encodeURIComponent(id)}`),
   search: (q: string) => get<{ ok: true; data: PersonBrief[] }>('/api/search', { q }),
+  poems: (
+    p: {
+      q?: string;
+      author?: string;
+      dynasty?: string;
+      genre?: string;
+      limit?: number;
+      offset?: number;
+    } = {},
+  ) => get<{ ok: true; data: Poem[]; total?: number }>('/api/poems', p),
+  poem: (id: number | string) => get<{ ok: true; data: Poem }>(`/api/poems/${id}`),
+  poemAuthors: (limit = 100) =>
+    get<{ ok: true; data: PoemAuthor[] }>('/api/poem-authors', { limit }),
 };

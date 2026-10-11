@@ -159,6 +159,30 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               </Section>
             )}
 
+            {p.nPoems ? (
+              <Section title={`诗词作品（${p.nPoems}）`}>
+                <div className="space-y-3">
+                  {(p.poems ?? []).slice(0, 20).map((po) => (
+                    <div
+                      key={po.id}
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+                    >
+                      <div className="flex flex-wrap items-baseline gap-x-3">
+                        <span className="text-base font-medium text-white/85">{po.title}</span>
+                        <span className="text-base text-white/40">{po.genre}</span>
+                      </div>
+                      <p className="mt-2 whitespace-pre-line text-base leading-relaxed text-white/65">
+                        {po.excerpt}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                {p.nPoems > 20 && (
+                  <p className="mt-3 text-base text-white/40">仅显示前 20 首，共 {p.nPoems} 首。</p>
+                )}
+              </Section>
+            ) : null}
+
             {p.kinships.length > 0 && (
               <Section title={`亲属关系（${p.kinships.length}）`}>
                 <KinshipGraph3D
