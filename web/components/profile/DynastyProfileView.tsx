@@ -6,6 +6,7 @@ import { Search } from 'lucide-react';
 import type { DynastyProfile } from '@/content/profiles/types';
 import { fmtRange, fmtRangeBP, fmtYear, fmtYearBP } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
+import { useDynastyPoems } from '@/components/persons/use-poems';
 import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
@@ -26,6 +27,7 @@ export function DynastyProfileView({
   const router = useRouter();
   const { persons } = useDynastyPersons(dynasty.id, 24);
   const { results, run, q } = usePersonSearch();
+  const poems = useDynastyPoems(dynasty.id);
   const cov = getCoverage(dynasty.id);
 
   const searching = q.trim().length > 0;
@@ -141,6 +143,34 @@ export function DynastyProfileView({
             ))}
           </CardGrid>
         </Block>
+
+        {/* ④b 文学作品（诗词）—— 数据来自 chinese-poetry，名篇点进独立页 */}
+        {poems.featured.length > 0 && (
+          <Block
+            title="文学作品"
+            sub={`${poems.authors.length ? poems.authors[0].name + ' 等 · ' : ''}共 ${poems.genres
+              .reduce((s, g) => s + g.n, 0)
+              .toLocaleString()} 首 · 点击阅读`}
+          >
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
+              {poems.featured.map((po) => (
+                <button
+                  key={po.id}
+                  onClick={() => router.push(`/dynasty/${dynasty.id}/poem/${po.id}`)}
+                  className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-emerald-400/40 hover:bg-emerald-400/[0.07]"
+                >
+                  <div className="flex flex-wrap items-baseline gap-x-2">
+                    <span className="text-base font-medium text-white/90">{po.title}</span>
+                    <span className="text-base text-emerald-300/70">{po.author}</span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
+                    {po.excerpt}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </Block>
+        )}
 
         {/* ⑤ 疆域地理 —— 与上面一样只是个格子，点进独立页 */}
         <Block title="疆域地理">

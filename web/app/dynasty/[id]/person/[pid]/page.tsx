@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { api, type PersonDetail } from '@/lib/api';
 import { DYNASTIES } from '@/content/dynasties';
 import { fmtRange, fmtYear } from '@/components/river/year';
@@ -163,9 +164,10 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               <Section title={`诗词作品（${p.nPoems}）`}>
                 <div className="space-y-3">
                   {(p.poems ?? []).slice(0, 20).map((po) => (
-                    <div
+                    <Link
                       key={po.id}
-                      className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+                      href={`/dynasty/${id}/poem/${po.id}`}
+                      className="block rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 transition hover:border-emerald-400/40 hover:bg-emerald-400/[0.06]"
                     >
                       <div className="flex flex-wrap items-baseline gap-x-3">
                         <span className="text-base font-medium text-white/85">{po.title}</span>
@@ -174,7 +176,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                       <p className="mt-2 whitespace-pre-line text-base leading-relaxed text-white/65">
                         {po.excerpt}
                       </p>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 {p.nPoems > 20 && (

@@ -138,4 +138,13 @@ export const api = {
   poem: (id: number | string) => get<{ ok: true; data: Poem }>(`/api/poems/${id}`),
   poemAuthors: (limit = 100) =>
     get<{ ok: true; data: PoemAuthor[] }>('/api/poem-authors', { limit }),
+  dynastyPoems: (dynasty: string) =>
+    get<{
+      ok: true;
+      data: {
+        genres: { genre: string; n: number }[];
+        authors: { name: string; n: number }[];
+        featured: Poem[];
+      };
+    }>('/api/dynasty-poems', { dynasty }),
 };

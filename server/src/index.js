@@ -138,7 +138,7 @@ function handle(pathname, searchParams) {
     const w = [];
     const b = [];
     if (author) { w.push('author = ?'); b.push(author); }
-    if (dynasty) { w.push('dynasty = ?'); b.push(dynasty); }
+    if (dynasty) { w.push('poem_dynasty = ?'); b.push(dynasty); }
     if (genre) { w.push('genre = ?'); b.push(genre); }
     if (q) { w.push('(title LIKE ? OR content LIKE ?)'); b.push(`%${q}%`, `%${q}%`); }
     const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
@@ -154,7 +154,48 @@ function handle(pathname, searchParams) {
   if (mPoem) {
     const poem = db.prepare('SELECT * FROM poems WHERE id = ?').get(parseInt(mPoem[1], 10));
     if (!poem) return err('poem not found', 404);
-    return ok(poem);
+    // 同作者其他作品
+    const siblings = db.prepare(
+      `SELECT id,title,genre,n_lines FROM poems
+       WHERE author = ? AND id <> ? ORDER BY n_lines ASC LIMIT 20`
+    ).all(poem.author, poem.id);
+    // 作者在人物库的 id（用于跳转人物页）
+    const person = db.prepare(
+      `SELECT id, dynasty_id FROM persons WHERE name = ? ORDER BY prominence DESC LIMIT 1`
+    ).get(poem.author);
+    return ok({ ...poem, siblings, person });
+  }
+
+  if (p === '/api/dynasty-poems') {
+    const dynasty = searchParams.get('dynasty');
+    if (!dynasty) return err('需要 dynasty 参数');
+    const genres = db.prepare(
+      `SELECT genre, COUNT(*) n FROM poems WHERE poem_dynasty = ? GROUP BY genre ORDER BY n DESC`
+    ).all(dynasty);
+    const authors = db.prepare(
+      `SELECT author AS name, COUNT(*) n FROM poems
+       WHERE poem_dynasty = ? AND author IS NOT NULL AND author <> ''
+       GROUP BY author ORDER BY n DESC LIMIT 12`
+    ).all(dynasty);
+    // 代表作：优先人工核验的名篇（famous=1），不足再补流行短篇
+    let featured = db.prepare(
+      `SELECT id, title, author, genre, n_lines, substr(content,1,120) AS excerpt
+       FROM poems WHERE poem_dynasty = ? AND famous = 1
+       ORDER BY n_lines DESC LIMIT 12`
+    ).all(dynasty);
+    if (featured.length < 12) {
+      const more = db.prepare(
+        `SELECT p.id, p.title, p.author, p.genre, p.n_lines, substr(p.content,1,120) AS excerpt
+         FROM poems p
+         WHERE p.poem_dynasty = ? AND p.famous = 0
+           AND p.n_lines BETWEEN 2 AND 8
+           AND p.title NOT LIKE '%乐章%' AND p.title NOT LIKE '%歌辞%'
+           AND p.title NOT LIKE '%郊庙%' AND p.title NOT LIKE '%鼓吹%'
+         ORDER BY length(p.content) ASC LIMIT ?`
+      ).all(dynasty, 12 - featured.length);
+      featured = featured.concat(more);
+    }
+    return ok({ genres, authors, featured });
   }
 
   if (p === '/api/poem-authors') {
