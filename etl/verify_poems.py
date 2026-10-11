@@ -586,11 +586,16 @@ def verify_cross(cur, ident: dict) -> dict:
             soft += 1
             soft_list.append(rec)
         else:
+            # persons 里完全没有该诗朝代族的人物 → 高度疑似「同名人物碰撞」
+            # （如唐诗人朱庆余，persons 只有明代朱庆余；CBDB 未收录该唐诗人）
+            rec["likely_name_collision"] = not (pdyns & expected)
             hard += 1
             conflict_list.append(rec)
 
     conflict_list.sort(key=lambda x: -x["poems"])
     soft_list.sort(key=lambda x: -x["poems"])
+    n_collision = sum(1 for c in conflict_list if c.get("likely_name_collision"))
+    n_collision_poems = sum(c["poems"] for c in conflict_list if c.get("likely_name_collision"))
     res = {
         "matched_author_dynasty_rows": matched_pairs,
         "judged_rows": judged,
@@ -602,6 +607,8 @@ def verify_cross(cur, ident: dict) -> dict:
         "any_conflict_rate": round((hard + soft) / judged * 100, 3) if judged else 0,
         "conflict_top": conflict_list[:60],
         "soft_conflict_top": soft_list[:40],
+        "likely_name_collision_rows": n_collision,
+        "likely_name_collision_poems": n_collision_poems,
         "poem_dynasty_dist": poem_dyn_dist,
         "poem_pd_dist": poem_pd_dist,
     }
@@ -722,10 +729,16 @@ def build_report(ident, scan, famous, famsum, cross) -> str:
 
     # ---- 5 交叉 ----
     A("## 六、诗 → 人物朝代交叉核验\n")
-    A(f"- poems.dynasty 取值分布（前 15）：\n")
+    A(f"- poems.dynasty 取值分布（全量）：\n")
     A("| dynasty | 诗数 |")
     A("|---|---|")
-    for d, n in sorted(cross["poem_dynasty_dist"], key=lambda x: -x[1])[:15]:
+    for d, n in sorted(cross["poem_dynasty_dist"], key=lambda x: -x[1]):
+        A(f"| {d} | {n:,} |")
+    A("")
+    A(f"- poems.poem_dynasty 取值分布（全量，较 dynasty 更细，区分宋西/宋南等）：\n")
+    A("| poem_dynasty | 诗数 |")
+    A("|---|---|")
+    for d, n in sorted(cross["poem_pd_dist"], key=lambda x: -x[1]):
         A(f"| {d} | {n:,} |")
     A("")
     A(f"- 作者可映射到 persons（排除无名氏）且双方均有朝代信息的判定行 **{cross['judged_rows']:,}**。")
@@ -738,6 +751,12 @@ def build_report(ident, scan, famous, famsum, cross) -> str:
     for c in cross["conflict_top"][:40]:
         A(f"| {c['author']} | {c['poem_dynasty']} | {', '.join(c['person_dynasties'])} | {c['poems']} |")
     A("")
+    A(f"**成因分析**：硬矛盾中 **{cross['likely_name_collision_rows']:,}** 行"
+      f"（涉及 {cross['likely_name_collision_poems']:,} 首）属"
+      f"**同名人物碰撞** —— persons 中完全没有该诗朝代的人物，仅存在姓名相同的"
+      f"异代人物（如唐诗人「朱庆余」，CBDB 仅有明代「朱庆余」；唐诗人「刘希夷」，"
+      f"persons 记为明人）。此类为 CBDB 收录缺位 / 姓名歧义导致的**假性矛盾**，"
+      f"应在关联时以「诗朝代优先」消歧，而非直接采信 persons.dynasty_id。\n")
     A("**相邻朝代软矛盾示例（合理跨代，TOP 15）**：\n")
     A("| 作者 | 诗朝代 | persons 朝代 | 涉及诗数 |")
     A("|---|---|---|---|")
@@ -800,6 +819,8 @@ def main() -> int:
         "non_name_poems": scan["non_name_author_poems"],
         "conflict_rows": cross["conflict_rows"],
         "conflict_rate": cross["conflict_rate"],
+        "soft_conflict_rows": cross["soft_conflict_rows"],
+        "likely_name_collision_rows": cross["likely_name_collision_rows"],
         "famous": famsum,
     }, ensure_ascii=False, indent=2))
     con.close()
