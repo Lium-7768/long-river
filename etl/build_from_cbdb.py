@@ -76,7 +76,7 @@ DY2DYNASTY = {
     16: "liao",
     17: "jin-chao",
     78: "xixia",
-    1: "han-pre",   # 汉前（先秦）
+    1: "zhou-e",    # 汉前（先秦：孔丘等，归东周/春秋战国）
     14: "gaoli",    # 高丽（域外，暂存）
 }
 
