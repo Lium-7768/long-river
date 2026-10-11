@@ -90,6 +90,9 @@ function handle(pathname, searchParams) {
     const officeAddrs = db.prepare(
       `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? LIMIT 100`
     ).all(id);
+    const evid = db.prepare(
+      `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
+    ).all(id);
 
     return ok({
       ...person,
@@ -99,6 +102,7 @@ function handle(pathname, searchParams) {
       sources: parseJsonArr(person.sources),
       kinships, offices, entries, works, assocs,
       officeAddrs: officeAddrs.map((r) => r.addr),
+      evid,
     });
   }
 
