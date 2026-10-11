@@ -44,6 +44,11 @@ DY2DYNASTY_EXT = {
     48: "wudai",    # 后晋
     34: "wudai",    # 后梁
     75: "wudai",    # 前蜀
+    10: "wudai",    # 南唐
+    11: "wudai",    # 吴越
+    12: "wudai",    # 闽国
+    13: "wudai",    # 南汉
+    8:  "wudai",    # 后蜀
     9:  "wudai",    # 吴（十国）
     36: "wudai",    # 吴（杨）
     38: "wudai",    # 楚（马）
