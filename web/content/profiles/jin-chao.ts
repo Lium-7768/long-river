@@ -196,5 +196,6 @@ export const JIN_CHAO: DynastyProfile = {
     area: '约 300 万平方公里（史家估数）',
     population: '约 4000 万–5000 万（史家估数）',
   },
+  sources: ['《金史》（本纪、百官志、食货志、地理志）', '《大金国志》'],
   completeness: 'draft',
 };

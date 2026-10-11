@@ -155,5 +155,6 @@ export const WUDAI: DynastyProfile = {
     area: '合计约 200 万–300 万平方公里（史家估数）',
     population: '约 2000 万–3000 万（史家估数）',
   },
+  sources: ['《旧五代史》', '《新五代史》', '《资治通鉴》'],
   completeness: 'draft',
 };

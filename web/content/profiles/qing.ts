@@ -339,6 +339,6 @@ export const QING: DynastyProfile = {
     area: '约 1316 万平方公里（乾隆极盛时，为现代中国版图之基础）',
     population: '约 4 亿（道光年间，突破四万万，为当时世界第一人口大国）',
   },
-  sources: ['《清史稿》（各本纪、职官志、食货志、兵志、地理志、艺文志）', '《清实录》《清会典》'],
+  sources: ['《清史稿》（本纪、职官志、食货志、地理志）'],
   completeness: 'draft',
 };

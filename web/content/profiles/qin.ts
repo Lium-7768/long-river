@@ -271,10 +271,6 @@ export const QIN: DynastyProfile = {
     area: '约 340 万平方公里（史家估数）',
     population: '约 2000 万（学界估数）',
   },
-  sources: [
-    '《史记》（秦始皇本纪、李斯列传、蒙恬列传、陈涉世家）',
-    '《汉书·百官公卿表》',
-    '《睡虎地秦墓竹简》',
-  ],
+  sources: ['《史记》（秦始皇本纪、李斯列传、商君列传、蒙恬列传）'],
   completeness: 'draft',
 };

@@ -164,5 +164,6 @@ export const SANGUO: DynastyProfile = {
     area: '约 540 万平方公里（三国合计，史家估数）',
     population: '约 700 万–900 万（史家估数，战乱人口锐减）',
   },
+  sources: ['《三国志》（魏书、蜀书、吴书）', '《后汉书》', '《资治通鉴》'],
   completeness: 'draft',
 };

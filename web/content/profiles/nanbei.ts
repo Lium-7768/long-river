@@ -194,5 +194,6 @@ export const NANBEI: DynastyProfile = {
     area: '南北合计约 400 万–500 万平方公里（史家估数）',
     population: '约 2500 万–3000 万（史家估数）',
   },
+  sources: ['《宋书》', '《南齐书》', '《梁书》', '《陈书》', '《魏书》', '《北齐书》', '《周书》'],
   completeness: 'draft',
 };

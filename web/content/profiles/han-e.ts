@@ -286,6 +286,6 @@ export const HAN_E: DynastyProfile = {
     area: '约 350 万平方公里（史家估数）',
     population: '约 5000 万（东汉中期，[汉书]与[后汉书]记载峰值逾五千万）',
   },
-  sources: ['《后汉书》（光武帝纪、班超传、党锢列传、宦者列传、张衡传、蔡伦传）', '《三国志》'],
+  sources: ['《后汉书》（光武帝纪、明帝纪、党锢列传、宦者列传、西域传）'],
   completeness: 'draft',
 };

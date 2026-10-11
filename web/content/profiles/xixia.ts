@@ -160,5 +160,6 @@ export const XIXIA: DynastyProfile = {
     area: '约 80 万–100 万平方公里（史家估数）',
     population: '约 200 万–300 万（史家估数）',
   },
+  sources: ['《宋史·夏国传》', '《辽史》', '《金史》', '《西夏书事》'],
   completeness: 'draft',
 };

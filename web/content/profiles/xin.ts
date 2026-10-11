@@ -140,5 +140,6 @@ export const XIN: DynastyProfile = {
     area: '约 400 万–500 万平方公里（承西汉，史家估数）',
     population: '约 5000 万–6000 万（承西汉末，史家估数）',
   },
+  sources: ['《汉书·王莽传》', '《食货志》', '《王莽传》', '居延汉简'],
   completeness: 'draft',
 };

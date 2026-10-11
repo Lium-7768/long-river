@@ -173,5 +173,6 @@ export const JIN: DynastyProfile = {
     area: '西晋约 540 万平方公里；东晋约 200 万平方公里（史家估数）',
     population: '西晋约 1600 万（太康年间册载）；东晋约 1700 万（史家估数）',
   },
+  sources: ['《晋书》（本纪、职官志、食货志、地理志）', '《资治通鉴》'],
   completeness: 'draft',
 };

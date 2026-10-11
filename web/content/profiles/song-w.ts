@@ -261,5 +261,10 @@ export const SONG_W: DynastyProfile = {
     area: '约 280 万平方公里（史家估数）',
     population: '约 1 亿（北宋末，学界估数，含隐漏人口）',
   },
+  sources: [
+    '《宋史》（本纪、职官志、食货志、兵志、选举志）',
+    '《续资治通鉴长编》（李焘）',
+    '《宋会要辑稿》《文献通考》',
+  ],
   completeness: 'draft',
 };

@@ -161,5 +161,6 @@ export const ZHOU_W: DynastyProfile = {
     area: '约 100 万–150 万平方公里（影响范围，史家估数）',
     population: '约 700 万–1000 万（史家估数）',
   },
+  sources: ['《史记·周本纪》', '青铜器铭文（金文）', '《尚书》', '《诗经》'],
   completeness: 'draft',
 };

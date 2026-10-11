@@ -111,5 +111,6 @@ export const XIA: DynastyProfile = {
     area: '约 30 万–50 万平方公里（核心影响区，史家估数）',
     population: '约 200 万–300 万（史家估数）',
   },
+  sources: ['《史记·夏本纪》', '《尚书》', '《竹书纪年》', '二里头考古'],
   completeness: 'draft',
 };

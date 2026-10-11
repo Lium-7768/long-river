@@ -231,5 +231,6 @@ export const SONG_E: DynastyProfile = {
     area: '约 200 万平方公里（史家估数）',
     population: '约 6000 万–8000 万（史家估数，嘉定年间册载约六千万）',
   },
+  sources: ['《宋史》（本纪、职官志、食货志、地理志）'],
   completeness: 'draft',
 };

@@ -160,5 +160,6 @@ export const LIAO: DynastyProfile = {
     area: '约 400 万平方公里（史家估数）',
     population: '约 400 万–900 万（史家估数，含汉、契丹、奚、女真等）',
   },
+  sources: ['《辽史》（本纪、百官志、地理志）', '《契丹国志》'],
   completeness: 'draft',
 };

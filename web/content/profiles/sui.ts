@@ -185,5 +185,6 @@ export const SUI: DynastyProfile = {
     area: '约 460 万平方公里（史家估数）',
     population: '约 4600 万–5000 万（大业年间册载约四千六百万，学界估数更高）',
   },
+  sources: ['《隋书》（本纪、百官志、食货志、地理志）', '《资治通鉴》'],
   completeness: 'draft',
 };

@@ -151,5 +151,6 @@ export const SHANG: DynastyProfile = {
     area: '约 70 万–100 万平方公里（影响范围，史家估数）',
     population: '约 400 万–500 万（史家估数）',
   },
+  sources: ['《史记·殷本纪》', '《尚书》', '甲骨文与殷墟考古'],
   completeness: 'draft',
 };

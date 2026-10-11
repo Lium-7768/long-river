@@ -208,5 +208,6 @@ export const ZHOU_E: DynastyProfile = {
     area: '华夏列国合计约 200 万–300 万平方公里（史家估数）',
     population: '战国末期约 2000 万（史家估数）',
   },
+  sources: ['《史记》', '《左传》', '《国语》', '《战国策》', '《竹书纪年》'],
   completeness: 'draft',
 };

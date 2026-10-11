@@ -220,5 +220,6 @@ export const YUAN: DynastyProfile = {
     area: '约 1372 万平方公里（元本部，史家估数，不含诸汗国）',
     population: '约 8000 万–9000 万（史家估数，至正年间册载约八千余万）',
   },
+  sources: ['《元史》（本纪、百官志、食货志、地理志）'],
   completeness: 'draft',
 };
