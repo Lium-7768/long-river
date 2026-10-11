@@ -98,13 +98,19 @@ function handle(pathname, searchParams) {
     const evid = db.prepare(
       `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
     ).all(id);
+    // 优先用消歧后的 poem_persons；回退 author 名匹配
     const poems = db.prepare(
+      `SELECT p.id, p.title, p.genre, substr(p.content,1,120) AS excerpt, p.n_lines
+       FROM poem_persons pp JOIN poems p ON p.id = pp.poem_id
+       WHERE pp.person_id = ? ORDER BY p.n_lines DESC LIMIT 200`
+    ).all(id);
+    const nPoems = db.prepare(
+      `SELECT COUNT(*) n FROM poem_persons WHERE person_id = ?`
+    ).get(id).n;
+    const poemsByName = db.prepare(
       `SELECT id, title, genre, substr(content,1,120) AS excerpt, n_lines
        FROM poems WHERE author = ? ORDER BY n_lines DESC LIMIT 200`
     ).all(person.name);
-    const nPoems = db.prepare(
-      `SELECT COUNT(*) n FROM poems WHERE author = ?`
-    ).get(person.name).n;
     const aliases = db.prepare(
       `SELECT alias, type_desc FROM aliases WHERE person_id = ? LIMIT 50`
     ).all(id);
@@ -130,8 +136,8 @@ function handle(pathname, searchParams) {
       kinships, offices, entries, works, assocs,
       officeAddrs: officeAddrs.map((r) => r.addr),
       evid,
-      poems,
-      nPoems,
+      poems: poems.length ? poems : poemsByName,
+      nPoems: poems.length ? nPoems : poemsByName.length,
       notes,
       possessions,
       institutions: insts,
