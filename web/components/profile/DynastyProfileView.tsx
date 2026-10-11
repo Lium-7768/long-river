@@ -163,6 +163,19 @@ export function DynastyProfileView({
             </button>
           </div>
         </Block>
+
+        {/* ⑥ 史料来源 —— 多源交叉印证 */}
+        {profile.sources && profile.sources.length > 0 && (
+          <Block title="史料来源" sub="多源交叉印证 · 可核验">
+            <ul className="space-y-1">
+              {profile.sources.map((s) => (
+                <li key={s} className="text-base leading-relaxed text-white/55">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </Block>
+        )}
       </div>
     </main>
   );

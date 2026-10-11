@@ -13,6 +13,7 @@ export interface Institution {
   background?: string; // 设立背景 / 为什么
   impact?: string; // 影响 / 后果
   figures?: InstitutionFigure[]; // 关键人物（可关联人物页）
+  source?: string; // 可核验史料出处，如「《旧唐书·职官志》」
 }
 
 /** 制度分类 */
@@ -33,6 +34,7 @@ export interface HistoricEvent {
   outcome?: string; // 经过 / 结果
   impact?: string; // 影响
   figures?: InstitutionFigure[]; // 关键人物（可关联人物页）
+  source?: string; // 可核验史料出处，如「《明史·太祖本纪》」
 }
 
 /** 事件分类 */
@@ -47,6 +49,7 @@ export interface CultureItem {
   impact?: string; // 影响 / 历史地位
   figures?: InstitutionFigure[]; // 代表人物（可关联人物页）
   works?: string[]; // 代表作品
+  source?: string; // 可核验史料出处
 }
 
 export interface Territory {
@@ -62,6 +65,7 @@ export interface Territory {
   /** 大致面积 / 人口（史家估数，注来源不确定） */
   area?: string;
   population?: string;
+  source?: string; // 可核验史料出处（《地理志》等）
 }
 
 export interface DynastyProfile {
@@ -72,6 +76,8 @@ export interface DynastyProfile {
   events: HistoricEvent[]; // 重大事件
   culture: CultureItem[]; // 文化成就
   territory: Territory; // 疆域地理
+  /** 主要史料依据（多源交叉印证） */
+  sources?: string[];
   /** 数据完整性标记 */
   completeness: 'draft' | 'reviewed';
 }

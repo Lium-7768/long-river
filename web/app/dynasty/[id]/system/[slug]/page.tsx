@@ -31,6 +31,7 @@ export default function Page({ params }: { params: Promise<{ id: string; slug: s
         background: s.background,
         impact: s.impact,
         figures: s.figures,
+        source: s.source,
       }}
       dynastyId={id}
       dynastyName={dynasty.name}

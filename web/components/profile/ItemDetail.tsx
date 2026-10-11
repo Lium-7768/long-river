@@ -17,6 +17,8 @@ export interface ItemDetailData {
   impact?: string;
   figures?: { name: string; personId?: string }[];
   works?: string[];
+  /** 可核验史料出处 */
+  source?: string;
 }
 
 const KIND = {
@@ -68,6 +70,13 @@ export function ItemDetail({
 
         {/* 一句话简述 */}
         <p className="text-base leading-relaxed text-white/80">{data.desc}</p>
+
+        {data.source && (
+          <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+            <div className="mb-1 text-base tracking-[0.2em] text-sky-300/70">史料出处</div>
+            <p className="text-base leading-relaxed text-white/65">{data.source}</p>
+          </div>
+        )}
 
         {data.background && (
           <Section title="设立背景">
