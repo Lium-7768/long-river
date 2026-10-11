@@ -81,7 +81,10 @@ function handle(pathname, searchParams) {
     ).all(id);
     const offices = db.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year').all(id);
     const entries = db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year').all(id);
-    const works = db.prepare('SELECT title, category FROM works WHERE person_id = ?').all(id);
+    const works = db.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id);
+    const notes = db.prepare('SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20').all(id);
+    const possessions = db.prepare('SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20').all(id);
+    const insts = db.prepare('SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20').all(id);
     const assocs = db.prepare(
       `SELECT a.rel_name, a.assoc_id AS id, p.name
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
@@ -112,6 +115,9 @@ function handle(pathname, searchParams) {
       evid,
       poems,
       nPoems,
+      notes,
+      possessions,
+      institutions: insts,
     });
   }
 

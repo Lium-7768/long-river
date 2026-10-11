@@ -62,6 +62,9 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                   </span>
                 )}
                 {p.addr?.length ? <span>{p.addr.join(' · ')}</span> : null}
+                {p.ethnicity && p.ethnicity !== '汉' ? <span>民族 {p.ethnicity}</span> : null}
+                {p.household ? <span>{p.household}</span> : null}
+                {p.death_age ? <span>享年 {p.death_age}</span> : null}
               </div>
               {p.summary && (
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">
@@ -151,9 +154,16 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                     <span
                       key={i}
                       className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-1 text-base text-amber-100/80"
-                      title={w.category ? `类别：${w.category}` : undefined}
+                      title={
+                        [w.category && `分类：${w.category}`, w.role && `角色：${w.role}`]
+                          .filter(Boolean)
+                          .join(' · ') || undefined
+                      }
                     >
                       {w.title}
+                      {w.category ? (
+                        <span className="ml-2 text-amber-300/50">{w.category}</span>
+                      ) : null}
                     </span>
                   ))}
                 </div>
@@ -182,6 +192,37 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 {p.nPoems > 20 && (
                   <p className="mt-3 text-base text-white/40">仅显示前 20 首，共 {p.nPoems} 首。</p>
                 )}
+              </Section>
+            ) : null}
+
+            {p.institutions?.length ? (
+              <Section title="书院 / 机构">
+                <div className="flex flex-wrap gap-2">
+                  {p.institutions.map((it, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-cyan-400/20 bg-cyan-400/[0.06] px-3 py-1 text-base text-cyan-100/80"
+                      title={it.source ?? undefined}
+                    >
+                      {it.name}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
+
+            {p.possessions?.length ? (
+              <Section title="家境 / 财产">
+                <ul className="space-y-2">
+                  {p.possessions.map((po, i) => (
+                    <li
+                      key={i}
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-base text-white/75"
+                    >
+                      {po.desc}
+                    </li>
+                  ))}
+                </ul>
               </Section>
             ) : null}
 

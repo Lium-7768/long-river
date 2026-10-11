@@ -59,6 +59,7 @@ export interface Entry {
 export interface Work {
   title: string;
   category: string | null;
+  role?: string | null;
 }
 
 export interface Evidence {
@@ -84,7 +85,29 @@ export interface PoemAuthor {
   n_poems: number;
 }
 
+export interface Note {
+  kind: string;
+  note: string;
+}
+export interface Possession {
+  desc: string;
+  quantity: number | null;
+  year: number | null;
+}
+export interface Institution {
+  name: string;
+  begin_year: number | null;
+  end_year: number | null;
+  source: string | null;
+}
+
 export interface PersonDetail extends PersonBrief {
+  ethnicity?: string | null;
+  household?: string | null;
+  death_age?: number | null;
+  notes?: Note[];
+  possessions?: Possession[];
+  institutions?: Institution[];
   hao: string[];
   shi: string[];
   addr: string[];
