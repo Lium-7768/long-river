@@ -82,6 +82,11 @@ function handle(pathname, searchParams) {
     const offices = db.prepare('SELECT office, year FROM offices WHERE person_id = ? ORDER BY year').all(id);
     const entries = db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year').all(id);
     const works = db.prepare('SELECT title, category FROM works WHERE person_id = ?').all(id);
+    const assocs = db.prepare(
+      `SELECT a.rel_name, a.assoc_id AS id, p.name
+       FROM assocs a JOIN persons p ON p.id = a.assoc_id
+       WHERE a.person_id = ? LIMIT 200`
+    ).all(id);
 
     return ok({
       ...person,
@@ -89,7 +94,7 @@ function handle(pathname, searchParams) {
       shi: parseJsonArr(person.shi),
       addr: parseJsonArr(person.addr),
       sources: parseJsonArr(person.sources),
-      kinships, offices, entries, works,
+      kinships, offices, entries, works, assocs,
     });
   }
 
