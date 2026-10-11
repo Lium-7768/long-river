@@ -178,4 +178,9 @@ export const api = {
         featured: Poem[];
       };
     }>('/api/dynasty-poems', { dynasty }),
+  personGeo: (dynasty: string, limit = 200) =>
+    get<{ ok: true; data: { name: string; lon: number; lat: number; n: number }[] }>(
+      '/api/person-geo',
+      { dynasty, limit },
+    ),
 };

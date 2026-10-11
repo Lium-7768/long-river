@@ -3,6 +3,7 @@ import { DYNASTIES } from '@/content/dynasties';
 import { getProfile } from '@/content/profiles';
 import { getCoverage } from '@/content/territory/coverage';
 import { TerritoryMap } from '@/components/profile/TerritoryMap';
+import { PersonOriginPanel } from '@/components/profile/PersonOriginPanel';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 
 export default async function TerritoryPage({ params }: { params: Promise<{ id: string }> }) {
@@ -129,6 +130,9 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
                 </div>
               </div>
             )}
+
+            {/* 人物籍贯分布（来自本地库 person_geo） */}
+            <PersonOriginPanel dynastyId={id} />
 
             {/* 地图放最下面 */}
             <TerritoryMap dynastyId={id} height={520} />
