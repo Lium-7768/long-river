@@ -28,7 +28,7 @@ def main():
     L.append("## 一、表规模\n")
     L.append("| 表 | 行数 |")
     L.append("|---|---:|")
-    for t in ["persons", "kinships", "offices", "entries", "works", "assocs", "texts"]:
+    for t in ["persons", "kinships", "offices", "office_addrs", "entries", "works", "assocs", "texts"]:
         try:
             L.append(f"| {t} | {q(f'SELECT COUNT(*) FROM {t}'):,} |")
         except Exception:
@@ -57,6 +57,15 @@ def main():
     L.append("|---|---:|")
     for b, c in con.execute("SELECT book,COUNT(*) FROM texts GROUP BY book ORDER BY 2 DESC"):
         L.append(f"| {b} | {c} |")
+
+    L.append(f"\n## 五、关系与官职规范化（100% 中文）\n")
+    L.append("| 表 | 唯一中文关系/官职名 | 非中文残留 |")
+    L.append("|---|---:|---:|")
+    cn = "SELECT COUNT(*) FROM kinships WHERE rel NOT GLOB '*[一-龥]*'"
+    co = "SELECT COUNT(*) FROM offices WHERE office NOT GLOB '*[一-龥]*'"
+    L.append(f"| kinships.rel | {q('SELECT COUNT(DISTINCT rel) FROM kinships')} | {q(cn)} |")
+    L.append(f"| offices.office | {q('SELECT COUNT(DISTINCT office) FROM offices')} | {q(co)} |")
+    L.append(f"| offices.category 覆盖 | {q('SELECT COUNT(*) FROM offices WHERE category IS NOT NULL')} | — |")
 
     txt = "\n".join(L) + "\n"
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
