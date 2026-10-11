@@ -55,7 +55,10 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 {p.hao?.length ? <span>号{p.hao.join('、')}</span> : null}
                 {p.shi?.length ? <span>谥{p.shi.join('、')}</span> : null}
                 {(p.birth || p.death) && (
-                  <span className="tabular-nums">{fmtRange(p.birth ?? 0, p.death ?? 0)}</span>
+                  <span className="tabular-nums">
+                    {fmtRange(p.birth ?? 0, p.death ?? 0)}
+                    {p.birth_evid && <EvidTag label={p.birth_evid} />}
+                  </span>
                 )}
                 {p.addr?.length ? <span>{p.addr.join(' · ')}</span> : null}
               </div>
@@ -78,6 +81,35 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                     </span>
                   ))}
                 </div>
+              </Section>
+            ) : null}
+
+            {p.evid?.length ? (
+              <Section title={`逐条证据（${p.evid.length}）`}>
+                <p className="mb-4 text-base leading-relaxed text-white/45">
+                  以下每条数据均指向具体史料出处，可逐条核验。
+                </p>
+                <ul className="space-y-2">
+                  {p.evid.slice(0, 40).map((e, i) => (
+                    <li
+                      key={i}
+                      className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-base"
+                    >
+                      <span className="shrink-0 rounded border border-sky-400/20 bg-sky-400/[0.08] px-2 py-0.5 text-base text-sky-100/80">
+                        {CLAIM_LABEL[e.claim_type] ?? e.claim_type}
+                      </span>
+                      <span className="text-white/75">{e.src_book}</span>
+                      {e.src_pages && (
+                        <span className="tabular-nums text-white/40">{e.src_pages}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                {p.evid.length > 40 && (
+                  <p className="mt-3 text-base text-white/40">
+                    仅显示前 40 条，共 {p.evid.length} 条。
+                  </p>
+                )}
               </Section>
             ) : null}
 
@@ -151,5 +183,25 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       </div>
       {children}
     </section>
+  );
+}
+
+const CLAIM_LABEL: Record<string, string> = {
+  bio: '传记',
+  summary: '事迹',
+  name: '姓名/字号',
+  addr: '籍贯',
+  office: '官职',
+  entry: '科举',
+  kin: '亲属',
+  assoc: '社会关系',
+  status: '身份',
+};
+
+function EvidTag({ label }: { label: string }) {
+  return (
+    <span className="ml-2 rounded border border-emerald-400/20 bg-emerald-400/[0.06] px-2 py-0.5 text-base text-emerald-100/70">
+      据{label}
+    </span>
   );
 }

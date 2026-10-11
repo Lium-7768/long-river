@@ -61,11 +61,21 @@ export interface Work {
   category: string | null;
 }
 
+export interface Evidence {
+  claim_type: string;
+  src_book: string | null;
+  src_pages: string | null;
+}
+
 export interface PersonDetail extends PersonBrief {
   hao: string[];
   shi: string[];
   addr: string[];
   sources: string[];
+  birth_evid?: string | null;
+  death_evid?: string | null;
+  officeAddrs?: string[];
+  evid?: Evidence[];
   kinships: Kinship[];
   offices: Office[];
   entries: Entry[];
