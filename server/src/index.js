@@ -87,6 +87,9 @@ function handle(pathname, searchParams) {
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ? LIMIT 200`
     ).all(id);
+    const officeAddrs = db.prepare(
+      `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? LIMIT 100`
+    ).all(id);
 
     return ok({
       ...person,
@@ -95,6 +98,7 @@ function handle(pathname, searchParams) {
       addr: parseJsonArr(person.addr),
       sources: parseJsonArr(person.sources),
       kinships, offices, entries, works, assocs,
+      officeAddrs: officeAddrs.map((r) => r.addr),
     });
   }
 
