@@ -41,22 +41,27 @@ def main():
         "SELECT cbdb_id, id FROM persons WHERE cbdb_id IS NOT NULL")}
 
     n = 0
+
+    def clean(x):
+        # CBDB 多数身份标签自带方括号（如 [為官者：文]），括号是格式非噪声 → 去括号保留
+        if not x:
+            return None
+        x = x.strip("[]（）()【】 ").strip()
+        return x if x and x != "未詳" else None
+
     for pid, codes in per.items():
         if pid not in idmap:
             continue
         # 选最优
         best = sorted(codes, key=lambda c: PRIORITY.get(c, 15))[0]
-        label = code2chn.get(best)
-        if not label or label.startswith("[") or label in ("未詳",):
-            # 退而取任一
+        label = clean(code2chn.get(best))
+        if not label:
             for c in codes:
-                l = code2chn.get(c)
-                if l and not l.startswith("[") and l != "未詳":
-                    label = l; break
-        if not label or label.startswith("[") or label == "未詳":
+                label = clean(code2chn.get(c))
+                if label:
+                    break
+        if not label:
             continue
-        # 去方括号（如 [皇帝] → 皇帝）
-        label = label.strip("[]（）()")
         con.execute("UPDATE persons SET role=? WHERE id=? AND (role IS NULL OR role='')",
                     (label, idmap[pid]))
         n += 1
