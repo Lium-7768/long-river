@@ -117,6 +117,9 @@ function handle(pathname, searchParams) {
     const network = db.prepare(
       `SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?`
     ).get(id) || null;
+    const excerpts = db.prepare(
+      `SELECT book, volume, excerpt FROM bio_excerpt WHERE person_id = ? LIMIT 5`
+    ).all(id);
 
     return ok({
       ...person,
@@ -136,6 +139,7 @@ function handle(pathname, searchParams) {
       occupations,
       birthplaces,
       network,
+      excerpts,
     });
   }
 

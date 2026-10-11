@@ -129,6 +129,7 @@ export interface PersonDetail extends PersonBrief {
   occupations?: string[];
   birthplaces?: string[];
   network?: { n_out: number; n_in: number; n_types: number } | null;
+  excerpts?: { book: string; volume: string; excerpt: string }[];
 }
 
 export interface Paged<T> {

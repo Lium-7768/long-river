@@ -122,6 +122,22 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               </Section>
             ) : null}
 
+            {p.excerpts?.length ? (
+              <Section title="正史原文">
+                {p.excerpts.map((e, i) => (
+                  <blockquote
+                    key={i}
+                    className="mb-3 rounded-lg border-l-2 border-amber-400/40 bg-amber-400/[0.04] px-4 py-3 text-base leading-relaxed text-white/75"
+                  >
+                    <div className="mb-2 text-base text-amber-200/70">
+                      《{e.book}》{e.volume}
+                    </div>
+                    {e.excerpt.replace(/^==.*?==\s*/, '')}
+                  </blockquote>
+                ))}
+              </Section>
+            ) : null}
+
             {p.evid?.length ? (
               <Section title={`逐条证据（${p.evid.length}）`}>
                 <p className="mb-4 text-base leading-relaxed text-white/45">
