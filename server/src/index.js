@@ -285,6 +285,20 @@ function handle(pathname, searchParams) {
     return ok(rows, { dynasty });
   }
 
+  if (p === '/api/ref-dict') {
+    const category = searchParams.get('category');
+    const q = searchParams.get('q');
+    const conds = [];
+    const args = [];
+    if (category) { conds.push('category = ?'); args.push(category); }
+    if (q) { conds.push('(name LIKE ? OR name_en LIKE ?)'); args.push(`%${q}%`, `%${q}%`); }
+    const where = conds.length ? 'WHERE ' + conds.join(' AND ') : '';
+    const rows = db.prepare(
+      `SELECT category, name, name_en, note FROM ref_dict ${where} ORDER BY category, name LIMIT 500`
+    ).all(...args);
+    return ok(rows);
+  }
+
   if (p === '/api/stats') {
     const s = db.prepare(
       `SELECT
