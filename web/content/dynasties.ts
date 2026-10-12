@@ -165,5 +165,5 @@ export const DYNASTIES: Dynasty[] = [
   },
 ];
 
-/** 有数据的朝代（可进入第二层） */
-export const DYNASTIES_WITH_DATA = new Set(['song-w', 'song-e', 'liao', 'xixia', 'jin-chao']);
+/** 有数据的朝代（可进入第二层）—— 与已收录档案保持一致 */
+export const DYNASTIES_WITH_DATA = new Set(DYNASTIES.map((d) => d.id));
