@@ -75,7 +75,10 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·刘焉传》',
       background: '黄巾乱起，地方动荡，刘焉建言「选清名重臣以为牧伯」，以镇安州郡。',
       impact: '州牧手握一州军政，尾大不掉，成为汉末群雄割据（如袁绍、刘表、刘璋）的制度温床。',
-      figures: [{ name: '刘焉', personId: 'hanshu-后汉书-082-刘焉' }, { name: '汉灵帝' }],
+      figures: [
+        { name: '刘焉', personId: 'hanshu-后汉书-082-刘焉' },
+        { name: '汉灵帝', personId: 'liuhong-30265' },
+      ],
     },
   ],
   events: [
@@ -121,7 +124,7 @@ export const HAN_E: DynastyProfile = {
         '和帝幼立，窦太后临朝，窦宪专权；和帝长成后借宦官郑众诛窦宪。此后如邓、阎、梁诸外戚与宦官反复争权。',
       outcome: '窦宪、梁冀等外戚嚣张一时，宦官五侯亦擅权乱政，皇帝多短寿，权柄屡易其手。',
       impact: '朝纲败坏、吏治黑暗，为东汉中后期的最大毒瘤，与党锢、黄巾并为其灭亡之因。',
-      figures: [{ name: '梁冀' }, { name: '汉桓帝' }],
+      figures: [{ name: '梁冀' }, { name: '汉桓帝', personId: 'liuzhi-30264' }],
     },
     {
       year: 166,
@@ -266,7 +269,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·西域传》（永平求法）',
       background: '汉明帝夜梦金人，遣使西域求法，迎天竺僧摄摩腾、竺法兰及佛经至洛阳。',
       impact: '佛教自此在中土扎根，与儒道交融，深刻塑造中古以降的中国思想与文化。',
-      figures: [{ name: '汉明帝' }],
+      figures: [{ name: '汉明帝', personId: 'liuzhuang-24662' }],
       works: ['《四十二章经》'],
     },
     {

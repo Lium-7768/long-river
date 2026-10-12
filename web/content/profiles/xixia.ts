@@ -93,7 +93,10 @@ export const XIXIA: DynastyProfile = {
       background: '成吉思汗西征东归后即攻西夏，西夏困守中兴府。',
       outcome: '1227年西夏末主李睍出降被杀，兴庆府遭屠，西夏亡。',
       impact: '西夏近二百年国祚终结，党项族渐融入他族，其文字亦成绝学。',
-      figures: [{ name: '成吉思汗', personId: 'tiemu-29239' }, { name: '李睍' }],
+      figures: [
+        { name: '成吉思汗', personId: 'tiemu-29239' },
+        { name: '李睍', personId: 'lixian-23455' },
+      ],
     },
   ],
   culture: [

@@ -159,7 +159,7 @@ export const JIN: DynastyProfile = {
       desc: '陶渊明归隐田园，开田园诗一派，诗风冲淡自然。',
       background: '东晋末年政局浑浊，陶潜不为五斗米折腰，归隐躬耕。',
       impact: '田园诗开山，影响唐宋以降的隐逸文学与士人精神。',
-      figures: [{ name: '陶渊明' }],
+      figures: [{ name: '陶渊明', personId: 'gb-晋书-卷94-陶潜' }],
       works: ['《桃花源记》', '《归园田居》'],
     },
     {

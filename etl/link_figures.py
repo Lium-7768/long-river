@@ -5,10 +5,12 @@
 用 persons.name / aliases.alias 解析，把 personId 写回 profile 源文件。
 """
 import sqlite3, os, re, sys
+from opencc import OpenCC
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB = os.path.join(ROOT, "data", "lr-song.sqlite3")
 DIR = os.path.join(ROOT, "web", "content", "profiles")
 SKIP = {'index.ts', 'types.ts', 'slug.ts', 'famous-poems.ts'}
+_T2S = OpenCC('t2s')
 
 
 def main():
@@ -24,11 +26,19 @@ def main():
     for title, native in con.execute("SELECT title, native FROM emperor"):
         if native:
             emp_alt.setdefault(title, native)
+    # 历史别名：通称/异体 → 本名（如 汉明帝=刘庄、魏徵=魏征）
+    hist = dict(con.execute("SELECT alias, real_name FROM hist_alias"))
 
     def resolve(nm):
         r = by_name.get(nm) or by_alias.get(nm)
         if r:
             return r
+        # 繁→简
+        s = _T2S.convert(nm)
+        if s != nm:
+            r0 = by_name.get(s) or by_alias.get(s)
+            if r0:
+                return r0
         # 二次：库内形如 "名(别名)" / "别名(名)"，如 李世民(唐太宗)、武曌(武则天)
         row = con.execute(
             "SELECT id FROM persons WHERE name LIKE ? OR name LIKE ? LIMIT 1",
@@ -36,9 +46,10 @@ def main():
         ).fetchone()
         if row:
             return row[0]
-        # 三次：帝王庙号 → 本名 → 查 persons/aliases
-        alt = emp_alt.get(nm)
+        # 三次：帝王庙号 / 历史别名 → 本名 → 查 persons/aliases
+        alt = emp_alt.get(nm) or hist.get(nm)
         if alt:
+            alt = _T2S.convert(alt)
             r2 = by_name.get(alt) or by_alias.get(alt)
             if r2:
                 return r2

@@ -90,7 +90,7 @@ export const LIAO: DynastyProfile = {
       outcome: '1005年盟成：宋岁输银十万两、绢二十万匹，边界维持，通商互市。',
       impact: '宋辽结束大规模战事、维持百余年和好，经济文化交流频繁。',
       figures: [
-        { name: '萧太后' },
+        { name: '萧太后', personId: 'wk-Q777372' },
         { name: '宋真宗', personId: 'zhaoheng-9003' },
         { name: '寇准', personId: 'kouzhun-898' },
       ],
@@ -103,7 +103,10 @@ export const LIAO: DynastyProfile = {
       background: '女真兴起建金，联宋灭辽；辽天祚帝逃亡。',
       outcome: '1125年天祚帝被俘，辽亡；耶律大石西迁建西辽（哈剌契丹）于中亚。',
       impact: '辽亡后契丹势力西移，西辽在中亚立国近百年，促进东西交流。',
-      figures: [{ name: '耶律大石', personId: 'yelv-135303' }, { name: '天祚帝' }],
+      figures: [
+        { name: '耶律大石', personId: 'yelv-135303' },
+        { name: '天祚帝', personId: 'yelv-43166' },
+      ],
     },
   ],
   culture: [

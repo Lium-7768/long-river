@@ -200,7 +200,7 @@ export const YUAN: DynastyProfile = {
       background: '元代文人仕进无门，寄情书画，追求写意与个人情趣。',
       impact: '文人画传统确立，「元四家」成明清文人画之宗师。',
       figures: [
-        { name: '赵孟頫' },
+        { name: '赵孟頫', personId: 'zhaomeng-17690' },
         { name: '黄公望', personId: 'huanggong-109158' },
         { name: '倪瓒', personId: 'nizan-33468' },
       ],

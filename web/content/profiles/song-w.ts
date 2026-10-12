@@ -195,7 +195,7 @@ export const SONG_W: DynastyProfile = {
       desc: '毕昇发明胶泥活字，推动书籍流通与文化普及。',
       background: '雕版印刷费工费料，难以适应日益增长的书籍需求。',
       impact: '世界上最早的活字印刷术，后经西夏、回鹘西传，对世界文明传播影响深远。',
-      figures: [{ name: '毕昇' }],
+      figures: [{ name: '毕昇', personId: 'bisheng-307817' }],
       works: ['胶泥活字（沈括《梦溪笔谈》记载）'],
     },
     {

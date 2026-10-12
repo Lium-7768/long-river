@@ -267,7 +267,10 @@ export const QIN: DynastyProfile = {
       source: '《史记·秦始皇本纪》《汉书·严助传》',
       background: '为控驭天下与南征粮运，秦修驰道、直道，又由监禄凿灵渠连接长江、珠江水系。',
       impact: '驰道强化中央对地方的控制与商业往来；灵渠成为沟通岭南与中原的水利枢纽。',
-      figures: [{ name: '蒙恬', personId: 'wk-Q1151702' }, { name: '监禄' }],
+      figures: [
+        { name: '蒙恬', personId: 'wk-Q1151702' },
+        { name: '监禄', personId: 'wk-Q9592880' },
+      ],
       works: ['秦驰道', '灵渠'],
     },
   ],
