@@ -1,3 +1,23 @@
+# 依赖
+node_modules/
+.pnpm-store/
 
-# 本地后端
-server/node_modules/
+# Next.js 构建产物 / 缓存
+.next/
+out/
+.turbo/
+
+# 系统 / 编辑器
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# 环境变量
+.env
+.env.local
+.env*.local
+
+# Python
+__pycache__/
+*.pyc

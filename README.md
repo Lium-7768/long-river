@@ -18,8 +18,7 @@ long-river/
 ├── docs/           全部文档
 │   ├── design/     架构 / 数据模型 / 需求 / CBDB / 视觉
 │   ├── reports/    数据报告（可信度 / 史料互证 / 诗词核验 …）
-│   └── archive/    归档调研稿
-├── asset/          原型数据
+│   └── archive/    归档（调研稿 + 原型数据）
 ├── README.md       本文件
 └── AGENTS.md       协作规则（改代码前必读）
 ```

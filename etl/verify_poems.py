@@ -4,8 +4,8 @@
 verify_poems.py — 长河项目 · 诗词数据横向交叉核验
 
 只读核验 data/db/lr-song.sqlite3 的 poems 表（344,106 首），产出：
-  data/诗词核验报告.md        统计表 + 矛盾清单 + 名篇比对结论
-  data/_verify_poems.json     结构化结果（供后续复用）
+  docs/reports/诗词核验报告.md        统计表 + 矛盾清单 + 名篇比对结论
+  data/build/_verify_poems.json     结构化结果（供后续复用）
 
 核验维度：
   1. 作者身份核验   poems.author → persons.name / cbdb_ALTNAME_DATA(字4/号5)
@@ -30,8 +30,8 @@ from collections import Counter, defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DB = os.path.join(ROOT, "data", "db", "lr-song.sqlite3")
-REPORT = os.path.join(ROOT, "data", "诗词核验报告.md")
-JSON_OUT = os.path.join(ROOT, "data", "_verify_poems.json")
+REPORT = os.path.join(ROOT, "docs", "reports", "诗词核验报告.md")
+JSON_OUT = os.path.join(ROOT, "data", "build", "_verify_poems.json")
 
 T0 = time.time()
 

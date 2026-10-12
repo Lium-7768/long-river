@@ -5,7 +5,7 @@
 """
 import sqlite3, os
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
-OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "数据来源与可信度总报告.md")
+OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "reports", "数据来源与可信度总报告.md")
 
 
 def main():
@@ -56,12 +56,12 @@ def main():
         "",
         "### 2. 正史卒年互证（正史全文 ↔ 库内）",
         "- 宋史（北宋）一致率 **72.9%**，余为 CBDB 生年推定误差（卒年多正确）",
-        "- 报告详见 `data/史料互证报告.md`",
+        "- 报告详见 `docs/reports/史料互证报告.md`",
         "",
         "### 3. 诗词作者消歧（chinese-poetry ↔ CBDB）",
         f"- poem_persons 消歧链接：{q('SELECT COUNT(*) FROM poem_persons'):,} 条",
         "- 修正同名作者误连（唐·朱庆余 vs 明·朱庆余 178首）",
-        "- 报告详见 `data/诗词核验报告.md`",
+        "- 报告详见 `docs/reports/诗词核验报告.md`",
         "",
         "### 4. 关系网络合理性",
         "- 枢纽排名：朱熹2049 / 苏轼794 / 周必大754 / 刘克庄729（符合学术直觉）",

@@ -7,7 +7,7 @@
 """
 import sqlite3, os, re
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
-OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "史料互证报告.md")
+OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "reports", "史料互证报告.md")
 
 # 朝代 → 正史书名
 DYN_BOOK = {

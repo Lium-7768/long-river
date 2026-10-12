@@ -4,11 +4,10 @@
 *.sqlite3-wal
 *.sqlite3-shm
 
-# 数据库备份分卷（请走外部存储/对象存储，勿入库）
+# 数据库备份分卷（不进 git；请走对象存储，或用 etl/backup_db.sh 本地生成）
 *.sql.gz
 *.sql.gz.part-*
 
-# ETL 中间产物（JSONL/JSON，由 etl/*.py 生成，可重生成，不入库）
-# 例外：data/build/data_report.md 为汇总产物，强制入库
+# ETL 中间产物（JSONL/JSON，可由 etl/*.py 重生成，不进 git）
 build/*
 !build/data_report.md
