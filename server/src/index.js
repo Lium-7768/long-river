@@ -302,6 +302,26 @@ function handle(pathname, searchParams) {
     return ok(rows, { total: cnt, q });
   }
 
+  if (p === '/api/evidence-sources') {
+    const category = searchParams.get('category');
+    const q = searchParams.get('q');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500);
+    const w = [];
+    const b = [];
+    if (category) { w.push('category = ?'); b.push(category); }
+    if (q) { w.push('book LIKE ?'); b.push(`%${q}%`); }
+    const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
+    const cnt = db.prepare(`SELECT COUNT(*) n FROM evidence_sources ${wsql}`).get(...b).n;
+    const rows = db.prepare(
+      `SELECT book, category, n_claims, n_persons, claim_types, in_texts
+       FROM evidence_sources ${wsql} ORDER BY n_claims DESC LIMIT ?`
+    ).all(...b, limit);
+    const cats = db.prepare(
+      `SELECT category, COUNT(*) n, SUM(n_claims) claims FROM evidence_sources GROUP BY category ORDER BY n DESC`
+    ).all();
+    return ok(rows, { total: cnt, categories: cats, category: category || 'all', q: q || '' });
+  }
+
   if (p === '/api/book-editions') {
     const title = searchParams.get('title');
     const titles = searchParams.get('titles');

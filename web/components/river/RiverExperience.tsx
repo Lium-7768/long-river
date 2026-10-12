@@ -85,8 +85,16 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
 
       {/* ---------- 覆盖层（DOM，中文绝对清晰）---------- */}
       {/* 左上角标题 */}
-      <div className="pointer-events-none absolute left-0 top-0 px-8 py-6">
-        <span className="text-xl font-semibold tracking-[0.4em] text-white/90">长河</span>
+      <div className="absolute left-0 top-0 flex items-center gap-4 px-8 py-6">
+        <span className="pointer-events-none text-xl font-semibold tracking-[0.4em] text-white/90">
+          长河
+        </span>
+        <a
+          href="/sources"
+          className="pointer-events-auto rounded-full border border-white/20 px-3 py-1 text-base text-white/60 transition hover:bg-white/10 hover:text-white"
+        >
+          史料来源
+        </a>
       </div>
 
       {/* 右上角：视角切换 + 当前朝代信息 */}

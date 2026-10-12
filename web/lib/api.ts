@@ -226,4 +226,22 @@ export const api = {
         { edition: string | null; pub_year: number | null; pub_loc: string | null }[]
       >;
     }>('/api/book-editions', { titles: titles.join(',') }),
+  evidenceSources: (params: { category?: string; q?: string; limit?: number } = {}) =>
+    get<{
+      ok: true;
+      data: {
+        book: string;
+        category: string;
+        n_claims: number;
+        n_persons: number;
+        claim_types: string;
+        in_texts: number;
+      }[];
+      meta: {
+        total: number;
+        categories: { category: string; n: number; claims: number }[];
+        category: string;
+        q: string;
+      };
+    }>('/api/evidence-sources', params),
 };
