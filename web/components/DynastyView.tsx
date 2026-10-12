@@ -61,14 +61,14 @@ export function DynastyView({
         <div>
           <button
             onClick={onBack}
-            className="mb-2 text-xs tracking-widest text-lr-muted transition-colors hover:text-lr-accent"
+            className="mb-2 text-base tracking-widest text-lr-muted transition-colors hover:text-lr-accent"
           >
             ← 返回时间长河
           </button>
           <h2 className="text-glow text-3xl font-semibold tracking-[0.2em] text-lr-accent">
             {dynasty.name}
           </h2>
-          <p className="mt-1 text-xs text-lr-muted">
+          <p className="mt-1 text-base text-lr-muted">
             {dynasty.start < 0 ? `前${-dynasty.start}` : dynasty.start} – {dynasty.end} ｜{' '}
             {dynasty.note}
           </p>
@@ -84,12 +84,12 @@ export function DynastyView({
 
       {/* 内容 */}
       <div className="flex-1 overflow-y-auto px-8 pb-16">
-        {err && <p className="text-lr-accent-2 text-sm">加载失败：{err}</p>}
-        {loading && <p className="animate-pulse-glow text-sm text-lr-muted">载入中…</p>}
+        {err && <p className="text-lr-accent-2 text-base">加载失败：{err}</p>}
+        {loading && <p className="animate-pulse-glow text-base text-lr-muted">载入中…</p>}
 
         {!loading && !err && (
           <>
-            <p className="mb-4 text-xs tracking-widest text-lr-muted">
+            <p className="mb-4 text-base tracking-widest text-lr-muted">
               {q ? `搜索「${q}」` : '代表人物'} · {total} 条
               {!q && total > people.length && `（显示前 ${people.length}）`}
             </p>
@@ -105,15 +105,15 @@ export function DynastyView({
                       {p.name}
                     </span>
                     {p.prominence != null && (
-                      <span className="text-[10px] text-lr-muted">P{p.prominence}</span>
+                      <span className="text-base text-lr-muted">P{p.prominence}</span>
                     )}
                   </div>
-                  <div className="mt-1 text-xs text-lr-muted">
+                  <div className="mt-1 text-base text-lr-muted">
                     {p.birth || p.death ? `${p.birth ?? '?'}–${p.death ?? '?'}` : '生卒不详'}
                     {p.role && ` · ${p.role}`}
                   </div>
                   {p.summary && (
-                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-lr-muted">
+                    <p className="mt-2 line-clamp-2 text-base leading-relaxed text-lr-muted">
                       {p.summary}
                     </p>
                   )}

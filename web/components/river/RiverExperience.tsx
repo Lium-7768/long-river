@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Scene } from './Scene';
@@ -85,30 +86,30 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
 
       {/* ---------- 覆盖层（DOM，中文绝对清晰）---------- */}
       {/* 左上角标题 */}
-      <div className="absolute left-0 top-0 flex items-center gap-4 px-8 py-6">
+      <div className="absolute left-0 top-0 flex items-center gap-3 px-4 py-4 sm:gap-4 sm:px-8 sm:py-6">
         <span className="pointer-events-none text-xl font-semibold tracking-[0.4em] text-white/90">
           长河
         </span>
-        <a
+        <Link
           href="/sources"
           className="pointer-events-auto rounded-full border border-white/20 px-3 py-1 text-base text-white/60 transition hover:bg-white/10 hover:text-white"
         >
           史料来源
-        </a>
+        </Link>
       </div>
 
       {/* 右上角：视角切换 + 当前朝代信息 */}
-      <div className="absolute right-8 top-6 flex flex-col items-end gap-5">
+      <div className="absolute right-4 top-4 flex flex-col items-end gap-3 sm:right-8 sm:top-6 sm:gap-5">
         <div className="pointer-events-auto flex items-center gap-2">
           <button
             onClick={() => setMode('fly')}
-            className={`rounded-full px-3 py-1 text-xs tracking-wider transition ${mode === 'fly' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
+            className={`rounded-full px-3 py-1 text-base tracking-wider transition ${mode === 'fly' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
           >
             沿河飞行
           </button>
           <button
             onClick={() => setMode('side')}
-            className={`rounded-full px-3 py-1 text-xs tracking-wider transition ${mode === 'side' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
+            className={`rounded-full px-3 py-1 text-base tracking-wider transition ${mode === 'side' ? 'bg-sky-400/90 text-black' : 'border border-white/20 text-white/60 hover:text-white'}`}
           >
             侧览全景
           </button>
@@ -116,21 +117,21 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
 
         {/* 当前朝代：右上，右对齐 */}
         <div key={activeIdx} className="pointer-events-none animate-[fadeUp_0.6s_ease] text-right">
-          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">
+          <div className="text-base tracking-[0.3em] text-sky-300/70">
             {fmtRange(cur.start, cur.end)}
           </div>
-          <h2 className="mt-2 text-6xl font-semibold leading-none tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,180,255,0.35)]">
+          <h2 className="mt-2 text-4xl font-semibold leading-none tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,180,255,0.35)] sm:text-6xl">
             {cur.name}
           </h2>
-          <p className="mt-2 text-sm tracking-wide text-white/50">
+          <p className="mt-2 max-w-[60vw] text-base tracking-wide text-white/50 sm:max-w-none">
             {hasData(cur.id) ? `${cur.note} · 点击节点进入` : cur.note}
           </p>
         </div>
       </div>
 
       {/* 右侧：进度 */}
-      <div className="pointer-events-none absolute bottom-24 right-10 flex flex-col items-center gap-3">
-        <span className="text-xs tabular-nums text-white/40">{pct}%</span>
+      <div className="pointer-events-none absolute bottom-24 right-4 hidden flex-col items-center gap-3 sm:right-10 sm:flex">
+        <span className="text-base tabular-nums text-white/40">{pct}%</span>
         <div className="h-48 w-px bg-white/15">
           <div
             className="w-px bg-sky-400 transition-[height] duration-200"
@@ -140,7 +141,7 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
       </div>
 
       {/* 底部提示 */}
-      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tracking-widest text-white/30">
+      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-base tracking-widest text-white/30">
         ↓ 滚动 / 拖动 前行
       </div>
 
@@ -154,15 +155,15 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
             className="w-[min(560px,90vw)] rounded-3xl border border-white/10 bg-[#0a111f]/95 p-10 text-center shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-xs tracking-[0.3em] text-sky-300/70">
+            <div className="text-base tracking-[0.3em] text-sky-300/70">
               {fmtRange(picked.start, picked.end)}
             </div>
             <h3 className="mt-4 text-5xl font-semibold text-white">{picked.name}</h3>
-            <p className="mt-4 text-sm text-white/60">{picked.note}</p>
-            <p className="mt-8 text-xs text-white/40">第二层「人物与事件」即将呈现</p>
+            <p className="mt-4 text-base text-white/60">{picked.note}</p>
+            <p className="mt-8 text-base text-white/40">第二层「人物与事件」即将呈现</p>
             <button
               onClick={() => setPicked(null)}
-              className="mt-8 rounded-full border border-white/20 px-6 py-2 text-sm text-white/80 transition hover:bg-white/10"
+              className="mt-8 rounded-full border border-white/20 px-6 py-2 text-base text-white/80 transition hover:bg-white/10"
             >
               返回
             </button>

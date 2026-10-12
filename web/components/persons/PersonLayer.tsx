@@ -60,15 +60,15 @@ export function PersonLayer({
         <div className="pointer-events-auto">
           <button
             onClick={onBack}
-            className="rounded-full border border-white/20 px-4 py-1.5 text-xs tracking-wider text-white/70 transition hover:bg-white/10"
+            className="rounded-full border border-white/20 px-4 py-1.5 text-base tracking-wider text-white/70 transition hover:bg-white/10"
           >
             ← 返回长河
           </button>
         </div>
         <div className="text-right">
-          <div className="text-[13px] tracking-[0.3em] text-sky-300/70">代表人物</div>
+          <div className="text-base tracking-[0.3em] text-sky-300/70">代表人物</div>
           <h2 className="mt-1 text-5xl font-semibold tracking-tight text-white">{name}</h2>
-          <div className="mt-1 text-xs text-white/45">
+          <div className="mt-1 text-base text-white/45">
             {searching && q
               ? `${shown.length} 个搜索结果`
               : `收录 ${total.toLocaleString()} 人 · 展示前 ${persons.length}`}
@@ -87,7 +87,7 @@ export function PersonLayer({
               run(e.target.value);
             }}
             placeholder="搜索人物（跨全部朝代）…"
-            className="w-full bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none"
+            className="w-full bg-transparent text-base text-white placeholder:text-white/30 focus:outline-none"
           />
           {searching && (
             <button
@@ -95,14 +95,16 @@ export function PersonLayer({
                 setSearching(false);
                 run('');
               }}
-              className="shrink-0 text-xs text-white/40 hover:text-white/70"
+              className="shrink-0 text-base text-white/40 hover:text-white/70"
             >
               清除
             </button>
           )}
-          {sLoading && <span className="shrink-0 text-xs text-white/30">…</span>}
+          {sLoading && <span className="shrink-0 text-base text-white/30">…</span>}
         </div>
-        <div className="mt-2 text-center text-xs text-white/30">星越大越亮 = 越重要 · 点击进入</div>
+        <div className="mt-2 text-center text-base text-white/30">
+          星越大越亮 = 越重要 · 点击进入
+        </div>
       </div>
     </div>
   );

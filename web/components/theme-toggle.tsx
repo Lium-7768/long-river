@@ -9,7 +9,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       onClick={toggle}
       className={cn(
-        'gear-border pointer-events-auto rounded-full px-4 py-1.5 text-xs tracking-widest',
+        'gear-border pointer-events-auto rounded-full px-4 py-1.5 text-base tracking-widest',
         'text-lr-fg/80 transition-colors hover:text-lr-accent',
         className,
       )}
