@@ -20,3 +20,8 @@ build/works.jsonl
 __pycache__/
 build/merged_persons.jsonl
 build/kinship_edges.jsonl
+
+# 构建中间产物（JSONL/JSON），由 etl/*.py 生成，不入库
+build/
+__pycache__/
+*.pyc

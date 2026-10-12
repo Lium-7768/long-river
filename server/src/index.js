@@ -1,11 +1,10 @@
 /**
  * 长河 · 本地后端（Node + better-sqlite3）
  * ------------------------------------------------------------
- * 与 Cloudflare Worker (api/src/index.js) 路由/返回结构保持一致，
- * 数据源改为本地 SQLite (data/lr-song.sqlite3)。
+ * 唯一后端。数据源为本地 SQLite (data/lr-song.sqlite3)。
  *
  * 目的：D1 免费层有「每日写入行数」限额，无法承载全史导入。
- *      本地 SQLite 不受限，作为开发/自用的数据源。
+ *      本地 SQLite 不受限，作为唯一数据源（已弃用 Cloudflare D1）。
  *
  * 环境变量：
  *   LR_DB    SQLite 路径（默认 ../data/lr-song.sqlite3）
