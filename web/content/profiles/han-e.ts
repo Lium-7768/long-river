@@ -34,7 +34,10 @@ export const HAN_E: DynastyProfile = {
       background: '东汉选举操于地方大族与士人之手，「孝廉」多出世家；清议品评人物之风盛行。',
       impact:
         '选官为重名望的门阀所把持，如弘农杨氏、汝南袁氏四世三公，为魏晋门阀「九品中正」之先声。',
-      figures: [{ name: '袁安' }, { name: '杨震' }],
+      figures: [
+        { name: '袁安', personId: 'yuanan-359667' },
+        { name: '杨震', personId: 'yangzhen-4040' },
+      ],
     },
     {
       name: '度田令',
@@ -58,7 +61,10 @@ export const HAN_E: DynastyProfile = {
       background:
         '王莽时西域与中原断绝，匈奴复控其地。明帝时班超等西征，追灭匈奴所立之莎车、龟兹势力。',
       impact: '「投笔从戎」的班超经营西域三十年，丝路复通；然东汉对西域控制时断时续，随国势起伏。',
-      figures: [{ name: '班超' }, { name: '班勇' }],
+      figures: [
+        { name: '班超', personId: 'banchao-415684' },
+        { name: '班勇', personId: 'banyong-415676' },
+      ],
     },
     {
       name: '州牧制',
@@ -69,7 +75,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·刘焉传》',
       background: '黄巾乱起，地方动荡，刘焉建言「选清名重臣以为牧伯」，以镇安州郡。',
       impact: '州牧手握一州军政，尾大不掉，成为汉末群雄割据（如袁绍、刘表、刘璋）的制度温床。',
-      figures: [{ name: '刘焉' }, { name: '汉灵帝' }],
+      figures: [{ name: '刘焉', personId: 'hanshu-后汉书-082-刘焉' }, { name: '汉灵帝' }],
     },
   ],
   events: [
@@ -84,7 +90,11 @@ export const HAN_E: DynastyProfile = {
       outcome: '公元25年刘秀于鄗城称帝，沿用「汉」国号，定都洛阳；至36年平定公孙述，全国一统。',
       impact:
         '开创「光武中兴」，轻徭薄赋、释放奴婢、整顿吏治，东汉前期重现治世，为明章之治奠定基础。',
-      figures: [{ name: '汉光武帝' }, { name: '邓禹' }, { name: '冯异' }],
+      figures: [
+        { name: '汉光武帝' },
+        { name: '邓禹', personId: 'dengyu-135103' },
+        { name: '冯异', personId: 'fengyi-30683' },
+      ],
     },
     {
       year: 73,
@@ -96,7 +106,10 @@ export const HAN_E: DynastyProfile = {
       outcome:
         '班超以「不入虎穴，焉得虎子」之勇袭杀匈奴使者，使鄯善归汉，后历定莎车、龟兹、疏勒，官至西域都护。',
       impact: '西域五十余国复附汉朝，丝路畅通，中亚与中原往来复盛。',
-      figures: [{ name: '班超' }, { name: '班固' }],
+      figures: [
+        { name: '班超', personId: 'banchao-415684' },
+        { name: '班固', personId: 'bangu-135114' },
+      ],
     },
     {
       year: 92,
@@ -120,7 +133,11 @@ export const HAN_E: DynastyProfile = {
       outcome:
         '桓帝时李膺等被诬下狱，后虽赦而「禁锢终身」；灵帝时再兴党狱，李膺、范滂等百余人死狱中，党人门生故吏悉遭禁锢。',
       impact: '士林精锐摧折殆尽，正气消沉，士人与朝廷离心，加速东汉崩解。',
-      figures: [{ name: '李膺' }, { name: '范滂' }, { name: '陈蕃' }],
+      figures: [
+        { name: '李膺', personId: 'liying-41141' },
+        { name: '范滂', personId: 'fanpang-135342' },
+        { name: '陈蕃', personId: 'chenfan-81485' },
+      ],
     },
     {
       year: 184,
@@ -133,7 +150,11 @@ export const HAN_E: DynastyProfile = {
       outcome:
         '张角兄弟率黄巾军起，京师震动。灵帝解党锢、遣皇甫嵩、卢植等讨之，起义主力年余溃散，然余部绵延廿余年。',
       impact: '为镇压黄巾，朝廷放权地方州牧、刺史募兵，地方割据之势成，东汉名存实亡。',
-      figures: [{ name: '张角' }, { name: '皇甫嵩' }, { name: '卢植' }],
+      figures: [
+        { name: '张角' },
+        { name: '皇甫嵩', personId: 'sj-huangfusong-95' },
+        { name: '卢植', personId: 'luzhi-31521' },
+      ],
     },
     {
       year: 189,
@@ -145,7 +166,11 @@ export const HAN_E: DynastyProfile = {
         '灵帝崩，何进谋诛宦官，召董卓等外兵入京；何进反为宦官所杀，袁绍等尽诛宦官，董卓乘乱擅权。',
       outcome: '董卓废少帝立献帝，纵兵劫掠，焚洛阳、掘帝陵，挟献帝西迁长安，关东诸侯遂结盟讨董。',
       impact: '东汉中央权威彻底瓦解，军阀混战开启，直接引向三国鼎立。',
-      figures: [{ name: '董卓' }, { name: '袁绍' }, { name: '曹操' }],
+      figures: [
+        { name: '董卓', personId: 'sj-dongzhuo-97' },
+        { name: '袁绍', personId: 'sj-yuanshao-100' },
+        { name: '曹操', personId: 'caocao-30257' },
+      ],
     },
     {
       year: 200,
@@ -156,7 +181,10 @@ export const HAN_E: DynastyProfile = {
       background: '董卓乱后群雄割据，袁绍据河北势盛，曹操挟献帝都许，与袁绍对峙于官渡。',
       outcome: '曹操火烧乌巢袁军粮屯，袁军大溃，绍仅以身免；曹操遂渐平河北。',
       impact: '北方归属奠定，为曹魏代汉铺路，「挟天子以令诸侯」之效大显。',
-      figures: [{ name: '曹操' }, { name: '袁绍' }],
+      figures: [
+        { name: '曹操', personId: 'caocao-30257' },
+        { name: '袁绍', personId: 'sj-yuanshao-100' },
+      ],
     },
     {
       year: 220,
@@ -167,7 +195,7 @@ export const HAN_E: DynastyProfile = {
       background: '曹操挟献帝、平北方，权倾天下；曹操死后，子曹丕嗣魏王。',
       outcome: '汉献帝被迫「禅让」，曹丕称帝建魏；次年刘备称帝于蜀，孙权建吴，三国鼎立。',
       impact: '两汉四百年帝业终结，中国历史进入三国魏晋南北朝分裂时期。',
-      figures: [{ name: '曹丕' }, { name: '汉献帝' }],
+      figures: [{ name: '曹丕', personId: 'wk-Q313333' }, { name: '汉献帝' }],
     },
   ],
   culture: [
@@ -179,7 +207,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·蔡伦传》',
       background: '此前文字书于竹简、缣帛，笨重昂贵；蔡伦总结民间经验，以植物纤维造纸。',
       impact: '「蔡侯纸」轻便廉价，极大推动文化传播，被视为中国古代四大发明之一。',
-      figures: [{ name: '蔡伦' }],
+      figures: [{ name: '蔡伦', personId: 'cailun-464629' }],
       works: ['蔡侯纸'],
     },
     {
@@ -190,7 +218,10 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·班固传》',
       background: '班固承父班彪之遗稿撰《汉书》，历二十余年；后由其妹班昭续成。',
       impact: '开创「断代史」体例，为后世正史所宗，与《史记》并称。',
-      figures: [{ name: '班固' }, { name: '班昭' }],
+      figures: [
+        { name: '班固', personId: 'bangu-135114' },
+        { name: '班昭', personId: 'banzhao-135108' },
+      ],
       works: ['《汉书》'],
     },
     {
@@ -201,7 +232,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·张衡传》',
       background: '东汉地震频仍，天文历法需求推动观测仪器发展。',
       impact: '地动仪是世界最早的验震仪器，标志中国古代天文学与机械制造的高度。',
-      figures: [{ name: '张衡' }],
+      figures: [{ name: '张衡', personId: 'zhangheng-80160' }],
       works: ['《灵宪》', '候风地动仪'],
     },
     {
@@ -212,7 +243,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·许慎传》',
       background: '东汉古文经学兴盛，为解经而重文字训诂，许慎遂集大成著此书。',
       impact: '首创部首检字法，收录九千余字，为文字学（小学）奠基之作。',
-      figures: [{ name: '许慎' }],
+      figures: [{ name: '许慎', personId: 'xushen-75665' }],
       works: ['《说文解字》'],
     },
     {
@@ -242,7 +273,10 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·孔融传》',
       background: '汉末乱世，文人感时伤乱，托诗言志，形成「建安风骨」。',
       impact: '开创文人自觉创作的新风气，为魏晋文学自觉与诗歌发展奠基。',
-      figures: [{ name: '曹操' }, { name: '曹植' }],
+      figures: [
+        { name: '曹操', personId: 'caocao-30257' },
+        { name: '曹植', personId: 'caozhi-96869' },
+      ],
       works: ['《短歌行》', '《洛神赋》'],
     },
   ],

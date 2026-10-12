@@ -18,7 +18,7 @@ export const SHANG: DynastyProfile = {
       desc: '商王直辖「内服」（王畿），分封或臣服外族为「外服」（诸侯），分区而治。',
       background: '商以王畿为核心，向外以盟誓、征伐臣服四方部族。',
       impact: '早期国家「内外有别」的统治模式，为西周分封制之前身。',
-      figures: [{ name: '商汤' }, { name: '盘庚' }],
+      figures: [{ name: '商汤' }, { name: '盘庚', personId: 'ws-史记-卷003-盘庚' }],
     },
     {
       name: '王室占卜与贞人',
@@ -60,7 +60,7 @@ export const SHANG: DynastyProfile = {
       background: '夏桀暴虐，商汤修德、任伊尹为相，联合诸侯伐夏。',
       outcome: '鸣条之战灭夏，汤建商朝，行「宽政」以安民。',
       impact: '商立国五百余年，开创中国信史时代。',
-      figures: [{ name: '商汤' }, { name: '伊尹' }],
+      figures: [{ name: '商汤' }, { name: '伊尹', personId: 'wk-Q981363' }],
     },
     {
       year: -1300,
@@ -70,7 +70,7 @@ export const SHANG: DynastyProfile = {
       background: '商前期屡次迁都、内乱频仍，盘庚力主迁殷以图振兴。',
       outcome: '迁殷后商朝复兴，历二百七十余年不再迁都，故商亦称「殷」。',
       impact: '殷墟成为商代晚期都城遗址，甲骨文自此大宗出土。',
-      figures: [{ name: '盘庚' }],
+      figures: [{ name: '盘庚', personId: 'ws-史记-卷003-盘庚' }],
     },
     {
       year: -1250,
@@ -80,7 +80,7 @@ export const SHANG: DynastyProfile = {
       background: '武丁继位后举贤才（傅说）、用女将（妇好），大举开疆。',
       outcome: '武丁时商国势达顶峰，征土方、鬼方、羌方，疆域大拓。',
       impact: '「武丁中兴」是商朝最盛期，殷墟甲骨多属此期。',
-      figures: [{ name: '武丁' }, { name: '妇好' }, { name: '傅说' }],
+      figures: [{ name: '武丁' }, { name: '妇好', personId: 'wk-Q270018' }, { name: '傅说' }],
     },
     {
       year: -1046,
@@ -90,7 +90,11 @@ export const SHANG: DynastyProfile = {
       background: '商纣暴虐、众叛亲离，周联合诸侯兴师。',
       outcome: '牧野之战商军阵前倒戈，纣王登鹿台自焚，商亡。',
       impact: '「汤武革命」之续，周革殷命，开西周之世。',
-      figures: [{ name: '商纣王' }, { name: '周武王' }, { name: '姜子牙' }],
+      figures: [
+        { name: '商纣王' },
+        { name: '周武王', personId: 'ws-史记-卷004-周武王' },
+        { name: '姜子牙' },
+      ],
     },
   ],
   culture: [

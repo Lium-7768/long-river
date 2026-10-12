@@ -18,7 +18,7 @@ export const XIN: DynastyProfile = {
       desc: '改天下田为「王田」、奴婢为「私属」，禁买卖，拟复井田之制。',
       background: '西汉末土地兼并、奴婢问题严重，王莽托古改制，欲均田限奴。',
       impact: '脱离实际、豪强抵制，诏令旋废，反致更大混乱，民怨沸腾。',
-      figures: [{ name: '王莽' }],
+      figures: [{ name: '王莽', personId: 'wk-Q7250' }],
     },
     {
       name: '五均六筦',
@@ -28,7 +28,7 @@ export const XIN: DynastyProfile = {
       desc: '设五均官平抑物价、赊贷，国家垄断盐铁酒钱布名山大泽之利（六筦）。',
       background: '王莽仿《周礼》行「六筦」，以国家控制工商、平抑兼并。',
       impact: '强化国家垄断，然官吏舞弊、执行苛刻，工商凋敝、民不聊生。',
-      figures: [{ name: '王莽' }],
+      figures: [{ name: '王莽', personId: 'wk-Q7250' }],
     },
     {
       name: '币制改革',
@@ -38,7 +38,7 @@ export const XIN: DynastyProfile = {
       desc: '屡改货币，行宝货五物六名二十八品，币制繁乱。',
       background: '王莽为聚财与复古，多次变更钱币（错刀、契刀、大泉等）。',
       impact: '币制紊乱、私铸盛行，经济秩序崩溃，为亡国之重要诱因。',
-      figures: [{ name: '王莽' }],
+      figures: [{ name: '王莽', personId: 'wk-Q7250' }],
     },
     {
       name: '托古改官制',
@@ -48,7 +48,7 @@ export const XIN: DynastyProfile = {
       desc: '仿《周礼》改官名、爵位、郡县名，制度繁复、更易无常。',
       background: '王莽以儒生自居，事事必依古制，官名地名频改。',
       impact: '政令混乱、吏民不知所从，行政体系陷于瘫痪。',
-      figures: [{ name: '王莽' }],
+      figures: [{ name: '王莽', personId: 'wk-Q7250' }],
     },
   ],
   events: [
@@ -60,7 +60,10 @@ export const XIN: DynastyProfile = {
       background: '王莽以外戚辅政、受「安汉公」，渐掌大权，借符命篡汉。',
       outcome: '公元9年王莽受禅称帝，国号新，改元始建国，西汉亡。',
       impact: '西汉二百年而亡，新莽之制旋即动荡。',
-      figures: [{ name: '王莽' }, { name: '孺子婴' }],
+      figures: [
+        { name: '王莽', personId: 'wk-Q7250' },
+        { name: '孺子婴', personId: 'wk-Q7247' },
+      ],
     },
     {
       year: 17,
@@ -70,7 +73,11 @@ export const XIN: DynastyProfile = {
       background: '王莽改制失败、连年灾荒，百姓流亡，湖北绿林、山东赤眉揭竿。',
       outcome: '绿林军立刘玄为更始帝，赤眉军转战中原，各地豪强并起。',
       impact: '新朝统治崩溃，为东汉建立扫清道路。',
-      figures: [{ name: '王匡' }, { name: '樊崇' }, { name: '刘玄' }],
+      figures: [
+        { name: '王匡', personId: 'wk-Q11572928' },
+        { name: '樊崇', personId: 'wk-Q11120928' },
+        { name: '刘玄', personId: 'liuxuan-170185' },
+      ],
     },
     {
       year: 23,
@@ -80,7 +87,11 @@ export const XIN: DynastyProfile = {
       background: '莽军四十二万围昆阳，刘秀率援军内外夹击。',
       outcome: '昆阳一战莽军大溃，绿林军攻克长安，王莽被杀，新亡。',
       impact: '史上以少胜多之经典；新朝十五年而亡，光武中兴之序幕。',
-      figures: [{ name: '刘秀' }, { name: '王莽' }, { name: '刘玄' }],
+      figures: [
+        { name: '刘秀', personId: 'liuxiu-24661' },
+        { name: '王莽', personId: 'wk-Q7250' },
+        { name: '刘玄', personId: 'liuxuan-170185' },
+      ],
     },
   ],
   culture: [
@@ -90,7 +101,10 @@ export const XIN: DynastyProfile = {
       desc: '西汉末经学与谶纬神学合流，王莽借符命图谶篡汉。',
       background: '汉儒好言灾异、谶纬，为王莽「受命」提供神学依据。',
       impact: '谶纬之风延续东汉，深刻影响当时的政治与学术。',
-      figures: [{ name: '王莽' }, { name: '刘歆' }],
+      figures: [
+        { name: '王莽', personId: 'wk-Q7250' },
+        { name: '刘歆', personId: 'liuxin-391688' },
+      ],
       works: ['《七略》', '谶纬之书'],
     },
     {
@@ -99,7 +113,7 @@ export const XIN: DynastyProfile = {
       desc: '刘歆表彰古文经，立古文博士，为王莽改制提供经学依据。',
       background: '西汉今古文经学之争，王莽、刘歆推崇古文经以托古。',
       impact: '古文经学由此兴起，影响东汉及后世的经学格局。',
-      figures: [{ name: '刘歆' }],
+      figures: [{ name: '刘歆', personId: 'liuxin-391688' }],
       works: ['《七略》'],
     },
     {
@@ -108,7 +122,7 @@ export const XIN: DynastyProfile = {
       desc: '王莽制嘉量、铜卡尺等度量衡器，工艺精密；新莽钱币形制多样。',
       background: '王莽重制度、好复古，铸造标准量器与货币。',
       impact: '新莽嘉量、货币为研究古代度量衡与钱币之重要实物。',
-      figures: [{ name: '王莽' }],
+      figures: [{ name: '王莽', personId: 'wk-Q7250' }],
       works: ['新莽嘉量', '新莽铜卡尺'],
     },
     {

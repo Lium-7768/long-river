@@ -156,6 +156,21 @@ function handle(pathname, searchParams) {
     });
   }
 
+  if (p === '/api/person-lookup') {
+    const names = (searchParams.get('names') || '').split(',').map((s) => s.trim()).filter(Boolean).slice(0, 200);
+    if (!names.length) return ok({});
+    const out = {};
+    const byName = db.prepare('SELECT id, name FROM persons WHERE name = ? LIMIT 1');
+    const byAlias = db.prepare(
+      'SELECT p.id, p.name FROM aliases a JOIN persons p ON p.id = a.person_id WHERE a.alias = ? LIMIT 1'
+    );
+    for (const nm of names) {
+      const r = byName.get(nm) || byAlias.get(nm);
+      if (r) out[nm] = { id: r.id, name: r.name };
+    }
+    return ok(out);
+  }
+
   if (p === '/api/search') {
     const q = searchParams.get('q');
     if (!q) return err('需要 q 参数');

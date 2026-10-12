@@ -18,7 +18,7 @@ export const SUI: DynastyProfile = {
       desc: '中书取旨、门下审议、尚书执行，下设六部，确立中央官制基本框架。',
       background: '隋文帝废北周六官之弊，采汉魏以来官制之优，创三省六部，权责分明。',
       impact: '为唐所承并完善，成中国古代中央官制成熟范式，沿用至明清。',
-      figures: [{ name: '隋文帝' }, { name: '高颎' }],
+      figures: [{ name: '隋文帝' }, { name: '高颎', personId: 'gb-隋书-卷41-高颎' }],
     },
     {
       name: '科举制创立',
@@ -28,7 +28,7 @@ export const SUI: DynastyProfile = {
       desc: '炀帝始设进士科，以考试取士，废九品中正，开科举先河。',
       background: '南北朝以来门阀垄断选举，隋为扩大皇权统治基础，改以考试取才。',
       impact: '中国选官制度的重大变革，破除门第，为唐及后世科举奠定基础。',
-      figures: [{ name: '隋炀帝' }],
+      figures: [{ name: '隋炀帝', personId: 'wk-Q7419' }],
     },
     {
       name: '均田制与租庸调',
@@ -58,7 +58,7 @@ export const SUI: DynastyProfile = {
       desc: '开凿贯通南北的大运河，连接涿郡、洛阳、余杭，沟通五大水系。',
       background: '为控驭南北、转运粮赋，炀帝征百万民夫开凿通济渠、永济渠、江南河。',
       impact: '中国南北经济文化的大动脉，功在千秋；然役民过甚，为隋亡之因。',
-      figures: [{ name: '隋炀帝' }],
+      figures: [{ name: '隋炀帝', personId: 'wk-Q7419' }],
     },
   ],
   events: [
@@ -70,7 +70,7 @@ export const SUI: DynastyProfile = {
       background: '北周宣帝崩，外戚杨坚辅政，受禅代周建隋，渐次统一北方。',
       outcome: '581年杨坚称帝建隋，行均田、轻赋役、整吏治，仓库充盈，史称「开皇之治」。',
       impact: '为统一南北、缔造盛世奠定基础。',
-      figures: [{ name: '隋文帝' }, { name: '高颎' }],
+      figures: [{ name: '隋文帝' }, { name: '高颎', personId: 'gb-隋书-卷41-高颎' }],
     },
     {
       year: 589,
@@ -80,7 +80,11 @@ export const SUI: DynastyProfile = {
       background: '隋文帝励精图治，国力强盛；南陈君昏政乱。',
       outcome: '589年晋王杨广、贺若弼、韩擒虎等渡江攻建康，陈后主被俘，陈亡。',
       impact: '结束魏晋南北朝分裂，中国重归一统，隋制影响深远。',
-      figures: [{ name: '隋文帝' }, { name: '韩擒虎' }, { name: '贺若弼' }],
+      figures: [
+        { name: '隋文帝' },
+        { name: '韩擒虎', personId: 'hanqin-432925' },
+        { name: '贺若弼', personId: 'heruo-466025' },
+      ],
     },
     {
       year: 605,
@@ -90,7 +94,7 @@ export const SUI: DynastyProfile = {
       background: '炀帝欲营洛阳、巡江都、征高丽，遂大举兴作。',
       outcome: '开凿大运河贯通南北；始置进士科，科举肇端。',
       impact: '通运河、创科举皆泽被后世，然役民过甚，民怨沸腾。',
-      figures: [{ name: '隋炀帝' }],
+      figures: [{ name: '隋炀帝', personId: 'wk-Q7419' }],
     },
     {
       year: 612,
@@ -100,7 +104,7 @@ export const SUI: DynastyProfile = {
       background: '炀帝好大喜功，欲征服高句丽，动员百万军民。',
       outcome: '三征皆败（首征惨败于辽东），兵民死伤无数，激起大规模民变。',
       impact: '隋朝由盛转衰的转折，各地起义蜂起，王朝迅速崩溃。',
-      figures: [{ name: '隋炀帝' }],
+      figures: [{ name: '隋炀帝', personId: 'wk-Q7419' }],
     },
     {
       year: 619,
@@ -110,7 +114,11 @@ export const SUI: DynastyProfile = {
       background: '天下大乱，炀帝滞留江都，禁军思归，遂生变。',
       outcome: '618年宇文化及缢杀炀帝；李渊于长安称帝建唐，619年隋恭帝禅位，隋亡。',
       impact: '隋立国仅三十八年而亡，为后世「二世而亡」之又一鉴。',
-      figures: [{ name: '隋炀帝' }, { name: '李渊' }, { name: '宇文化及' }],
+      figures: [
+        { name: '隋炀帝', personId: 'wk-Q7419' },
+        { name: '李渊', personId: 'liyuan-23335' },
+        { name: '宇文化及', personId: 'yuwen-173126' },
+      ],
     },
   ],
   culture: [
@@ -121,7 +129,7 @@ export const SUI: DynastyProfile = {
       desc: '李春设计建造赵州桥，敞肩圆弧石拱，为世界最早的敞肩石拱桥。',
       background: '隋代南北交通繁忙，需在洨河上建坚固大跨桥，李春遂创敞肩拱形制。',
       impact: '历千余年仍坚固屹立，体现隋代高超造桥技术，比欧洲同类桥早一千二百年。',
-      figures: [{ name: '李春' }],
+      figures: [{ name: '李春', personId: 'lichun-40632' }],
       works: ['赵州桥'],
     },
     {
@@ -148,7 +156,7 @@ export const SUI: DynastyProfile = {
       desc: '隋代文学融合南北，为唐诗兴起之过渡。',
       background: '统一后南朝的绮丽与北朝的质朴交融，士人兼采其长。',
       impact: '为初唐诗歌的革新与唐诗的全面繁荣奠定基础。',
-      figures: [{ name: '薛道衡' }],
+      figures: [{ name: '薛道衡', personId: 'xuedao-18767' }],
       works: ['《人日思归》'],
     },
   ],

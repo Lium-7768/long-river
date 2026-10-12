@@ -17,8 +17,8 @@ export const SONG_W: DynastyProfile = {
       impact:
         '皇权空前强化，但也造成「三权鼎立」下的相互掣肘、决策迟滞与机构重叠；枢密院与三衙的分立更埋下「兵不识将、将不知兵」的隐患。',
       figures: [
-        { name: '赵匡胤', personId: 'zhao-9001' },
-        { name: '赵普', personId: 'zhao-pu' },
+        { name: '赵匡胤', personId: 'zhaokuang-9001' },
+        { name: '赵普', personId: 'zhaopu-8023' },
       ],
     },
     {
@@ -32,8 +32,8 @@ export const SONG_W: DynastyProfile = {
       impact:
         '寒门子弟得以跻身朝堂，「士大夫政治」全面确立。但取士既广，官多而阙少，与「差遣分离」共同酿成冗官之患。',
       figures: [
-        { name: '欧阳修', personId: 'ouyang-xiu' },
-        { name: '范仲淹', personId: 'fan-zhongyan' },
+        { name: '欧阳修', personId: 'ouyang-1384' },
+        { name: '范仲淹', personId: 'fanzhong-8043' },
       ],
     },
     {
@@ -47,8 +47,8 @@ export const SONG_W: DynastyProfile = {
       impact:
         '言路大开，士论得以制约相权；但台谏亦常沦为党争工具，「风闻言事」使政争趋于激烈（如新旧党争中的互相攻讦）。',
       figures: [
-        { name: '包拯', personId: 'baozheng' },
-        { name: '司马光', personId: 'sima-guang' },
+        { name: '包拯', personId: 'baozheng-1411' },
+        { name: '司马光', personId: 'sima-1488' },
       ],
     },
     {
@@ -61,7 +61,7 @@ export const SONG_W: DynastyProfile = {
         '唐代府兵制（兵农合一）至中晚唐已瓦解。宋承五代之习，改行募兵：国家出钱募人当兵，灾年亦收流民入军以防民变，故有「养兵弥乱」之说。',
       impact:
         '军队职业化、禁军集于中央，利于防内；但军费浩繁、兵额臃肿，形成「冗兵」「冗费」，加之兵将分离削弱战力，终成「积贫积弱」之困。',
-      figures: [{ name: '赵匡胤', personId: 'zhao-9001' }],
+      figures: [{ name: '赵匡胤', personId: 'zhaokuang-9001' }],
     },
     {
       name: '差遣与官阶分离',
@@ -74,8 +74,8 @@ export const SONG_W: DynastyProfile = {
       impact:
         '官、职、差遣三分，名实不符，机构叠床架屋、官僚队伍膨胀，行政效率低下而财政负担沉重，成为「冗官」之源。',
       figures: [
-        { name: '范仲淹', personId: 'fan-zhongyan' },
-        { name: '王安石', personId: 'wang-anshi' },
+        { name: '范仲淹', personId: 'fanzhong-8043' },
+        { name: '王安石', personId: 'wangan-1762' },
       ],
     },
   ],
@@ -91,8 +91,8 @@ export const SONG_W: DynastyProfile = {
       impact:
         '结束五代十国以来武将跋扈、政权速亡的乱局，开启两宋三百余年文治，但也埋下「重文抑武」的基调。',
       figures: [
-        { name: '赵匡胤', personId: 'zhao-9001' },
-        { name: '赵普', personId: 'zhao-pu' },
+        { name: '赵匡胤', personId: 'zhaokuang-9001' },
+        { name: '赵普', personId: 'zhaopu-8023' },
       ],
     },
     {
@@ -103,7 +103,7 @@ export const SONG_W: DynastyProfile = {
       background: '赵匡胤以禁军拥立得国，深恐石守信等宿将效仿，遂欲「释去兵权」以绝后患。',
       outcome: '宴请禁军将领，许以田宅富贵、结以姻亲，诸将自请解职，兵权收归中央。',
       impact: '彻底扭转武将干政格局，确立文臣主导的国策；但过分压制武备，使宋朝长期「积弱」。',
-      figures: [{ name: '赵匡胤', personId: 'zhao-9001' }],
+      figures: [{ name: '赵匡胤', personId: 'zhaokuang-9001' }],
     },
     {
       year: 1005,
@@ -114,7 +114,7 @@ export const SONG_W: DynastyProfile = {
       outcome:
         '宰相寇准力主真宗亲征，宋军射杀辽将萧挞凛，辽方求和，双方约为兄弟之国，宋岁输银十万两、绢二十万匹。',
       impact: '换来宋辽百余年和平与榷场贸易，然开「以岁币换和平」之先例，亦被后世讥为屈辱。',
-      figures: [{ name: '寇准', personId: 'kouzhun' }, { name: '宋真宗' }],
+      figures: [{ name: '寇准', personId: 'kouzhun-898' }, { name: '宋真宗' }],
     },
     {
       year: 1043,
@@ -126,8 +126,8 @@ export const SONG_W: DynastyProfile = {
         '范仲淹上《答手诏条陈十事》，推行明黜陟、抑侥幸、精贡举等，触动既得利益，一年多即被罢。',
       impact: '虽失败，却开士大夫议政改革之风，为王安石变法之先声。',
       figures: [
-        { name: '范仲淹', personId: 'fan-zhongyan' },
-        { name: '欧阳修', personId: 'ouyang-xiu' },
+        { name: '范仲淹', personId: 'fanzhong-8043' },
+        { name: '欧阳修', personId: 'ouyang-1384' },
       ],
     },
     {
@@ -139,7 +139,7 @@ export const SONG_W: DynastyProfile = {
       outcome:
         '设制置三司条例司，颁青苗、募役、方田均税、保甲诸法，富国与强兵并行，然执行苛急，扰民甚广。',
       impact: '一时国库充盈、军力提振，但激化新旧党争，变法几度反复，终随北宋覆亡而废。',
-      figures: [{ name: '王安石', personId: 'wang-anshi' }, { name: '宋神宗' }],
+      figures: [{ name: '王安石', personId: 'wangan-1762' }, { name: '宋神宗' }],
     },
     {
       year: 1086,
@@ -151,8 +151,8 @@ export const SONG_W: DynastyProfile = {
         '司马光主政，数月间尽废新法，史称「元祐更化」，旧党内部又分裂为洛党、蜀党、朔党互斗。',
       impact: '新旧之争由政见之争堕入党派倾轧，此后绍圣再新、反复无常，朝政益坏。',
       figures: [
-        { name: '司马光', personId: 'sima-guang' },
-        { name: '苏轼', personId: 'su-shi' },
+        { name: '司马光', personId: 'sima-1488' },
+        { name: '苏轼', personId: 'sushi-3767' },
       ],
     },
     {
@@ -174,8 +174,8 @@ export const SONG_W: DynastyProfile = {
       background: '城市经济繁荣、市井娱乐（瓦舍勾栏）兴盛，长短句的「词」由歌筵小令升为一代文学。',
       impact: '与唐诗并称中国文学双峰，「豪放」「婉约」两大风格定型，影响后世千年词坛。',
       figures: [
-        { name: '苏轼', personId: 'su-shi' },
-        { name: '欧阳修', personId: 'ouyang-xiu' },
+        { name: '苏轼', personId: 'sushi-3767' },
+        { name: '欧阳修', personId: 'ouyang-1384' },
       ],
       works: ['《念奴娇·赤壁怀古》', '《雨霖铃》', '《醉翁亭记》'],
     },
@@ -205,7 +205,10 @@ export const SONG_W: DynastyProfile = {
       desc: '周敦颐、二程（程颢、程颐）开理学先河，重「天理」与道德修养。',
       background: '面对佛道思想的挑战，儒家学者力图重建以「天理」为核心的心性之学。',
       impact: '经朱熹集大成，成为元明清的官方正统哲学，深刻塑造中国近世思想与文化。',
-      figures: [{ name: '程颢' }, { name: '程颐' }],
+      figures: [
+        { name: '程颢', personId: 'chenghao-3102' },
+        { name: '程颐', personId: 'chengyi-3105' },
+      ],
       works: ['《定性书》', '《识仁篇》'],
     },
     {
@@ -214,7 +217,7 @@ export const SONG_W: DynastyProfile = {
       desc: '范宽《溪山行旅图》、张择端《清明上河图》，宋画写实与意境并重。',
       background: '宫廷画院（翰林图画院）制度与文人画的兴起，共同推动绘画大盛。',
       impact: '山水、花鸟、人物、风俗画全面成熟，成为中国绘画史的巅峰之一。',
-      figures: [{ name: '范宽' }, { name: '张择端' }],
+      figures: [{ name: '范宽', personId: 'fankuan-38864' }, { name: '张择端' }],
       works: ['《溪山行旅图》', '《清明上河图》'],
     },
     {

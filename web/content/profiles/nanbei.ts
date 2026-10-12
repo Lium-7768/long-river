@@ -19,7 +19,7 @@ export const NANBEI: DynastyProfile = {
       desc: '按丁口授田、还受有法，露田桑田有别，稳定小农、增赋税。',
       background: '北朝战乱地荒、豪强兼并，孝文帝纳李安世之议行均田。',
       impact: '重建国家编户、抑制兼并，为北朝富强与隋唐均田制所本。',
-      figures: [{ name: '北魏孝文帝' }, { name: '李安世' }],
+      figures: [{ name: '北魏孝文帝' }, { name: '李安世', personId: 'lian-77517' }],
     },
     {
       name: '三长制',
@@ -29,7 +29,7 @@ export const NANBEI: DynastyProfile = {
       desc: '五家一邻长、五邻一里长、五里一党长，取代宗主督护，清理户籍。',
       background: '北魏初行宗主督护、户籍隐匿，冯太后纳李冲议立三长。',
       impact: '户口大增、赋税足额，强化中央对基层的控制，均田得以推行。',
-      figures: [{ name: '冯太后' }, { name: '李冲' }],
+      figures: [{ name: '冯太后' }, { name: '李冲', personId: 'lichong-19785' }],
     },
     {
       name: '孝文帝汉化改革',
@@ -49,7 +49,7 @@ export const NANBEI: DynastyProfile = {
       desc: '西魏宇文泰创府兵，设八柱国、十二大将军，兵农渐合、关陇集团成。',
       background: '西魏承北魏之乱、府兵初起，宇文泰整军以抗东魏。',
       impact: '关陇军事贵族集团由此成形，孕育隋唐皇室与政治核心。',
-      figures: [{ name: '宇文泰' }],
+      figures: [{ name: '宇文泰', personId: 'cbdb-31770' }],
     },
     {
       name: '南朝寒人与典签',
@@ -71,7 +71,7 @@ export const NANBEI: DynastyProfile = {
       background: '鲜卑拓跋部建北魏，历数代征战，逐一翦灭十六国诸政权。',
       outcome: '439年灭北凉，北方统一；南方为刘宋，南北对峙格局确立。',
       impact: '北朝统一为汉化改革与北强南弱之势奠定基础。',
-      figures: [{ name: '北魏太武帝' }, { name: '崔浩' }],
+      figures: [{ name: '北魏太武帝' }, { name: '崔浩', personId: 'cuihao-168749' }],
     },
     {
       year: 494,
@@ -91,7 +91,7 @@ export const NANBEI: DynastyProfile = {
       background: '梁武帝晚年佞佛、政事废弛，侯景降而复叛。',
       outcome: '548年侯景围攻台城，549年梁武帝饿死，江南大乱；后陈霸先平之。',
       impact: '江南经济文化遭重创，南朝门阀几尽，士族衰落、寒人崛起。',
-      figures: [{ name: '侯景' }, { name: '梁武帝' }],
+      figures: [{ name: '侯景', personId: 'houjing-194562' }, { name: '梁武帝' }],
     },
     {
       year: 577,
@@ -111,7 +111,7 @@ export const NANBEI: DynastyProfile = {
       background: '隋代北周、国力强盛；南陈君昏国弱。',
       outcome: '589年隋灭陈，俘陈后主，南北统一。',
       impact: '魏晋南北朝近三百年分裂终结，隋唐大一统由此开启。',
-      figures: [{ name: '隋文帝' }, { name: '陈后主' }],
+      figures: [{ name: '隋文帝' }, { name: '陈后主', personId: 'wk-Q718206' }],
     },
   ],
   culture: [
@@ -139,7 +139,7 @@ export const NANBEI: DynastyProfile = {
       desc: '谢灵运开山水诗一派，与陶渊明并称「陶谢」。',
       background: '南朝士人寄情山水，山水审美兴盛。',
       impact: '确立山水诗传统，为唐诗山水田园一脉之源。',
-      figures: [{ name: '谢灵运' }, { name: '谢朓' }],
+      figures: [{ name: '谢灵运', personId: 'xieling-524277' }, { name: '谢朓' }],
       works: ['《登池上楼》'],
     },
     {
@@ -148,7 +148,7 @@ export const NANBEI: DynastyProfile = {
       desc: '郦道元《水经注》疏证水道地理；贾思勰《齐民要术》总结农学。',
       background: '南北地理、农业知识积累，实学著作涌现。',
       impact: '《水经注》为地理名著、《齐民要术》为现存最早最完整农书。',
-      figures: [{ name: '郦道元' }, { name: '贾思勰' }],
+      figures: [{ name: '郦道元', personId: 'lidao-460969' }, { name: '贾思勰' }],
       works: ['《水经注》', '《齐民要术》'],
     },
     {

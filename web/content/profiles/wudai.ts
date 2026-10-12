@@ -18,7 +18,11 @@ export const WUDAI: DynastyProfile = {
       desc: '藩镇节度使拥兵自重，武人主政、以兵夺位，形成「兵强马壮者为天子」之局。',
       background: '唐末藩镇割据，中央权威尽失，武人遂据中原更迭政权。',
       impact: '政权更替频繁、社会动荡；北宋「强干弱枝、重文抑武」即因之而发。',
-      figures: [{ name: '朱温' }, { name: '李存勖' }, { name: '石敬瑭' }],
+      figures: [
+        { name: '朱温', personId: 'cbdb-377600' },
+        { name: '李存勖' },
+        { name: '石敬瑭', personId: 'wk-Q1189495' },
+      ],
     },
     {
       name: '枢密院与三司',
@@ -28,7 +32,10 @@ export const WUDAI: DynastyProfile = {
       desc: '枢密院掌军政，三司理财，与宰相分权，为宋制之先。',
       background: '五代承唐末之制，中枢机构渐次演变，军权与财权分立。',
       impact: '中枢分权雏形成型，直接为宋代二府三司制所承。',
-      figures: [{ name: '郭威' }, { name: '柴荣' }],
+      figures: [
+        { name: '郭威', personId: 'guowei-457281' },
+        { name: '柴荣', personId: 'chairong-446634' },
+      ],
     },
     {
       name: '禁军与殿前司',
@@ -38,7 +45,10 @@ export const WUDAI: DynastyProfile = {
       desc: '以禁军为中央武力，殿前司、侍卫司统之，兵权成夺位关键。',
       background: '五代诸朝皆倚禁军立国，禁军将领动辄废立君主。',
       impact: '赵匡胤「陈桥兵变」即借禁军之力；宋遂收兵权、行更戍法。',
-      figures: [{ name: '赵匡胤' }, { name: '柴荣' }],
+      figures: [
+        { name: '赵匡胤', personId: 'zhaokuang-9001' },
+        { name: '柴荣', personId: 'chairong-446634' },
+      ],
     },
     {
       name: '北方屯田与南方垦殖',
@@ -60,7 +70,10 @@ export const WUDAI: DynastyProfile = {
       background: '黄巢之乱后唐廷名存实亡，藩镇朱温（黄巢降将）入主中原专权。',
       outcome: '907年朱温逼哀帝禅位建后梁，都汴；唐亡，五代更迭由此始。',
       impact: '大唐三百年国祚终结，中原进入武人割据之世。',
-      figures: [{ name: '朱温' }, { name: '唐哀帝' }],
+      figures: [
+        { name: '朱温', personId: 'cbdb-377600' },
+        { name: '唐哀帝', personId: 'wk-Q9892' },
+      ],
     },
     {
       year: 936,
@@ -70,7 +83,10 @@ export const WUDAI: DynastyProfile = {
       background: '石敬瑭举兵反后唐，求援于契丹，遂有割地称臣之举。',
       outcome: '契丹助石敬瑭建后晋，得燕云十六州，中原失北方屏障。',
       impact: '影响此后数百年宋辽格局，为宋人「燕云之痛」之始。',
-      figures: [{ name: '石敬瑭' }, { name: '耶律德光' }],
+      figures: [
+        { name: '石敬瑭', personId: 'wk-Q1189495' },
+        { name: '耶律德光', personId: 'yelv-43077' },
+      ],
     },
     {
       year: 954,
@@ -80,7 +96,10 @@ export const WUDAI: DynastyProfile = {
       background: '后周太祖郭威、世宗柴荣相继图治，力图削平割据。',
       outcome: '世宗整军练卒、均定赋税、废佛铸钱，南征北战，功业未竟而卒。',
       impact: '后周成为五代最强政权，为北宋统一打下坚实基础。',
-      figures: [{ name: '柴荣' }, { name: '赵匡胤' }],
+      figures: [
+        { name: '柴荣', personId: 'chairong-446634' },
+        { name: '赵匡胤', personId: 'zhaokuang-9001' },
+      ],
     },
     {
       year: 960,
@@ -90,7 +109,7 @@ export const WUDAI: DynastyProfile = {
       background: '周世宗早逝、幼主即位，禁军统帅赵匡胤受拥立。',
       outcome: '960年赵匡胤代后周建宋，定都开封；后渐次统一南方十国。',
       impact: '终结五代十国分裂，开启两宋三百年之局。',
-      figures: [{ name: '赵匡胤' }],
+      figures: [{ name: '赵匡胤', personId: 'zhaokuang-9001' }],
     },
   ],
   culture: [
@@ -100,7 +119,11 @@ export const WUDAI: DynastyProfile = {
       desc: '《花间集》与南唐李煜词，推动词的定型与成熟。',
       background: '西蜀、南唐歌舞宴乐之风盛，文人填词娱宾遣兴。',
       impact: '词由民间小调升为文人创作，李煜亡国之词成千古绝唱，为宋词先声。',
-      figures: [{ name: '李煜' }, { name: '温庭筠' }, { name: '韦庄' }],
+      figures: [
+        { name: '李煜', personId: 'liyu-3551' },
+        { name: '温庭筠', personId: 'wenting-169067' },
+        { name: '韦庄', personId: 'weizhuang-92161' },
+      ],
       works: ['《花间集》', '《虞美人》'],
     },
     {
@@ -109,7 +132,7 @@ export const WUDAI: DynastyProfile = {
       desc: '吴越、南唐、闽、南汉等重农商，海贸繁荣，钱氏治杭卓有成效。',
       background: '南方相对安定，十国君主多重视生产与商路。',
       impact: '江南、闽广为宋代经济繁盛奠定基础，经济重心继续南移。',
-      figures: [{ name: '钱镠' }],
+      figures: [{ name: '钱镠', personId: 'qianliu-3036' }],
       works: [],
     },
     {
@@ -127,7 +150,11 @@ export const WUDAI: DynastyProfile = {
       desc: '荆浩、董源、巨然等开山水画新风，南唐、西蜀设画院。',
       background: '乱世中文人寄情书画，南唐西蜀君主好艺，画院初兴。',
       impact: '「荆关董巨」为宋代山水画之宗，画院制度影响两宋。',
-      figures: [{ name: '荆浩' }, { name: '董源' }, { name: '巨然' }],
+      figures: [
+        { name: '荆浩', personId: 'jinghao-43819' },
+        { name: '董源', personId: 'dongyuan-49698' },
+        { name: '巨然' },
+      ],
       works: ['《匡庐图》', '《潇湘图》'],
     },
   ],

@@ -18,7 +18,7 @@ export const XIXIA: DynastyProfile = {
       desc: '仿宋设中书、枢密、三司等汉式机构，又保留蕃官（党项部族官）之制。',
       background: '西夏据河西、统治党项与汉、回鹘、吐蕃等族，遂行双轨之制。',
       impact: '兼顾游牧与农耕、党项与汉人，维系了多民族政权的稳定。',
-      figures: [{ name: '李元昊' }],
+      figures: [{ name: '李元昊', personId: 'liyuan-339687' }],
     },
     {
       name: '军事十二监军司',
@@ -28,7 +28,7 @@ export const XIXIA: DynastyProfile = {
       desc: '分全国为十二监军司，各统军旅，兵民合一、按部族征发。',
       background: '西夏枕戈待旦于宋辽金之间，军队以党项骑兵为主，机动善战。',
       impact: '兵力虽少而精，屡挫宋军；后期为蒙古长期围攻而耗竭。',
-      figures: [{ name: '李元昊' }],
+      figures: [{ name: '李元昊', personId: 'liyuan-339687' }],
     },
     {
       name: '榷场与丝路贸易',
@@ -48,7 +48,7 @@ export const XIXIA: DynastyProfile = {
       desc: '创西夏文（国书），设蕃学以本族文字教学取士，兼行汉学。',
       background: '李元昊为强化民族认同，命野利仁荣创制西夏文字。',
       impact: '西夏文用于公文、佛经、碑刻，是研究党项历史文化的钥匙。',
-      figures: [{ name: '李元昊' }, { name: '野利仁荣' }],
+      figures: [{ name: '李元昊', personId: 'liyuan-339687' }, { name: '野利仁荣' }],
     },
   ],
   events: [
@@ -60,7 +60,7 @@ export const XIXIA: DynastyProfile = {
       background: '党项拓跋（李）氏经营银夏数代，元昊继位后去宋赐姓、建制度、创文字。',
       outcome: '1038年元昊称帝，定都兴庆府（今银川），行蕃汉之制，与宋分庭抗礼。',
       impact: '西夏正式立国，西北多一强权，宋辽夏三角格局形成。',
-      figures: [{ name: '李元昊' }],
+      figures: [{ name: '李元昊', personId: 'liyuan-339687' }],
     },
     {
       year: 1044,
@@ -70,7 +70,7 @@ export const XIXIA: DynastyProfile = {
       background: '三川口、好水川、定川寨三战宋军屡败，夏亦疲于战争。',
       outcome: '1044年议和：元昊去帝号、称臣，宋岁赐银绢茶，重开榷场互市。',
       impact: '宋夏维持数十年和平，贸易兴盛，双方各得所需。',
-      figures: [{ name: '李元昊' }, { name: '宋仁宗' }],
+      figures: [{ name: '李元昊', personId: 'liyuan-339687' }, { name: '宋仁宗' }],
     },
     {
       year: 1085,
@@ -90,7 +90,7 @@ export const XIXIA: DynastyProfile = {
       background: '成吉思汗西征东归后即攻西夏，西夏困守中兴府。',
       outcome: '1227年西夏末主李睍出降被杀，兴庆府遭屠，西夏亡。',
       impact: '西夏近二百年国祚终结，党项族渐融入他族，其文字亦成绝学。',
-      figures: [{ name: '成吉思汗' }, { name: '李睍' }],
+      figures: [{ name: '成吉思汗', personId: 'tiemu-29239' }, { name: '李睍' }],
     },
   ],
   culture: [

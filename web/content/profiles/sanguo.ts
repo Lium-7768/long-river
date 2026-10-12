@@ -17,7 +17,7 @@ export const SANGUO: DynastyProfile = {
       desc: '曹操招流民屯田、分军屯民屯，收租以供军国之用。',
       background: '汉末战乱、粮食奇缺，曹操采枣祗、韩浩之议许下屯田。',
       impact: '解决军粮问题、恢复生产，成为曹魏立国与统一北方之经济基础。',
-      figures: [{ name: '曹操' }, { name: '枣祗' }],
+      figures: [{ name: '曹操', personId: 'caocao-30257' }, { name: '枣祗' }],
     },
     {
       name: '九品中正制',
@@ -27,7 +27,7 @@ export const SANGUO: DynastyProfile = {
       desc: '各州郡设中正官，品评士人分九等，据以授官。',
       background: '汉末察举败坏，曹丕纳陈群之议立九品官人之法。',
       impact: '初期兼顾才德，后渐为门阀垄断，「上品无寒门」成门阀政治之阶。',
-      figures: [{ name: '曹丕' }, { name: '陈群' }],
+      figures: [{ name: '曹丕', personId: 'wk-Q313333' }, { name: '陈群' }],
     },
     {
       name: '蜀汉丞相制',
@@ -37,7 +37,10 @@ export const SANGUO: DynastyProfile = {
       desc: '刘备以诸葛亮为丞相，总揽军政，「事无巨细，咸决于亮」。',
       background: '蜀汉偏居益州、国小力弱，赖丞相集权以高效运转。',
       impact: '诸葛亮治蜀严明、劝农兴教，蜀地得以偏安；其治为后世称道。',
-      figures: [{ name: '诸葛亮' }, { name: '刘备' }],
+      figures: [
+        { name: '诸葛亮', personId: 'zhuge-516888' },
+        { name: '刘备', personId: 'wk-Q245315' },
+      ],
     },
     {
       name: '孙吴世袭领兵与江防',
@@ -47,7 +50,10 @@ export const SANGUO: DynastyProfile = {
       desc: '江东大族世袭领兵，凭长江天险、水师立国。',
       background: '孙氏据江东，与江北大族共治，依水军守江。',
       impact: '江防与水师为吴立国之本，历六十年而亡，为东晋南朝偏安之先例。',
-      figures: [{ name: '孙权' }, { name: '周瑜' }],
+      figures: [
+        { name: '孙权', personId: 'sunquan-257053' },
+        { name: '周瑜', personId: 'zhouyu-23313' },
+      ],
     },
   ],
   events: [
@@ -59,7 +65,11 @@ export const SANGUO: DynastyProfile = {
       background: '曹操南下取荆州，欲一统江南；孙权、刘备联合抗之。',
       outcome: '周瑜、黄盖以火攻破曹军于赤壁，曹操退守北方。',
       impact: '史上以少胜多的经典，阻曹操统一，奠定魏蜀吴三分局面。',
-      figures: [{ name: '曹操' }, { name: '周瑜' }, { name: '诸葛亮' }],
+      figures: [
+        { name: '曹操', personId: 'caocao-30257' },
+        { name: '周瑜', personId: 'zhouyu-23313' },
+        { name: '诸葛亮', personId: 'zhuge-516888' },
+      ],
     },
     {
       year: 220,
@@ -69,7 +79,11 @@ export const SANGUO: DynastyProfile = {
       background: '曹操专权、汉室名存实亡；曹丕受禅代汉，破除汉家正统。',
       outcome: '220年曹丕建魏，221年刘备建蜀，229年孙权称帝建吴。',
       impact: '东汉正式灭亡，三国鼎立格局确立。',
-      figures: [{ name: '曹丕' }, { name: '刘备' }, { name: '孙权' }],
+      figures: [
+        { name: '曹丕', personId: 'wk-Q313333' },
+        { name: '刘备', personId: 'wk-Q245315' },
+        { name: '孙权', personId: 'sunquan-257053' },
+      ],
     },
     {
       year: 263,
@@ -79,7 +93,11 @@ export const SANGUO: DynastyProfile = {
       background: '姜维北伐耗蜀国力，魏司马昭乘机大举伐蜀。',
       outcome: '邓艾偷渡阴平，兵临成都，刘禅出降，蜀亡。',
       impact: '三国剩魏、吴；不久魏亦被司马氏所代。',
-      figures: [{ name: '邓艾' }, { name: '刘禅' }, { name: '姜维' }],
+      figures: [
+        { name: '邓艾', personId: 'wk-Q550368' },
+        { name: '刘禅', personId: 'wk-Q468780' },
+        { name: '姜维', personId: 'wk-Q280866' },
+      ],
     },
     {
       year: 280,
@@ -89,7 +107,11 @@ export const SANGUO: DynastyProfile = {
       background: '司马氏代魏建晋，国势强盛；吴主孙皓昏暴。',
       outcome: '280年晋六路伐吴，王濬舟师直抵建业，孙皓降，吴亡。',
       impact: '三国分裂近六十年而重归一统，然晋祚短促。',
-      figures: [{ name: '司马炎' }, { name: '孙皓' }, { name: '王濬' }],
+      figures: [
+        { name: '司马炎', personId: 'sima-21207' },
+        { name: '孙皓', personId: 'wk-Q470030' },
+        { name: '王濬', personId: 'wangjun-126841' },
+      ],
     },
   ],
   culture: [
@@ -99,7 +121,11 @@ export const SANGUO: DynastyProfile = {
       desc: '三曹、建安七子慷慨悲凉，开一代文风。',
       background: '汉末乱世，文人感时伤乱，多述志慷慨之作。',
       impact: '「建安风骨」成后世文学典范，奠定五言诗发展基础。',
-      figures: [{ name: '曹操' }, { name: '曹植' }, { name: '王粲' }],
+      figures: [
+        { name: '曹操', personId: 'caocao-30257' },
+        { name: '曹植', personId: 'caozhi-96869' },
+        { name: '王粲', personId: 'wangcan-134476' },
+      ],
       works: ['《短歌行》', '《洛神赋》'],
     },
     {
@@ -108,7 +134,7 @@ export const SANGUO: DynastyProfile = {
       desc: '诸葛亮治国治军，前后《出师表》忠恳感人，为千古名文。',
       background: '刘备托孤，诸葛亮辅刘禅、北伐中原，尽瘁而死。',
       impact: '「鞠躬尽瘁、死而后已」成忠臣典范；其治蜀与文章影响深远。',
-      figures: [{ name: '诸葛亮' }],
+      figures: [{ name: '诸葛亮', personId: 'zhuge-516888' }],
       works: ['《出师表》', '《诫子书》'],
     },
     {
@@ -117,7 +143,10 @@ export const SANGUO: DynastyProfile = {
       desc: '何晏、王弼倡玄学，以老庄解儒经，开清谈之风。',
       background: '汉末经学衰、乱世思变，士人转尚老庄、重思辨。',
       impact: '玄学为魏晋思想主潮，影响哲学、文学与士人风度。',
-      figures: [{ name: '何晏' }, { name: '王弼' }],
+      figures: [
+        { name: '何晏', personId: 'wk-Q1156713' },
+        { name: '王弼', personId: 'wangbi-66339' },
+      ],
       works: ['《老子注》'],
     },
     {
@@ -126,7 +155,7 @@ export const SANGUO: DynastyProfile = {
       desc: '钟繇、皇象等善书，顾恺之等开人物画新风。',
       background: '汉末魏晋艺术自觉，士人寄情书画。',
       impact: '为中国书法、绘画艺术的自律发展奠定基础。',
-      figures: [{ name: '钟繇' }, { name: '顾恺之' }],
+      figures: [{ name: '钟繇' }, { name: '顾恺之', personId: 'gb-晋书-卷92-顾恺之' }],
       works: ['《洛神赋图》'],
     },
     {
@@ -135,7 +164,7 @@ export const SANGUO: DynastyProfile = {
       desc: '马钧改良织绫机、造翻车（龙骨水车）、指南车，机械天才。',
       background: '三国重实务，军政需要推动机械改良。',
       impact: '翻车等灌溉机械惠及农业千余年，马钧被誉为「天下之名巧」。',
-      figures: [{ name: '马钧' }],
+      figures: [{ name: '马钧', personId: 'majun-106016' }],
       works: ['翻车', '指南车'],
     },
   ],

@@ -18,7 +18,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '女真兵民合一之制，三百户为谋克、十谋克为猛安，平时生产、战时为兵。',
       background: '女真部落的军事组织，完颜阿骨打整编为猛安谋克，成为立国之本。',
       impact: '初期战力极强、组织严密；入主中原后屯田占地、渐失战力，成为社会负担。',
-      figures: [{ name: '完颜阿骨打' }],
+      figures: [{ name: '完颜阿骨打', personId: 'wanyan-339707' }],
     },
     {
       name: '汉制与勃极烈并行',
@@ -28,7 +28,10 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '初期行女真勃极烈（贵族议事）制，后采辽宋汉制，设三省六部、行尚书省。',
       background: '金灭辽、北宋后，疆域含汉地，遂渐行汉制、用汉人儒士。',
       impact: '汉化程度不断加深，海陵王、金世宗时官制大体仿宋，皇权集中。',
-      figures: [{ name: '完颜阿骨打' }, { name: '完颜亮' }],
+      figures: [
+        { name: '完颜阿骨打', personId: 'wanyan-339707' },
+        { name: '完颜亮', personId: 'wanyan-339712' },
+      ],
     },
     {
       name: '迁都燕京（中都）',
@@ -38,7 +41,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '海陵王迁都燕京（中都，今北京），弃上京会宁府，全面转向中原统治。',
       background: '海陵王完颜亮以燕京为中枢，便于统治汉地与南伐。',
       impact: '确立北京作为北方政治中心之地位，为元明定都北京之先声。',
-      figures: [{ name: '完颜亮' }],
+      figures: [{ name: '完颜亮', personId: 'wanyan-339712' }],
     },
     {
       name: '通检推排与赋税',
@@ -48,7 +51,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '清查物力、核实田产，定赋役；行钞法（交钞）以济国用。',
       background: '金中期土地兼并、赋役不均，世宗行通检推排以均平之。',
       impact: '大定年间国力殷实；然后期钞法滥发、财政困窘。',
-      figures: [{ name: '金世宗' }],
+      figures: [{ name: '金世宗', personId: 'wk-Q5073' }],
     },
     {
       name: '科举与汉士任用',
@@ -58,7 +61,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '行科举取士，兼设女真进士科，任用汉人儒士参政。',
       background: '金据中原、需士人治政，遂采科举之制以笼络汉人。',
       impact: '促进汉化与政权稳固；金末士人多「国亡死节」，民族融合加深。',
-      figures: [{ name: '金世宗' }],
+      figures: [{ name: '金世宗', personId: 'wk-Q5073' }],
     },
   ],
   events: [
@@ -70,7 +73,7 @@ export const JIN_CHAO: DynastyProfile = {
       background: '女真受辽压迫，阿骨打统一各部，起兵反辽，屡战屡捷。',
       outcome: '1115年称帝建金（国号大金），创猛安谋克制，1125年灭辽。',
       impact: '女真崛起，取代辽成为北方强权，随即南下伐宋。',
-      figures: [{ name: '完颜阿骨打' }],
+      figures: [{ name: '完颜阿骨打', personId: 'wanyan-339707' }],
     },
     {
       year: 1127,
@@ -80,7 +83,11 @@ export const JIN_CHAO: DynastyProfile = {
       background: '金灭辽后即南下，宋廷主战主和举棋不定、防备废弛。',
       outcome: '1127年金军破汴京，俘徽宗、钦宗及宗室北迁，北宋亡；赵构南渡建南宋。',
       impact: '中国历史上著名之「靖康之耻」，宋金南北对峙格局形成。',
-      figures: [{ name: '完颜宗望' }, { name: '宋钦宗' }, { name: '岳飞' }],
+      figures: [
+        { name: '完颜宗望', personId: 'wanyan-556531' },
+        { name: '宋钦宗' },
+        { name: '岳飞', personId: 'yuefei-8175' },
+      ],
     },
     {
       year: 1153,
@@ -90,7 +97,7 @@ export const JIN_CHAO: DynastyProfile = {
       background: '海陵王完颜亮弑熙宗自立，锐意汉化、图谋南伐。',
       outcome: '1153年迁都中都（今北京），并推行汉制、整军南征。',
       impact: '奠定北京作为北方都城之地位，金统治重心彻底转向中原。',
-      figures: [{ name: '完颜亮' }],
+      figures: [{ name: '完颜亮', personId: 'wanyan-339712' }],
     },
     {
       year: 1161,
@@ -100,7 +107,10 @@ export const JIN_CHAO: DynastyProfile = {
       background: '海陵王倾国南征，采石一战败于虞允文，北方生变。',
       outcome: '1161年海陵王为部下所杀，金世宗完颜雍即位，与宋议和，史称「小尧舜」。',
       impact: '金朝进入盛世，宋金维持四十余年和平，经济文化繁荣。',
-      figures: [{ name: '金世宗' }, { name: '虞允文' }],
+      figures: [
+        { name: '金世宗', personId: 'wk-Q5073' },
+        { name: '虞允文', personId: 'yuyun-8170' },
+      ],
     },
     {
       year: 1234,
@@ -110,7 +120,10 @@ export const JIN_CHAO: DynastyProfile = {
       background: '蒙古崛起后大举攻金，金迁都汴京、又逃蔡州，困守一隅。',
       outcome: '1234年宋蒙合攻蔡州，金哀宗传位后自缢，末帝死于乱军，金亡。',
       impact: '金百年而亡，中原易主；宋失北屏，四十余年后亦亡于蒙元。',
-      figures: [{ name: '金哀宗' }, { name: '孟珙' }],
+      figures: [
+        { name: '金哀宗', personId: 'wk-Q5081' },
+        { name: '孟珙', personId: 'menggong-22681' },
+      ],
     },
   ],
   culture: [
@@ -120,7 +133,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '金词承苏轼豪放一派，元好问为「北方文雄」，诗文冠绝一时。',
       background: '金据中原、文士承宋之余绪，国难之际多悲慨之作。',
       impact: '元好问诗文兼擅、词论精到，为金元之际文坛领袖，影响深远。',
-      figures: [{ name: '元好问' }],
+      figures: [{ name: '元好问', personId: 'yuanhao-10074' }],
       works: ['《中州集》', '《摸鱼儿·雁丘词》'],
     },
     {
@@ -129,7 +142,10 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '王重阳创全真教，丘处机等弘道，道教在金元之际大盛。',
       background: '乱世之中，民众寻求宗教慰藉；全真教融儒释道，流传甚广。',
       impact: '全真教为金元时期最大道教派别，丘处机西行见成吉思汗，影响政治。',
-      figures: [{ name: '王重阳' }, { name: '丘处机' }],
+      figures: [
+        { name: '王重阳', personId: 'wangzhong-156475' },
+        { name: '丘处机', personId: 'qiuchu-33200' },
+      ],
       works: ['《立教十五论》'],
     },
     {
@@ -148,7 +164,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '完颜希尹创女真大字、小字，记录女真语。',
       background: '金立国后仿契丹、汉字创制本族文字，用于政令纪事。',
       impact: '为研究女真语言历史之珍贵材料，反映民族文化自觉。',
-      figures: [{ name: '完颜希尹' }],
+      figures: [{ name: '完颜希尹', personId: 'wanyan-556537' }],
       works: ['女真大字', '女真小字'],
     },
     {

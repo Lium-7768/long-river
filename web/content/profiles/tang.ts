@@ -22,7 +22,11 @@ export const TANG: DynastyProfile = {
         '隋创三省六部，唐承而完善之。为防宰相专权、提高行政效率，将决策与执行分属三省：中书取旨草诏，门下封驳审议，尚书总领六部贯彻，政事堂为宰相议政之所。',
       impact:
         '既分工制衡又协同运转，是中国古代中央官制最成熟的范式之一，为后世（乃至日本、朝鲜）所仿行；中书门下的运作亦使皇权受到一定程序约束。',
-      figures: [{ name: '李世民' }, { name: '房玄龄' }, { name: '杜如晦' }],
+      figures: [
+        { name: '李世民' },
+        { name: '房玄龄', personId: 'fangxuan-17130' },
+        { name: '杜如晦', personId: 'duru-30864' },
+      ],
     },
     {
       name: '科举制',
@@ -85,7 +89,10 @@ export const TANG: DynastyProfile = {
         '安史之乱后均田、租庸调崩坏，户籍失实、税源枯竭，杨炎遂倡两税法，废租庸调，按田亩与资产定税，分夏、秋两征。',
       impact:
         '中国赋税制度由「税人」转向「税地」，简化税制、扩大税源，为后世两税法、一条鞭法、摊丁入亩之滥觞。',
-      figures: [{ name: '杨炎' }, { name: '唐德宗' }],
+      figures: [
+        { name: '杨炎', personId: 'yangyan-20876' },
+        { name: '唐德宗', personId: 'tangde-182475' },
+      ],
     },
     {
       name: '节度使与藩镇',
@@ -98,7 +105,7 @@ export const TANG: DynastyProfile = {
         '为防边疆，睿宗、玄宗于缘边置节度使（安西、范阳、平卢等十镇），授以军、政、财权；募兵既行，节度使遂握重兵。',
       impact:
         '直接酿成安史之乱；乱后藩镇林立，河朔三镇形同割据，中央号令不出关中，为唐灭亡之远因。',
-      figures: [{ name: '安禄山' }, { name: '唐玄宗' }],
+      figures: [{ name: '安禄山', personId: 'anlu-379873' }, { name: '唐玄宗' }],
     },
     {
       name: '律令格式',
@@ -110,7 +117,7 @@ export const TANG: DynastyProfile = {
       background:
         '唐初在隋《开皇律》基础上订《武德律》《贞观律》，高宗时撰《律疏》，合成《唐律疏议》。',
       impact: '体例严谨、科条简要，「一准乎礼」，为唐后历代刑法及日本、朝鲜、越南律法之蓝本。',
-      figures: [{ name: '长孙无忌' }],
+      figures: [{ name: '长孙无忌', personId: 'zhangsun-31068' }],
     },
   ],
   events: [
@@ -135,7 +142,11 @@ export const TANG: DynastyProfile = {
         '李渊诸子中，太子建成与秦王世民争位激烈。世民屡立战功、府僚众多，建成与元吉联手相图。',
       outcome: '626年六月四日，世民伏兵玄武门，杀建成、元吉；高祖立世民为太子，旋禅位。',
       impact: '世民即位为唐太宗，开创「贞观之治」；然开唐代皇位血腥争夺之例，宫门喋血影响深远。',
-      figures: [{ name: '李世民' }, { name: '李建成' }, { name: '尉迟敬德' }],
+      figures: [
+        { name: '李世民' },
+        { name: '李建成', personId: 'lijian-187311' },
+        { name: '尉迟敬德', personId: 'yuchi-463519' },
+      ],
     },
     {
       year: 627,
@@ -148,7 +159,11 @@ export const TANG: DynastyProfile = {
       outcome:
         '任房玄龄、杜如晦、魏徵等贤臣，开言路、省刑罚，至贞观四年「米斗三四钱」、岁断死刑仅二十九人。',
       impact: '为开元盛世奠定基础，「贞观之治」与「文景之治」并称，成为后世君臣治国的理想。',
-      figures: [{ name: '唐太宗' }, { name: '魏徵' }, { name: '房玄龄' }],
+      figures: [
+        { name: '唐太宗' },
+        { name: '魏徵' },
+        { name: '房玄龄', personId: 'fangxuan-17130' },
+      ],
     },
     {
       year: 641,
@@ -175,7 +190,7 @@ export const TANG: DynastyProfile = {
         '690年武后称帝，改国号周（武周），定都洛阳；在位期间破格用人、发展科举，然晚年酷政、男宠乱政。',
       impact:
         '中国史上唯一女皇，承贞观、启开元；武周虽短暂，然科举取士（殿试、武举）之创为其功，政治遗产深远。',
-      figures: [{ name: '武则天' }, { name: '狄仁杰' }],
+      figures: [{ name: '武则天' }, { name: '狄仁杰', personId: 'diren-3840' }],
     },
     {
       year: 713,
@@ -188,7 +203,11 @@ export const TANG: DynastyProfile = {
         '政治清明、经济繁荣、人口增至五千余万，长安为国际都会，「稻米流脂粟米白」；武功亦盛，疆域极广。',
       impact:
         '唐乃至中国封建社会的巅峰之一，「忆昔开元全盛日」为后世追慕；然玄宗晚怠，盛世之尾即乱之始。',
-      figures: [{ name: '唐玄宗' }, { name: '姚崇' }, { name: '宋璟' }],
+      figures: [
+        { name: '唐玄宗' },
+        { name: '姚崇', personId: 'yaochong-26935' },
+        { name: '宋璟', personId: 'songjing-31275' },
+      ],
     },
     {
       year: 755,
@@ -201,7 +220,11 @@ export const TANG: DynastyProfile = {
       outcome:
         '755年安禄山以「清君侧」起兵，陷洛阳、长安，玄宗奔蜀、贵妃死于马嵬驿；历肃宗、代宗，赖郭子仪、李光弼等，763年始平。',
       impact: '唐由盛转衰之枢纽：户口锐减、经济凋敝，藩镇割据、宦官专权、吐蕃入侵接踵而至。',
-      figures: [{ name: '安禄山' }, { name: '郭子仪' }, { name: '唐玄宗' }],
+      figures: [
+        { name: '安禄山', personId: 'anlu-379873' },
+        { name: '郭子仪', personId: 'guozi-94373' },
+        { name: '唐玄宗' },
+      ],
     },
     {
       year: 780,
@@ -212,7 +235,10 @@ export const TANG: DynastyProfile = {
       background: '安史乱后均田、租庸调崩溃，户籍紊乱、财政困窘，德宗从杨炎议行两税法。',
       outcome: '废租庸调，量出为入，按田亩资产定税，分夏（六月）、秋（十一月）两次征收。',
       impact: '中国赋税由「税人」转「税地」，简化税制、缓解财政危机，深刻影响后世税制。',
-      figures: [{ name: '杨炎' }, { name: '唐德宗' }],
+      figures: [
+        { name: '杨炎', personId: 'yangyan-20876' },
+        { name: '唐德宗', personId: 'tangde-182475' },
+      ],
     },
     {
       year: 875,
@@ -223,7 +249,7 @@ export const TANG: DynastyProfile = {
       background: '唐末赋役苛重、连年灾荒，王仙芝、黄巢先后起兵，历时近十年。',
       outcome: '黄巢军流动作战，881年攻入长安称「大齐」皇帝，旋败；唐借沙陀兵平之，然元气大伤。',
       impact: '唐廷赖以制衡藩镇的中央兵力尽失，朱温等军阀坐大，唐名存实亡。',
-      figures: [{ name: '黄巢' }],
+      figures: [{ name: '黄巢', personId: 'huangchao-3409' }],
     },
     {
       year: 907,
@@ -234,7 +260,10 @@ export const TANG: DynastyProfile = {
       background: '黄巢降将朱温据汴、侵吞中原，尽诛唐室与朝臣，终行篡代。',
       outcome: '907年朱温废哀帝自立，国号梁（后梁），唐历289年而亡。',
       impact: '结束大唐三百年，中国进入五代十国的分裂时期，直至宋初重归一统。',
-      figures: [{ name: '朱温' }, { name: '唐哀帝' }],
+      figures: [
+        { name: '朱温', personId: 'cbdb-377600' },
+        { name: '唐哀帝', personId: 'wk-Q9892' },
+      ],
     },
   ],
   culture: [
@@ -246,7 +275,11 @@ export const TANG: DynastyProfile = {
       background: '科举试诗赋、国力强盛、南北文风交融与西域乐舞输入，共同催生唐诗的黄金时代。',
       impact:
         '清人所编《全唐诗》收诗四万八千余首、作者两千二百余人，为中华文学的巅峰，亦是民族精神的载体。',
-      figures: [{ name: '李白' }, { name: '杜甫' }, { name: '白居易' }],
+      figures: [
+        { name: '李白', personId: 'libai-32540' },
+        { name: '杜甫', personId: 'dufu-3915' },
+        { name: '白居易', personId: 'baiju-32227' },
+      ],
       works: ['《全唐诗》', '《静夜思》', '《春望》', '《长恨歌》'],
     },
     {
@@ -279,7 +312,10 @@ export const TANG: DynastyProfile = {
         '唐代兼容并包，佛教诸宗（天台、华严、法相、禅、净土）俱盛，玄奘于贞观年间西行求法。',
       impact:
         '佛教中国化加速（禅宗最著），深刻影响中国哲学、文学、艺术；玄奘《大唐西域记》为研究中亚南亚之珍贵文献。',
-      figures: [{ name: '玄奘' }, { name: '慧能' }],
+      figures: [
+        { name: '玄奘', personId: 'chenhui-92423' },
+        { name: '慧能', personId: 'shihui-94985' },
+      ],
       works: ['《大唐西域记》', '《大般若经》译'],
     },
     {
@@ -289,7 +325,11 @@ export const TANG: DynastyProfile = {
       source: '《新唐书·艺文志》《宣和书谱》',
       background: '唐代重书法（科举、官府文书），帝王提倡（太宗好王羲之），遂成书法盛世。',
       impact: '确立楷书法度（颜筋柳骨）与狂草新境，颜真卿楷书成为后世典范。',
-      figures: [{ name: '颜真卿' }, { name: '柳公权' }, { name: '张旭' }],
+      figures: [
+        { name: '颜真卿', personId: 'yanzhen-95025' },
+        { name: '柳公权', personId: 'liugong-33589' },
+        { name: '张旭', personId: 'zhangxu-29017' },
+      ],
       works: ['《多宝塔碑》', '《颜勤礼碑》', '《玄秘塔碑》'],
     },
     {
@@ -309,7 +349,7 @@ export const TANG: DynastyProfile = {
       source: '《新唐书·艺文志》孙思邈《丹经》',
       background: '道士炼丹遇硫黄、硝石、木炭合燃之性，火药配方在唐代被记载、应用。',
       impact: '火药为四大发明之一，唐后期始用于战事，后经宋、元成熟并西传，改变世界战争史。',
-      figures: [{ name: '孙思邈' }],
+      figures: [{ name: '孙思邈', personId: 'sunsi-92784' }],
       works: ['《丹经内伏硫黄法》'],
     },
   ],

@@ -18,7 +18,11 @@ export const ZHOU_W: DynastyProfile = {
       desc: '封同姓、功臣、先代之后为诸侯，建国治民，以藩屏周。',
       background: '周以小邦灭大商，为控驭东方广土，大封宗亲功臣（鲁、齐、燕、晋等）。',
       impact: '形成「封建」秩序，初期巩固周室；后诸侯坐大，为春秋战国之因。',
-      figures: [{ name: '周武王' }, { name: '周公旦' }, { name: '姜子牙' }],
+      figures: [
+        { name: '周武王', personId: 'ws-史记-卷004-周武王' },
+        { name: '周公旦', personId: 'sj-zhougongdan-5' },
+        { name: '姜子牙' },
+      ],
     },
     {
       name: '宗法制',
@@ -28,7 +32,7 @@ export const ZHOU_W: DynastyProfile = {
       desc: '以嫡长子继承为「大宗」，余子为「小宗」，别亲疏、定尊卑。',
       background: '周以血缘宗族整合统治集团，用嫡庶之别稳定继承与分封。',
       impact: '宗法为儒家伦理之本，塑造中国家族与政治文化数千年。',
-      figures: [{ name: '周公旦' }],
+      figures: [{ name: '周公旦', personId: 'sj-zhougongdan-5' }],
     },
     {
       name: '礼乐制度',
@@ -38,7 +42,7 @@ export const ZHOU_W: DynastyProfile = {
       desc: '制礼作乐，以礼别尊卑、以乐和人心，维系等级秩序。',
       background: '周公制礼作乐，将宗法封建制度化为可操作的仪节规范。',
       impact: '「郁郁乎文哉」的礼乐文明为孔子所向往，是中国文化之核心。',
-      figures: [{ name: '周公旦' }],
+      figures: [{ name: '周公旦', personId: 'sj-zhougongdan-5' }],
     },
     {
       name: '井田制与籍田',
@@ -58,7 +62,10 @@ export const ZHOU_W: DynastyProfile = {
       desc: '设卿事寮（政务）与太史寮（文书、宗教、历法）分掌国政。',
       background: '周官制较商完备，形成卿士、太史等职官体系。',
       impact: '为后世「六卿」与官僚制度之滥觞，周官之制为《周礼》所本。',
-      figures: [{ name: '周公旦' }, { name: '召公奭' }],
+      figures: [
+        { name: '周公旦', personId: 'sj-zhougongdan-5' },
+        { name: '召公奭', personId: 'wk-Q5928108' },
+      ],
     },
   ],
   events: [
@@ -70,7 +77,11 @@ export const ZHOU_W: DynastyProfile = {
       background: '周积数代之功，武王联合诸侯伐商，牧野一战而胜。',
       outcome: '商亡，周立；随后周公东征平定三监之乱，巩固周室。',
       impact: '周制奠定中华文明基因，分封宗法礼乐影响数千年。',
-      figures: [{ name: '周武王' }, { name: '周公旦' }, { name: '姜子牙' }],
+      figures: [
+        { name: '周武王', personId: 'ws-史记-卷004-周武王' },
+        { name: '周公旦', personId: 'sj-zhougongdan-5' },
+        { name: '姜子牙' },
+      ],
     },
     {
       year: -1042,
@@ -80,7 +91,10 @@ export const ZHOU_W: DynastyProfile = {
       background: '武王早逝、成王年幼，周公摄政，管蔡流言勾结商遗叛乱。',
       outcome: '周公东征三年平定，大封诸侯、营洛邑、制礼乐，成「成康之治」。',
       impact: '周室巩固、礼乐文明奠定，成康之际「天下安宁，刑错四十余年不用」。',
-      figures: [{ name: '周公旦' }, { name: '周成王' }],
+      figures: [
+        { name: '周公旦', personId: 'sj-zhougongdan-5' },
+        { name: '周成王', personId: 'wk-Q388766' },
+      ],
     },
     {
       year: -841,
@@ -90,7 +104,10 @@ export const ZHOU_W: DynastyProfile = {
       background: '周厉王行「专利」、监谤，激起国人（都邑自由民）反抗。',
       outcome: '前841年国人暴动，厉王出奔，周定公、召穆公共同执政，号「共和」。',
       impact: '中国历史确切纪年之始（前841年），周室自此衰微。',
-      figures: [{ name: '周厉王' }, { name: '周定公' }],
+      figures: [
+        { name: '周厉王', personId: 'ws-史记-卷004-周厉王' },
+        { name: '周定公', personId: 'wk-Q9631841' },
+      ],
     },
     {
       year: -771,
@@ -100,7 +117,10 @@ export const ZHOU_W: DynastyProfile = {
       background: '幽王宠褒姒、废申后及太子，失信于诸侯（「烽火戏诸侯」之说）。',
       outcome: '前771年申侯联合犬戎攻破镐京，幽王被杀，西周灭亡。',
       impact: '次年平王东迁洛邑，东周（春秋）开始，周室权威一落千丈。',
-      figures: [{ name: '周幽王' }, { name: '周平王' }],
+      figures: [
+        { name: '周幽王', personId: 'ws-史记-卷004-周幽王' },
+        { name: '周平王', personId: 'ws-史记-卷004-周平王' },
+      ],
     },
   ],
   culture: [
@@ -110,7 +130,10 @@ export const ZHOU_W: DynastyProfile = {
       desc: '周公制礼作乐，礼别尊卑、乐和人心，成中华文化之基调。',
       background: '西周将宗法封建制度化、仪式化，形成系统的礼乐规范。',
       impact: '儒家以礼乐为治国之本，礼乐文明影响中国社会两千余年。',
-      figures: [{ name: '周公旦' }, { name: '孔子' }],
+      figures: [
+        { name: '周公旦', personId: 'sj-zhougongdan-5' },
+        { name: '孔子', personId: 'sj-kongzi-68' },
+      ],
       works: ['《周礼》', '《仪礼》'],
     },
     {

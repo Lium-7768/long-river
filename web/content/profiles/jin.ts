@@ -18,7 +18,11 @@ export const JIN: DynastyProfile = {
       desc: '门阀士族垄断高位，与皇权共治；九品中正使「上品无寒门」。',
       background: '晋靠世家大族支持立国，遂以官品、荫客等制保障士族特权。',
       impact: '形成「王与马、共天下」的政治格局，士族政治达于极盛，也埋下内争之患。',
-      figures: [{ name: '王导' }, { name: '司马睿' }, { name: '谢安' }],
+      figures: [
+        { name: '王导', personId: 'wangdao-243627' },
+        { name: '司马睿' },
+        { name: '谢安', personId: 'xiean-3365' },
+      ],
     },
     {
       name: '占田荫客制',
@@ -28,7 +32,7 @@ export const JIN: DynastyProfile = {
       desc: '按官品占田、荫庇佃客、衣食客，士族庄园经济膨胀。',
       background: '晋初为安置士族、恢复生产，定占田荫客之法。',
       impact: '士族庄园与依附人口激增，国家编户减少，为南朝世族经济之基础。',
-      figures: [{ name: '司马炎' }],
+      figures: [{ name: '司马炎', personId: 'sima-21207' }],
     },
     {
       name: '都督与军镇',
@@ -38,7 +42,7 @@ export const JIN: DynastyProfile = {
       desc: '设都督诸州军事，镇守要地，军政合一；东晋以荆、扬二州为重。',
       background: '晋防内乱与外患，置都督统军镇守，渐成地方实力派。',
       impact: '都督、方镇拥兵自重，是晋末与南朝政局动荡的根源之一。',
-      figures: [{ name: '司马睿' }, { name: '桓温' }],
+      figures: [{ name: '司马睿' }, { name: '桓温', personId: 'cbdb-467951' }],
     },
     {
       name: '侨州郡县与土断',
@@ -48,7 +52,10 @@ export const JIN: DynastyProfile = {
       desc: '为安置南渡流民设侨州郡县，后行「土断」以并省、编户。',
       background: '永嘉乱后北方士民南迁，东晋设侨置州郡以安抚，然户籍紊乱。',
       impact: '侨置与土断是东晋南朝处理流民、整合户籍的关键制度。',
-      figures: [{ name: '王导' }, { name: '桓温' }],
+      figures: [
+        { name: '王导', personId: 'wangdao-243627' },
+        { name: '桓温', personId: 'cbdb-467951' },
+      ],
     },
   ],
   events: [
@@ -60,7 +67,10 @@ export const JIN: DynastyProfile = {
       background: '司马氏自高平陵之变后专魏政，司马昭灭蜀，司马炎受禅。',
       outcome: '265年司马炎称帝建晋，280年灭吴，一统天下。',
       impact: '三国归晋，短暂统一；然西晋享国仅五十余年。',
-      figures: [{ name: '司马炎' }, { name: '司马昭' }],
+      figures: [
+        { name: '司马炎', personId: 'sima-21207' },
+        { name: '司马昭', personId: 'sima-339533' },
+      ],
     },
     {
       year: 291,
@@ -70,7 +80,7 @@ export const JIN: DynastyProfile = {
       background: '晋武大封宗室、授兵权，惠帝昏弱，贾后干政，诸王遂起。',
       outcome: '汝南王、楚王、赵王、齐王、长沙王、成都王、河间王、东海王等混战，至306年方息。',
       impact: '西晋统治崩溃、军力耗竭，为外族入主与永嘉之祸埋下祸根。',
-      figures: [{ name: '司马亮' }, { name: '贾南风' }, { name: '司马越' }],
+      figures: [{ name: '司马亮', personId: 'sima-38865' }, { name: '贾南风' }, { name: '司马越' }],
     },
     {
       year: 311,
@@ -80,7 +90,11 @@ export const JIN: DynastyProfile = {
       background: '八王之乱后晋室衰弱，内迁诸胡（匈奴、羯、氐、羌、鲜卑）乘机起兵。',
       outcome: '311年刘曜陷洛阳（永嘉之乱），316年长安陷、愍帝降，西晋亡。',
       impact: '中原板荡、「衣冠南渡」，东晋立国江左，南北分裂近三百年。',
-      figures: [{ name: '刘曜' }, { name: '石勒' }, { name: '晋怀帝' }],
+      figures: [
+        { name: '刘曜', personId: 'liuyao-190310' },
+        { name: '石勒', personId: 'cbdb-31360' },
+        { name: '晋怀帝' },
+      ],
     },
     {
       year: 383,
@@ -90,7 +104,11 @@ export const JIN: DynastyProfile = {
       background: '前秦苻坚统一北方后大举南下，图灭东晋。',
       outcome: '谢玄率北府兵于淝水大破秦军，苻坚败退，前秦随之瓦解。',
       impact: '以少胜多的经典，保全东晋与江南文化；北方重陷分裂。',
-      figures: [{ name: '谢玄' }, { name: '苻坚' }, { name: '谢安' }],
+      figures: [
+        { name: '谢玄' },
+        { name: '苻坚', personId: 'gb-晋书-卷113-苻坚' },
+        { name: '谢安', personId: 'xiean-3365' },
+      ],
     },
     {
       year: 420,
@@ -100,7 +118,7 @@ export const JIN: DynastyProfile = {
       background: '刘裕以北府兵起家，北伐建功、威权日重，遂代晋自立。',
       outcome: '420年刘裕称帝建宋，东晋亡，中国进入南北朝对峙。',
       impact: '门阀政治的东晋终结，南朝寒人武人崛起，历史进入南北朝。',
-      figures: [{ name: '刘裕' }],
+      figures: [{ name: '刘裕', personId: 'liuyu-138987' }],
     },
   ],
   culture: [
@@ -110,7 +128,11 @@ export const JIN: DynastyProfile = {
       desc: '竹林七贤等放达任诞，清谈玄理，形成「魏晋风度」。',
       background: '政治黑暗、名教虚伪，士人转尚老庄、追求个性自由。',
       impact: '玄学与名士风度影响深远，是中国思想与文人精神的重要转折。',
-      figures: [{ name: '嵇康' }, { name: '阮籍' }, { name: '向秀' }],
+      figures: [
+        { name: '嵇康', personId: 'jikang-439186' },
+        { name: '阮籍', personId: 'ruanji-29615' },
+        { name: '向秀', personId: 'xiangxiu-218152' },
+      ],
       works: ['《声无哀乐论》', '《大人先生传》'],
     },
     {
@@ -119,7 +141,7 @@ export const JIN: DynastyProfile = {
       desc: '王羲之、王献之父子书法冠绝古今，《兰亭序》为「天下第一行书」。',
       background: '晋人尚韵，士族重书法，行草大兴。',
       impact: '确立中国书法的审美典范，王羲之被尊为「书圣」。',
-      figures: [{ name: '王羲之' }, { name: '王献之' }],
+      figures: [{ name: '王羲之', personId: 'cbdb-25793' }, { name: '王献之' }],
       works: ['《兰亭集序》'],
     },
     {
@@ -128,7 +150,7 @@ export const JIN: DynastyProfile = {
       desc: '顾恺之「以形写神」，人物画与画论成就卓著。',
       background: '东晋士族艺术自觉，绘画追求神韵。',
       impact: '为中国人物画与画论奠基，「传神写照」影响后世千年。',
-      figures: [{ name: '顾恺之' }],
+      figures: [{ name: '顾恺之', personId: 'gb-晋书-卷92-顾恺之' }],
       works: ['《女史箴图》', '《洛神赋图》'],
     },
     {
@@ -146,7 +168,7 @@ export const JIN: DynastyProfile = {
       desc: '葛洪整理道教理论、炼丹药学，《抱朴子》兼载化学与医药知识。',
       background: '晋代神仙道教盛行，士人好服食炼丹。',
       impact: '保存早期炼丹与化学、医药资料，对道教与科学史均有价值。',
-      figures: [{ name: '葛洪' }],
+      figures: [{ name: '葛洪', personId: 'gehong-30231' }],
       works: ['《抱朴子》', '《肘后备急方》'],
     },
   ],

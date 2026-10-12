@@ -22,7 +22,7 @@ export const QING: DynastyProfile = {
         '雍正用兵西北（准噶尔），为保密与高效，设「办理军机处」，取代议政王大臣会议，成为皇帝直辖的枢要。',
       impact:
         '皇权达于极致，军机大臣「只供传述缮撰，而不能稍有赞画于其间」；内阁、议政王大臣会议形同虚设，是中国君主专制最集中之形态。',
-      figures: [{ name: '雍正帝' }, { name: '张廷玉' }],
+      figures: [{ name: '雍正帝' }, { name: '张廷玉', personId: 'zhangting-56675' }],
     },
     {
       name: '八旗制度',
@@ -34,7 +34,10 @@ export const QING: DynastyProfile = {
       background: '努尔哈赤创四旗，皇太极增为八旗，兼有军事、行政、生产之职能，是满洲立国之本。',
       impact:
         '前期战力强盛、组织严密，为入关与开疆之柱石；然承平日久、生计困窘，八旗渐失战力，成国家财政之负担。',
-      figures: [{ name: '努尔哈赤' }, { name: '皇太极' }],
+      figures: [
+        { name: '努尔哈赤', personId: 'nuer-339768' },
+        { name: '皇太极', personId: 'huangtai-84965' },
+      ],
     },
     {
       name: '摊丁入亩',
@@ -71,7 +74,7 @@ export const QING: DynastyProfile = {
         '清以满蒙联盟立国，设理藩院统辖藩部；雍正朝在西南大规模「改土归流」，以流官取代世袭土司。',
       impact:
         '强化对边疆与西南少数民族地区的中央管辖，推动内地的政治整合，深远影响中国的疆域与民族格局。',
-      figures: [{ name: '雍正帝' }, { name: '鄂尔泰' }],
+      figures: [{ name: '雍正帝' }, { name: '鄂尔泰', personId: 'eer-368608' }],
     },
     {
       name: '文字狱',
@@ -108,7 +111,10 @@ export const QING: DynastyProfile = {
       background: '努尔哈赤建后金，皇太极继位后效汉制、改国号、编汉军旗与蒙古旗。',
       outcome: '1636年皇太极称帝，改元崇德，国号大清，完善官制、招降汉臣，国势日盛。',
       impact: '清由部族政权转向帝国形态，为1644年入主中原奠定制度与组织基础。',
-      figures: [{ name: '皇太极' }, { name: '多尔衮' }],
+      figures: [
+        { name: '皇太极', personId: 'huangtai-84965' },
+        { name: '多尔衮', personId: 'duoer-339770' },
+      ],
     },
     {
       year: 1644,
@@ -119,7 +125,11 @@ export const QING: DynastyProfile = {
       background: '李自成破北京、明亡；镇守山海关的吴三桂「借虏平寇」，引多尔衮率清军入关。',
       outcome: '清军与吴三桂合击李自成于一片石，自成西走；清入北京，顺治帝迁都，行剃发令。',
       impact: '清朝由辽东一隅而入主中原，此后历二十余年平定南明与全国抵抗，建立大一统。',
-      figures: [{ name: '多尔衮' }, { name: '吴三桂' }, { name: '顺治帝' }],
+      figures: [
+        { name: '多尔衮', personId: 'duoer-339770' },
+        { name: '吴三桂', personId: 'wusan-58844' },
+        { name: '顺治帝' },
+      ],
     },
     {
       year: 1673,
@@ -131,7 +141,7 @@ export const QING: DynastyProfile = {
         '清初封吴三桂、尚可喜、耿精忠为藩王镇守云南、广东、福建，尾大不掉。康熙决意撤藩。',
       outcome: '1673年吴三桂起兵，三藩并反，一度据半壁；康熙分化瓦解、逐一击破，1681年平定。',
       impact: '消除割据、巩固统一，为而后收台湾、平准部奠定基础。',
-      figures: [{ name: '康熙帝' }, { name: '吴三桂' }],
+      figures: [{ name: '康熙帝' }, { name: '吴三桂', personId: 'wusan-58844' }],
     },
     {
       year: 1689,
@@ -165,7 +175,7 @@ export const QING: DynastyProfile = {
       background: '清禁烟，林则徐虎门销烟；英国以「自由贸易」为名发动战争，坚船利炮破关。',
       outcome: '1840–1842年英军北上，清军屡败；1842年订《南京条约》：割香港、赔款、开五口通商。',
       impact: '中国开始沦为半殖民地半封建社会，被迫卷入世界体系，为近代屈辱与救亡之起点。',
-      figures: [{ name: '林则徐' }, { name: '道光帝' }],
+      figures: [{ name: '林则徐', personId: 'linze-54819' }, { name: '道光帝' }],
     },
     {
       year: 1851,
@@ -176,7 +186,11 @@ export const QING: DynastyProfile = {
       background: '清政腐败、赋役苛重、灾荒频仍，洪秀全借拜上帝会聚众，起于广西金田。',
       outcome: '1853年定都南京（天京），北伐西征；后经内讧、湘淮军围攻，1864年天京陷落。',
       impact: '中国史上规模最大的农民战争，沉重打击清朝，促湘淮军崛起与汉族官僚权力上升。',
-      figures: [{ name: '洪秀全' }, { name: '曾国藩' }, { name: '李鸿章' }],
+      figures: [
+        { name: '洪秀全', personId: 'hongxiu-65447' },
+        { name: '曾国藩', personId: 'cengguo-34344' },
+        { name: '李鸿章', personId: 'lihong-58961' },
+      ],
     },
     {
       year: 1861,
@@ -187,7 +201,11 @@ export const QING: DynastyProfile = {
       background: '两次鸦片战争与太平天国冲击下，部分官僚倡「自强」「求富」，引进西方技术。',
       outcome: '设总理衙门、办江南制造总局、福州船政局、轮船招商局，建北洋水师，派留美幼童。',
       impact: '开启中国近代化之第一步，然「中体西用」、不触及制度，甲午一战而前功尽弃。',
-      figures: [{ name: '李鸿章' }, { name: '曾国藩' }, { name: '张之洞' }],
+      figures: [
+        { name: '李鸿章', personId: 'lihong-58961' },
+        { name: '曾国藩', personId: 'cengguo-34344' },
+        { name: '张之洞', personId: 'zhangzhi-35048' },
+      ],
     },
     {
       year: 1894,
@@ -198,7 +216,11 @@ export const QING: DynastyProfile = {
       background: '日本明治维新后图谋朝鲜与中国，1894年因朝鲜问题开战。',
       outcome: '黄海海战、威海卫之战北洋水师全军覆没；1895年订《马关条约》：割台湾、赔二亿两。',
       impact: '震动朝野，民族危机空前，维新变法与革命思潮由此勃兴。',
-      figures: [{ name: '李鸿章' }, { name: '邓世昌' }, { name: '光绪帝' }],
+      figures: [
+        { name: '李鸿章', personId: 'lihong-58961' },
+        { name: '邓世昌', personId: 'dengshi-25052' },
+        { name: '光绪帝' },
+      ],
     },
     {
       year: 1898,
@@ -209,7 +231,11 @@ export const QING: DynastyProfile = {
       background: '甲午惨败后，维新派倡「变法图强」，光绪帝于1898年下诏变法。',
       outcome: '行新政百余日，触动守旧势力；慈禧发动政变，囚光绪、废新政，谭嗣同等六君子遇害。',
       impact: '变法虽败，然启蒙思想、传播新知，为辛亥革命作了思想与舆论准备。',
-      figures: [{ name: '康有为' }, { name: '梁启超' }, { name: '光绪帝' }],
+      figures: [
+        { name: '康有为' },
+        { name: '梁启超', personId: 'liangqi-691198' },
+        { name: '光绪帝' },
+      ],
     },
     {
       year: 1911,
@@ -233,7 +259,7 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》（乾隆四十七年，1782年）',
       background: '乾隆为「稽古右文」、寓禁于征，开馆征书、编修十年而成。',
       impact: '保存大量典籍，然编修中查禁、删改、「焚毁」违碍之书，文化功过并存。',
-      figures: [{ name: '乾隆帝' }, { name: '纪昀' }],
+      figures: [{ name: '乾隆帝' }, { name: '纪昀', personId: 'jiyun-30080' }],
       works: ['《四库全书》'],
     },
     {
@@ -263,7 +289,10 @@ export const QING: DynastyProfile = {
       source: '《清史稿·儒林传》',
       background: '文字狱高压下，士人避谈时政，转而埋头古书整理与考据。',
       impact: '于古籍校勘、音韵训诂、史地考证成就斐然，为近代学术方法奠基，亦折射思想之压抑。',
-      figures: [{ name: '戴震' }, { name: '钱大昕' }],
+      figures: [
+        { name: '戴震', personId: 'daizhen-65933' },
+        { name: '钱大昕', personId: 'qianda-29876' },
+      ],
       works: ['《日知录》（顾炎武）', '《廿二史考异》'],
     },
     {
@@ -274,7 +303,7 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》（康熙五十五年，1716年）',
       background: '康熙为「昭同文之治」，命儒臣编修字典，规范字形音义。',
       impact: '集历代字书之大成，长期为汉字研究之重要参考，影响东亚。',
-      figures: [{ name: '康熙帝' }, { name: '张玉书' }],
+      figures: [{ name: '康熙帝' }, { name: '张玉书', personId: 'zhangyu-64173' }],
       works: ['《康熙字典》'],
     },
     {
@@ -284,7 +313,11 @@ export const QING: DynastyProfile = {
       source: '《明史·徐光启传》《清史稿》及利玛窦《几何原本》译本',
       background: '利玛窦、汤若望等带来天文、历算、地理；晚清洋务、维新更大量译介西学。',
       impact: '推动中国知识界认识近代科学与世界，为近代教育与科学之先声。',
-      figures: [{ name: '徐光启' }, { name: '利玛窦' }, { name: '严复' }],
+      figures: [
+        { name: '徐光启', personId: 'xuguang-30598' },
+        { name: '利玛窦', personId: 'lima-30597' },
+        { name: '严复' },
+      ],
       works: ['《农政全书》', '《天演论》（严复译）'],
     },
     {
@@ -294,7 +327,7 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》',
       background: '作者科场失意，采集民间传说，托志怪以抒愤、讽世。',
       impact: '文言小说的集大成者，对后世志怪、戏曲影响深远。',
-      figures: [{ name: '蒲松龄' }],
+      figures: [{ name: '蒲松龄', personId: 'pusong-65615' }],
       works: ['《聊斋志异》'],
     },
   ],

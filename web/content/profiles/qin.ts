@@ -22,7 +22,10 @@ export const QIN: DynastyProfile = {
         '统一六国后，秦王政认为「王」号不足以彰显功业，令群臣议帝号，最终取「泰皇」之「皇」与「五帝」之「帝」，合称「皇帝」，并废谥法，以「二世、三世至于万世」为序。',
       impact:
         '创立中国两千余年的皇帝制度，皇帝集立法、行政、军事、祭祀大权于一身，成为此后历代王朝政体的核心范式。',
-      figures: [{ name: '秦始皇' }, { name: '李斯' }],
+      figures: [
+        { name: '秦始皇', personId: 'wk-Q7192' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
     },
     {
       name: '三公九卿制',
@@ -34,7 +37,10 @@ export const QIN: DynastyProfile = {
       background:
         '秦承战国官制而系统化，以丞相总百官、太尉掌军事、御史大夫司监察，九卿各司其职，形成中央官僚体系。',
       impact: '为后世「三省六部」等中央官制之雏形，确立官僚分职、皇权统御的中央行政架构。',
-      figures: [{ name: '李斯' }, { name: '冯去疾' }],
+      figures: [
+        { name: '李斯', personId: 'wk-Q152919' },
+        { name: '冯去疾', personId: 'fengqu-48351' },
+      ],
     },
     {
       name: '郡县制',
@@ -47,7 +53,10 @@ export const QIN: DynastyProfile = {
         '统一之初，丞相王绾等主张分封诸子以镇边，廷尉李斯力排众议，认为分封乃战乱之源，主张全面推行郡县。始皇从李斯议。',
       impact:
         '彻底废除世卿世禄的分封旧制，官僚由中央垂直任免，极大强化中央集权，成为此后两千年地方行政的基本制度。',
-      figures: [{ name: '李斯' }, { name: '秦始皇' }],
+      figures: [
+        { name: '李斯', personId: 'wk-Q152919' },
+        { name: '秦始皇', personId: 'wk-Q7192' },
+      ],
     },
     {
       name: '书同文·车同轨·统一度量衡',
@@ -60,7 +69,10 @@ export const QIN: DynastyProfile = {
         '六国文字、车轨、度量衡、货币各不相同，严重阻碍政令通行与经济发展。始皇令李斯作《仓颉篇》等，以小篆为正体，并颁标准器。',
       impact:
         '奠定中华文化「大一统」的文字与制度基础，度量衡与货币统一促进全国经济交流，影响深远。',
-      figures: [{ name: '李斯' }, { name: '秦始皇' }],
+      figures: [
+        { name: '李斯', personId: 'wk-Q152919' },
+        { name: '秦始皇', personId: 'wk-Q7192' },
+      ],
     },
     {
       name: '什伍连坐与严刑峻法',
@@ -72,7 +84,10 @@ export const QIN: DynastyProfile = {
       background:
         '秦自商鞅变法即以法治国，统一后推行于全国。据《睡虎地秦墓竹简》，秦律细密，涵盖田律、仓律、徭律等，程序严谨而刑罚严酷。',
       impact: '社会控制力极强，政令贯彻彻底；但刑繁役重，民不堪命，成为秦末民变蜂起的重要根源。',
-      figures: [{ name: '商鞅' }, { name: '李斯' }],
+      figures: [
+        { name: '商鞅', personId: 'sj-shangyang-23' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
     },
     {
       name: '军功爵制（二十等爵）',
@@ -85,7 +100,7 @@ export const QIN: DynastyProfile = {
         '商鞅变法所立，以「有功者显荣，无功者虽富无所芬华」为原则，将爵位与军功、田宅、役免挂钩。',
       impact:
         '极大提升秦军战力，助其兼并六国；然统一后战事减少，军功授爵难以为继，赏罚体系渐失平衡。',
-      figures: [{ name: '商鞅' }],
+      figures: [{ name: '商鞅', personId: 'sj-shangyang-23' }],
     },
   ],
   events: [
@@ -100,7 +115,11 @@ export const QIN: DynastyProfile = {
       outcome:
         '前230灭韩、前228灭赵、前225灭魏、前223灭楚、前222灭燕、前221灭齐，秦王政称「始皇帝」。',
       impact: '结束春秋战国五百余年分裂，建立中国第一个中央集权大一统帝国。',
-      figures: [{ name: '秦始皇' }, { name: '王翦' }, { name: '李斯' }],
+      figures: [
+        { name: '秦始皇', personId: 'wk-Q7192' },
+        { name: '王翦', personId: 'wangjian-415288' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
     },
     {
       year: -214,
@@ -112,7 +131,10 @@ export const QIN: DynastyProfile = {
       outcome:
         '南平百越设三郡，沟通灵渠；北收河南地（河套），连缀燕赵秦旧长城为万里长城，西起临洮、东至辽东。',
       impact: '奠定中国南方与北方疆域基础；长城成为后世防御与民族象征，但南征北筑耗民甚巨。',
-      figures: [{ name: '蒙恬' }, { name: '任嚣' }],
+      figures: [
+        { name: '蒙恬', personId: 'wk-Q1151702' },
+        { name: '任嚣', personId: 'wk-Q4163792' },
+      ],
     },
     {
       year: -213,
@@ -124,7 +146,10 @@ export const QIN: DynastyProfile = {
         '博士淳于越主张师古分封，李斯斥「不师今而学古，以非当世」，建议禁私学、焚百家书以定于一尊。',
       outcome: '始皇下焚书令，非博士官所职，天下敢有藏《诗》《书》者悉烧之，私学禁绝。',
       impact: '先秦典籍遭重大损失，思想由多元趋于一统，钳制言论之始。',
-      figures: [{ name: '秦始皇' }, { name: '李斯' }],
+      figures: [
+        { name: '秦始皇', personId: 'wk-Q7192' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
     },
     {
       year: -212,
@@ -136,7 +161,11 @@ export const QIN: DynastyProfile = {
       outcome:
         '御史按问诸生，转相告引，得犯禁者四百六十余人，坑之咸阳。扶苏谏之，反遭贬斥北监蒙恬军。',
       impact: '与焚书并称「焚书坑儒」，士人离心，为秦失去人心、速亡埋下伏笔。',
-      figures: [{ name: '秦始皇' }, { name: '李斯' }, { name: '扶苏' }],
+      figures: [
+        { name: '秦始皇', personId: 'wk-Q7192' },
+        { name: '李斯', personId: 'wk-Q152919' },
+        { name: '扶苏' },
+      ],
     },
     {
       year: -210,
@@ -147,7 +176,11 @@ export const QIN: DynastyProfile = {
       background: '前210年始皇东巡途中病重，遗诏令扶苏返咸阳主持丧事即位；时扶苏远在蒙恬军中。',
       outcome: '始皇崩于沙丘平台，赵高说李斯隐瞒丧讯，矫诏立少子胡亥为二世皇帝，赐扶苏、蒙恬死。',
       impact: '秦政更趋昏暴，统治集团自相残杀，秦亡之祸自此始。',
-      figures: [{ name: '赵高' }, { name: '李斯' }, { name: '秦二世' }],
+      figures: [
+        { name: '赵高', personId: 'zhaogao-457358' },
+        { name: '李斯', personId: 'wk-Q152919' },
+        { name: '秦二世', personId: 'wk-Q7196' },
+      ],
     },
     {
       year: -209,
@@ -158,7 +191,10 @@ export const QIN: DynastyProfile = {
       background: '二世元年，九百戍卒被征戍渔阳，行至大泽乡遇雨失期，按秦律当斩，遂「揭竿为旗」。',
       outcome: '陈胜自立为「张楚」王，各地纷纷响应，反秦烽火遍及关东，刘邦、项羽亦起兵其中。',
       impact: '敲响秦王朝丧钟，「王侯将相宁有种乎」激励后世反抗，天下大乱由此始。',
-      figures: [{ name: '陈胜' }, { name: '吴广' }],
+      figures: [
+        { name: '陈胜', personId: 'chensheng-247944' },
+        { name: '吴广', personId: 'wuguang-128267' },
+      ],
     },
     {
       year: -207,
@@ -170,7 +206,11 @@ export const QIN: DynastyProfile = {
       outcome:
         '项羽九战九捷，大破章邯，秦军主力尽丧；刘邦乘虚西入武关、进逼咸阳，子婴素车白马出降，秦亡。',
       impact: '秦仅十四年而亡，创「二世而亡」之鉴，为汉初「与民休息」之政提供教训。',
-      figures: [{ name: '项羽' }, { name: '刘邦' }, { name: '章邯' }],
+      figures: [
+        { name: '项羽', personId: 'wk-Q182266' },
+        { name: '刘邦', personId: 'liubang-16622' },
+        { name: '章邯', personId: 'sj-zhanghan-42' },
+      ],
     },
   ],
   culture: [
@@ -183,7 +223,7 @@ export const QIN: DynastyProfile = {
       background:
         '六国文字异形，秦以小篆统一书写，令李斯作《仓颉篇》、赵高作《爰历篇》等标准字书。',
       impact: '汉字由篆而隶、由隶而楷的演进由此规范，奠定汉字书同文的基础。',
-      figures: [{ name: '李斯' }],
+      figures: [{ name: '李斯', personId: 'wk-Q152919' }],
       works: ['《仓颉篇》', '《泰山刻石》', '《峄山刻石》'],
     },
     {
@@ -193,7 +233,7 @@ export const QIN: DynastyProfile = {
       source: '秦始皇陵兵马俑考古（1974年发现）',
       background: '始皇即位即营骊山陵，历三十余年，役徒七十万，兵马俑为其陪葬军阵。',
       impact: '展现秦代高超陶塑、冶铸与军事组织水平，是研究秦军与帝陵制度的第一手实物。',
-      figures: [{ name: '秦始皇' }],
+      figures: [{ name: '秦始皇', personId: 'wk-Q7192' }],
       works: ['秦始皇陵兵马俑'],
     },
     {
@@ -204,7 +244,10 @@ export const QIN: DynastyProfile = {
       source: '《睡虎地秦墓竹简》（1975年出土）',
       background: '秦崇法家，商鞅、韩非之说为治国圭臬，「以法为教、以吏为师」。',
       impact: '留存中国最早的成文法典实例之一，是研究秦代法制与社会的重要文献。',
-      figures: [{ name: '商鞅' }, { name: '李斯' }],
+      figures: [
+        { name: '商鞅', personId: 'sj-shangyang-23' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
       works: ['《睡虎地秦墓竹简》'],
     },
     {
@@ -224,7 +267,7 @@ export const QIN: DynastyProfile = {
       source: '《史记·秦始皇本纪》《汉书·严助传》',
       background: '为控驭天下与南征粮运，秦修驰道、直道，又由监禄凿灵渠连接长江、珠江水系。',
       impact: '驰道强化中央对地方的控制与商业往来；灵渠成为沟通岭南与中原的水利枢纽。',
-      figures: [{ name: '蒙恬' }, { name: '监禄' }],
+      figures: [{ name: '蒙恬', personId: 'wk-Q1151702' }, { name: '监禄' }],
       works: ['秦驰道', '灵渠'],
     },
   ],

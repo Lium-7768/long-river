@@ -18,7 +18,7 @@ export const LIAO: DynastyProfile = {
       desc: '以国制治契丹、汉制待汉人，北面官管游牧部族，南面官理汉地州县。',
       background: '契丹据燕云汉地，游牧与农耕并存，遂创「因俗而治」的双轨官制。',
       impact: '有效统合多民族，为后世金、元多元治理提供范本，是中国古代制度史之创举。',
-      figures: [{ name: '耶律阿保机' }],
+      figures: [{ name: '耶律阿保机', personId: 'yelv-29261' }],
     },
     {
       name: '斡鲁朵与捺钵',
@@ -28,7 +28,7 @@ export const LIAO: DynastyProfile = {
       desc: '皇帝有斡鲁朵（宫帐）私属；四时捺钵（行营）为政治中心，随季节游猎议政。',
       background: '契丹保持游牧传统，皇帝不在固定都城，而以捺钵为流动朝廷。',
       impact: '游牧政治与农耕官僚结合，形成独特的「行国」统治方式。',
-      figures: [{ name: '耶律阿保机' }],
+      figures: [{ name: '耶律阿保机', personId: 'yelv-29261' }],
     },
     {
       name: '四时捺钵与军事',
@@ -38,7 +38,10 @@ export const LIAO: DynastyProfile = {
       desc: '以部族军与宫帐军为主，兼用汉军；骑射为长，机动性强。',
       background: '契丹全民皆兵，按部落编军，皇帝捺钵即军事中枢。',
       impact: '初期战力强劲，与北宋相抗；后期军备废弛，为金所灭。',
-      figures: [{ name: '耶律阿保机' }, { name: '述律平' }],
+      figures: [
+        { name: '耶律阿保机', personId: 'yelv-29261' },
+        { name: '述律平', personId: 'wk-Q907847' },
+      ],
     },
     {
       name: '燕云十六州与汉地治理',
@@ -48,7 +51,10 @@ export const LIAO: DynastyProfile = {
       desc: '得后晋所割燕云十六州，行汉制州县、征赋税，为辽之财赋根基。',
       background: '后晋石敬瑭割燕云予契丹以求援，辽遂得农耕富庶之地。',
       impact: '燕云为辽提供财赋与屏障；其归属成为宋辽冲突之焦点。',
-      figures: [{ name: '石敬瑭' }, { name: '耶律德光' }],
+      figures: [
+        { name: '石敬瑭', personId: 'wk-Q1189495' },
+        { name: '耶律德光', personId: 'yelv-43077' },
+      ],
     },
   ],
   events: [
@@ -60,7 +66,7 @@ export const LIAO: DynastyProfile = {
       background: '阿保机统一契丹八部，兼采汉制、用汉人，奠定立国之基。',
       outcome: '916年称帝，国号契丹（947年改称辽），都上京临潢府。',
       impact: '契丹由部落联盟转为帝国，成为北方强国。',
-      figures: [{ name: '耶律阿保机' }],
+      figures: [{ name: '耶律阿保机', personId: 'yelv-29261' }],
     },
     {
       year: 936,
@@ -70,7 +76,10 @@ export const LIAO: DynastyProfile = {
       background: '石敬瑭谋反，借契丹之力灭后唐，遂割地称臣。',
       outcome: '辽得燕云十六州，改国号大辽（947），行南北面官治之。',
       impact: '中原失去北方屏障，宋辽此后长期争夺，影响数百年格局。',
-      figures: [{ name: '石敬瑭' }, { name: '耶律德光' }],
+      figures: [
+        { name: '石敬瑭', personId: 'wk-Q1189495' },
+        { name: '耶律德光', personId: 'yelv-43077' },
+      ],
     },
     {
       year: 1004,
@@ -80,7 +89,7 @@ export const LIAO: DynastyProfile = {
       background: '辽承天太后、圣宗南下，宋真宗亲征澶州，双方相持后议和。',
       outcome: '1005年盟成：宋岁输银十万两、绢二十万匹，边界维持，通商互市。',
       impact: '宋辽结束大规模战事、维持百余年和好，经济文化交流频繁。',
-      figures: [{ name: '萧太后' }, { name: '宋真宗' }, { name: '寇准' }],
+      figures: [{ name: '萧太后' }, { name: '宋真宗' }, { name: '寇准', personId: 'kouzhun-898' }],
     },
     {
       year: 1125,
@@ -90,7 +99,7 @@ export const LIAO: DynastyProfile = {
       background: '女真兴起建金，联宋灭辽；辽天祚帝逃亡。',
       outcome: '1125年天祚帝被俘，辽亡；耶律大石西迁建西辽（哈剌契丹）于中亚。',
       impact: '辽亡后契丹势力西移，西辽在中亚立国近百年，促进东西交流。',
-      figures: [{ name: '耶律大石' }, { name: '天祚帝' }],
+      figures: [{ name: '耶律大石', personId: 'yelv-135303' }, { name: '天祚帝' }],
     },
   ],
   culture: [
@@ -101,7 +110,7 @@ export const LIAO: DynastyProfile = {
       desc: '创制契丹大字、小字，记录契丹语，为中国古代民族文字之一。',
       background: '辽立国后为纪事与政令，仿汉字创制契丹文。',
       impact: '反映契丹文化的自觉，是研究契丹语言与历史的关键材料。',
-      figures: [{ name: '耶律阿保机' }],
+      figures: [{ name: '耶律阿保机', personId: 'yelv-29261' }],
       works: ['契丹大字', '契丹小字'],
     },
     {

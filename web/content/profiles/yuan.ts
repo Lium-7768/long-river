@@ -21,7 +21,10 @@ export const YUAN: DynastyProfile = {
         '蒙古以「行中书省」作为中书省派出的临时机构治理新征服地，后渐成地方最高行政建置，全国分十余行省。',
       impact:
         '行省既统军民政、又受中央节制，强化了对辽阔疆域的控制；其制为明清及现代「省」制直接源头。',
-      figures: [{ name: '忽必烈' }, { name: '耶律楚材' }],
+      figures: [
+        { name: '忽必烈', personId: 'wk-Q7523' },
+        { name: '耶律楚材', personId: 'yelv-29279' },
+      ],
     },
     {
       name: '四等人制',
@@ -33,7 +36,7 @@ export const YUAN: DynastyProfile = {
         '元为保障蒙古统治地位、防范汉地反抗，在法律、任官、科举、刑罚上对四等人区别对待。',
       impact:
         '民族压迫深重，激化社会矛盾，是元末民变与元朝速亡的重要原因；亦深刻影响元代政治与社会结构。',
-      figures: [{ name: '忽必烈' }],
+      figures: [{ name: '忽必烈', personId: 'wk-Q7523' }],
     },
     {
       name: '站赤（驿站）制度',
@@ -43,7 +46,7 @@ export const YUAN: DynastyProfile = {
       desc: '遍设驿站（站赤）连通全国，供军情、政令、使节往来，兼管后勤征战。',
       background: '蒙古以驿传维系横跨欧亚的帝国，入主中原后更以站赤贯通各行省与边疆。',
       impact: '政令通达、军政迅捷，中外交通空前便利，丝路与东西交流达于极盛。',
-      figures: [{ name: '忽必烈' }],
+      figures: [{ name: '忽必烈', personId: 'wk-Q7523' }],
     },
     {
       name: '纸钞（交钞·中统元宝交钞）',
@@ -53,7 +56,7 @@ export const YUAN: DynastyProfile = {
       desc: '以纸钞为法定主币，全国通行，禁用金属货币为主要流通手段。',
       background: '元承宋金交钞之制，发行中统钞，以白银为储备，一度信用稳固。',
       impact: '世界最早的全国性纯纸币流通体系；然元末滥印无度、币值崩溃，成为元亡的经济诱因。',
-      figures: [{ name: '忽必烈' }],
+      figures: [{ name: '忽必烈', personId: 'wk-Q7523' }],
     },
     {
       name: '怯薛与达鲁花赤',
@@ -63,7 +66,7 @@ export const YUAN: DynastyProfile = {
       desc: '怯薛（护卫军）子弟世袭任官，达鲁花赤（镇守官）由蒙古人充任，监督各级行政。',
       background: '元以蒙古贵族为核心，怯薛出身者充任要职，地方遍设达鲁花赤掌实权。',
       impact: '蒙古、色目人垄断要津，汉人难掌实权；加速统治集团腐败与执政能力衰退。',
-      figures: [{ name: '忽必烈' }],
+      figures: [{ name: '忽必烈', personId: 'wk-Q7523' }],
     },
     {
       name: '北面官旧俗与汉法并行',
@@ -73,7 +76,10 @@ export const YUAN: DynastyProfile = {
       desc: '保留蒙古「忽里台」等旧制，同时采行汉地三省六部之制，双轨并行。',
       background: '忽必烈「附会汉法」建元，然蒙古旧俗与草原分封、怯薛特权仍在。',
       impact: '制度杂糅、政出多门，汉法与蒙古旧俗的冲突贯穿元朝始终。',
-      figures: [{ name: '忽必烈' }, { name: '耶律楚材' }],
+      figures: [
+        { name: '忽必烈', personId: 'wk-Q7523' },
+        { name: '耶律楚材', personId: 'yelv-29279' },
+      ],
     },
   ],
   events: [
@@ -85,7 +91,7 @@ export const YUAN: DynastyProfile = {
       background: '蒙古各部纷争，铁木真经多年征战统一诸部，1206年忽里台大会推举为汗。',
       outcome: '建大蒙古国，创千户制、怯薛军，颁《大札撒》，随即大举西征南伐。',
       impact: '蒙古崛起改变欧亚格局，为元朝及四大汗国奠定基础。',
-      figures: [{ name: '成吉思汗' }],
+      figures: [{ name: '成吉思汗', personId: 'tiemu-29239' }],
     },
     {
       year: 1271,
@@ -95,7 +101,10 @@ export const YUAN: DynastyProfile = {
       background: '忽必烈击败阿里不哥夺得汗位，推行汉法、营建大都（今北京）。',
       outcome: '1271年改国号大元，1272年定都大都；1279年灭南宋，完成统一。',
       impact: '中国首个由少数民族建立的大一统王朝，大都成为当时世界最大都会之一。',
-      figures: [{ name: '忽必烈' }, { name: '刘秉忠' }],
+      figures: [
+        { name: '忽必烈', personId: 'wk-Q7523' },
+        { name: '刘秉忠', personId: 'liubing-28934' },
+      ],
     },
     {
       year: 1279,
@@ -105,7 +114,11 @@ export const YUAN: DynastyProfile = {
       background: '元军南下，南宋残部退守崖山，张弘范率军合围。',
       outcome: '崖山之战宋军覆没，陆秀夫背幼帝蹈海，宋亡；元统一全国。',
       impact: '结束自唐末以来的分裂，元朝疆域达于空前；也成汉族士人痛史之象征。',
-      figures: [{ name: '张弘范' }, { name: '陆秀夫' }, { name: '文天祥' }],
+      figures: [
+        { name: '张弘范', personId: 'zhanghong-17111' },
+        { name: '陆秀夫', personId: 'luxiu-17112' },
+        { name: '文天祥', personId: 'wentian-19123' },
+      ],
     },
     {
       year: 1351,
@@ -115,7 +128,10 @@ export const YUAN: DynastyProfile = {
       background: '元末吏治腐败、纸钞崩溃、黄河泛滥，民不聊生，白莲教聚众起事。',
       outcome: '红巾军遍及南北，朱元璋、张士诚、陈友谅等各据一方，元廷失去控制。',
       impact: '动摇元朝统治根基，为朱元璋建立明朝铺路。',
-      figures: [{ name: '刘福通' }, { name: '朱元璋' }],
+      figures: [
+        { name: '刘福通', personId: 'liufu-111415' },
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+      ],
     },
     {
       year: 1368,
@@ -125,7 +141,11 @@ export const YUAN: DynastyProfile = {
       background: '朱元璋统一南方后北伐，徐达、常遇春率军直取大都。',
       outcome: '1368年明军入大都，元顺帝逃往上都，元朝在中原的统治结束，退为北元。',
       impact: '元朝九十余年而亡，蒙古退归草原，与明朝对峙二百余年。',
-      figures: [{ name: '朱元璋' }, { name: '元顺帝' }, { name: '徐达' }],
+      figures: [
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+        { name: '元顺帝', personId: 'yuanshun-100390' },
+        { name: '徐达', personId: 'xuda-66290' },
+      ],
     },
   ],
   culture: [
@@ -135,7 +155,11 @@ export const YUAN: DynastyProfile = {
       desc: '杂剧与散曲兴盛，关汉卿、王实甫、马致远等名家辈出，为中国戏曲黄金时代。',
       background: '科举久废、文人沉抑下僚，转而投身勾栏瓦舍，市井娱乐需求推动戏曲繁荣。',
       impact: '与唐诗、宋词并称，「元曲」成为一代文学；杂剧体制奠定中国戏曲基础。',
-      figures: [{ name: '关汉卿' }, { name: '王实甫' }, { name: '马致远' }],
+      figures: [
+        { name: '关汉卿', personId: 'guanhan-112918' },
+        { name: '王实甫', personId: 'wangshi-690977' },
+        { name: '马致远', personId: 'mazhi-106103' },
+      ],
       works: ['《窦娥冤》', '《西厢记》', '《汉宫秋》'],
     },
     {
@@ -145,7 +169,10 @@ export const YUAN: DynastyProfile = {
       desc: '郭守敬制《授时历》，一年长度精确到 365.2425 日，与今历几乎一致。',
       background: '元初历法误差累积，忽必烈命郭守敬等改历，创制简仪、高表等观测仪器。',
       impact: '《授时历》为当时世界最精密历法，精度与三百年后格里高利历相当。',
-      figures: [{ name: '郭守敬' }, { name: '王恂' }],
+      figures: [
+        { name: '郭守敬', personId: 'guoshou-107822' },
+        { name: '王恂', personId: 'wangxun-36880' },
+      ],
       works: ['《授时历》'],
     },
     {
@@ -154,7 +181,7 @@ export const YUAN: DynastyProfile = {
       desc: '黄道婆改良棉纺织工具与技术，推动棉纺业在江南普及。',
       background: '黄道婆自海南黎族学得先进棉纺技术，返乡改良搅车、弹弓、纺车。',
       impact: '棉布渐成民众主要衣料，改变中国人的衣着结构，促进江南经济发展。',
-      figures: [{ name: '黄道婆' }],
+      figures: [{ name: '黄道婆', personId: 'huangdao-109232' }],
       works: ['改良棉纺工具'],
     },
     {
@@ -172,7 +199,11 @@ export const YUAN: DynastyProfile = {
       desc: '赵孟頫、黄公望、倪瓒等「元四家」开文人山水画新风，重笔墨意境。',
       background: '元代文人仕进无门，寄情书画，追求写意与个人情趣。',
       impact: '文人画传统确立，「元四家」成明清文人画之宗师。',
-      figures: [{ name: '赵孟頫' }, { name: '黄公望' }, { name: '倪瓒' }],
+      figures: [
+        { name: '赵孟頫' },
+        { name: '黄公望', personId: 'huanggong-109158' },
+        { name: '倪瓒', personId: 'nizan-33468' },
+      ],
       works: ['《富春山居图》'],
     },
     {

@@ -18,7 +18,11 @@ export const ZHOU_E: DynastyProfile = {
       desc: '周室衰微，强大诸侯以「尊王攘夷」为号召，会盟诸侯、号令天下。',
       background: '平王东迁后王畿狭小、王权衰落，齐、晋等大国崛起。',
       impact: '霸政暂维华夏秩序，实为大国争衡；「尊王」徒具虚名。',
-      figures: [{ name: '齐桓公' }, { name: '管仲' }, { name: '晋文公' }],
+      figures: [
+        { name: '齐桓公', personId: 'wk-Q470108' },
+        { name: '管仲', personId: 'guanzhong-17364' },
+        { name: '晋文公', personId: 'wk-Q561973' },
+      ],
     },
     {
       name: '变法与军功爵',
@@ -28,7 +32,11 @@ export const ZHOU_E: DynastyProfile = {
       desc: '废除世卿世禄，奖励耕战，以军功授爵，官僚政治渐代贵族政治。',
       background: '兼并之势下，各国为富国强兵而变法（魏李悝、楚吴起、秦商鞅）。',
       impact: '世袭贵族政治瓦解，中央集权与官僚制兴起，为秦制之基。',
-      figures: [{ name: '商鞅' }, { name: '吴起' }, { name: '李悝' }],
+      figures: [
+        { name: '商鞅', personId: 'sj-shangyang-23' },
+        { name: '吴起', personId: 'wuqi-592854' },
+        { name: '李悝' },
+      ],
     },
     {
       name: '郡县之制初起',
@@ -38,7 +46,7 @@ export const ZHOU_E: DynastyProfile = {
       desc: '边地设郡、内地设县，由国君任免官吏，取代封邑世袭。',
       background: '春秋战国兼并所得新地，多以郡县直辖，不再分封。',
       impact: '郡县制为秦统一后推行全国之制度，是中国地方行政之根本变革。',
-      figures: [{ name: '商鞅' }],
+      figures: [{ name: '商鞅', personId: 'sj-shangyang-23' }],
     },
     {
       name: '初税亩与土地私有',
@@ -58,7 +66,12 @@ export const ZHOU_E: DynastyProfile = {
       desc: '官学衰、私学兴，儒、道、墨、法、名、阴阳、纵横诸家竞起。',
       background: '社会剧变、士阶层崛起，列国求贤，思想空前自由。',
       impact: '奠定中华思想基本格局，影响此后两千余年。',
-      figures: [{ name: '孔子' }, { name: '老子' }, { name: '墨子' }, { name: '韩非' }],
+      figures: [
+        { name: '孔子', personId: 'sj-kongzi-68' },
+        { name: '老子', personId: 'sj-laozi-18' },
+        { name: '墨子' },
+        { name: '韩非', personId: 'sj-hanfei-41' },
+      ],
     },
   ],
   events: [
@@ -70,7 +83,7 @@ export const ZHOU_E: DynastyProfile = {
       background: '犬戎破镐京、幽王被杀，平王东迁以避戎祸。',
       outcome: '前770年平王东迁洛邑，王畿狭小、号令不行，诸侯争霸。',
       impact: '东周（春秋）开始，中国进入大变革、大动荡时代。',
-      figures: [{ name: '周平王' }],
+      figures: [{ name: '周平王', personId: 'ws-史记-卷004-周平王' }],
     },
     {
       year: -685,
@@ -80,7 +93,10 @@ export const ZHOU_E: DynastyProfile = {
       background: '齐地富庶、管仲改革富国强兵，齐桓公以「尊王攘夷」号召诸侯。',
       outcome: '齐桓公北御戎狄、南遏楚，会盟诸侯（葵丘之会），成春秋五霸之首。',
       impact: '霸政模式确立，「尊王攘夷」成为维系华夏秩序之旗帜。',
-      figures: [{ name: '齐桓公' }, { name: '管仲' }],
+      figures: [
+        { name: '齐桓公', personId: 'wk-Q470108' },
+        { name: '管仲', personId: 'guanzhong-17364' },
+      ],
     },
     {
       year: -632,
@@ -90,7 +106,11 @@ export const ZHOU_E: DynastyProfile = {
       background: '晋楚争霸中原，宋向晋求救，晋文公退避三舍诱敌。',
       outcome: '城濮之战晋胜，践土之盟诸侯拥晋，文公成霸主。',
       impact: '晋楚争霸成为春秋主线，华夏与楚文化加速交融。',
-      figures: [{ name: '晋文公' }, { name: '先轸' }, { name: '楚成王' }],
+      figures: [
+        { name: '晋文公', personId: 'wk-Q561973' },
+        { name: '先轸' },
+        { name: '楚成王', personId: 'wk-Q795905' },
+      ],
     },
     {
       year: -403,
@@ -100,7 +120,11 @@ export const ZHOU_E: DynastyProfile = {
       background: '晋国公室衰微、六卿专权，韩赵魏灭智氏后瓜分晋国。',
       outcome: '前403年三家分晋受封诸侯，战国七雄（齐楚燕韩赵魏秦）格局形成。',
       impact: '「礼崩乐坏」之极致，战国兼并时代开始。',
-      figures: [{ name: '赵襄子' }, { name: '魏桓子' }, { name: '韩康子' }],
+      figures: [
+        { name: '赵襄子', personId: 'ws-史记-卷043-赵襄子' },
+        { name: '魏桓子', personId: 'ws-史记-卷044-魏桓子' },
+        { name: '韩康子' },
+      ],
     },
     {
       year: -356,
@@ -110,7 +134,10 @@ export const ZHOU_E: DynastyProfile = {
       background: '秦僻处西陲、受诸侯轻视，孝公发愤，用商鞅两度变法。',
       outcome: '废世卿世禄、开阡陌、颁军功爵、编户齐民，秦富兵强。',
       impact: '秦崛起之根，法家体制为统一与秦制奠基。',
-      figures: [{ name: '商鞅' }, { name: '秦孝公' }],
+      figures: [
+        { name: '商鞅', personId: 'sj-shangyang-23' },
+        { name: '秦孝公', personId: 'sj-qinxiaogong-10' },
+      ],
     },
     {
       year: -221,
@@ -120,7 +147,10 @@ export const ZHOU_E: DynastyProfile = {
       background: '战国后期秦远交近攻、逐个击破；周王室已于前256年被秦所灭。',
       outcome: '前256年周亡；前230–前221年秦灭六国，嬴政称「始皇帝」。',
       impact: '先秦结束、帝制开始，中国进入中央集权大一统时代。',
-      figures: [{ name: '秦始皇' }, { name: '李斯' }],
+      figures: [
+        { name: '秦始皇', personId: 'wk-Q7192' },
+        { name: '李斯', personId: 'wk-Q152919' },
+      ],
     },
   ],
   culture: [
@@ -131,11 +161,11 @@ export const ZHOU_E: DynastyProfile = {
       background: '社会剧变、私学兴起，士人游说著书，思想空前自由。',
       impact: '中华思想之源头，影响此后两千余年的政治与文化。',
       figures: [
-        { name: '孔子' },
-        { name: '孟子' },
-        { name: '老子' },
-        { name: '庄子' },
-        { name: '韩非' },
+        { name: '孔子', personId: 'sj-kongzi-68' },
+        { name: '孟子', personId: 'sj-mengzi-27' },
+        { name: '老子', personId: 'sj-laozi-18' },
+        { name: '庄子', personId: 'sj-zhuangzi-19' },
+        { name: '韩非', personId: 'sj-hanfei-41' },
       ],
       works: ['《论语》', '《孟子》', '《道德经》', '《庄子》', '《韩非子》'],
     },
@@ -154,7 +184,10 @@ export const ZHOU_E: DynastyProfile = {
       desc: '孙武著《孙子兵法》，系统论兵，为世界最早兵书之一。',
       background: '春秋战国战事频仍，兵学成为显学。',
       impact: '「兵学圣典」，影响中外军事思想两千余年。',
-      figures: [{ name: '孙武' }, { name: '孙膑' }],
+      figures: [
+        { name: '孙武', personId: 'sunwu-34214' },
+        { name: '孙膑', personId: 'sj-sunbin-12' },
+      ],
       works: ['《孙子兵法》', '《孙膑兵法》'],
     },
     {
@@ -163,7 +196,10 @@ export const ZHOU_E: DynastyProfile = {
       desc: '屈原创骚体，融神话与抒情，《离骚》寄忠愤，开浪漫一脉。',
       background: '楚国文化独特、巫风浓郁，屈原忠而见放，发愤抒情。',
       impact: '与《诗经》并称「风骚」，为中国诗歌浪漫主义之源。',
-      figures: [{ name: '屈原' }, { name: '宋玉' }],
+      figures: [
+        { name: '屈原', personId: 'wk-Q313330' },
+        { name: '宋玉', personId: 'songyu-127652' },
+      ],
       works: ['《离骚》', '《九歌》'],
     },
     {
@@ -172,7 +208,10 @@ export const ZHOU_E: DynastyProfile = {
       desc: '铁农具、牛耕推广，水利大兴（都江堰、郑国渠），生产力飞跃。',
       background: '战国冶铁技术进步，各国兴修水利以增粮产。',
       impact: '农业革命推动社会转型，都江堰至今仍惠泽天府。',
-      figures: [{ name: '李冰' }, { name: '郑国' }],
+      figures: [
+        { name: '李冰', personId: 'libing-43039' },
+        { name: '郑国', personId: 'zhengguo-535656' },
+      ],
       works: ['都江堰', '郑国渠'],
     },
     {
@@ -181,7 +220,7 @@ export const ZHOU_E: DynastyProfile = {
       desc: '天文观测（甘德、石申）与《黄帝内经》成书，科学医药积累。',
       background: '战国学术繁荣，天文历法、医学理论系统化。',
       impact: '《甘石星经》为最早天文著作之一，《内经》奠定中医理论。',
-      figures: [{ name: '扁鹊' }],
+      figures: [{ name: '扁鹊', personId: 'sj-bianque-56' }],
       works: ['《甘石星经》', '《黄帝内经》'],
     },
   ],

@@ -20,7 +20,11 @@ export const SONG_E: DynastyProfile = {
       background:
         '靖康之变后，赵构南渡称帝，几经辗转定都临安；国力不及北宋，遂以江淮为屏障，长期与金（后与蒙）对峙。',
       impact: '维持了东南半壁一百五十年的安定与繁荣，然守势外交、岁币议和，始终未能恢复中原。',
-      figures: [{ name: '宋高宗' }, { name: '岳飞' }, { name: '韩世忠' }],
+      figures: [
+        { name: '宋高宗' },
+        { name: '岳飞', personId: 'yuefei-8175' },
+        { name: '韩世忠', personId: 'hanshi-8050' },
+      ],
     },
     {
       name: '岳飞抗金与主和主战之争',
@@ -32,7 +36,11 @@ export const SONG_E: DynastyProfile = {
         '南宋初年主战主和两派激烈。岳飞屡破金军、进军朱仙镇，高宗、秦桧恐其功高、又虑迎回钦宗，遂力主议和。',
       impact:
         '十二道金牌召还岳飞，1141年绍兴和议「称臣纳贡、划淮为界」，岳飞以「莫须有」冤死，成为民族悲情之象征。',
-      figures: [{ name: '岳飞' }, { name: '秦桧' }, { name: '韩世忠' }],
+      figures: [
+        { name: '岳飞', personId: 'yuefei-8175' },
+        { name: '秦桧', personId: 'qingui-8008' },
+        { name: '韩世忠', personId: 'hanshi-8050' },
+      ],
     },
     {
       name: '理学集大成',
@@ -42,7 +50,10 @@ export const SONG_E: DynastyProfile = {
       desc: '朱熹集濂洛关闽之大成，确立以「理」为核心的理学体系，后成官方正统。',
       background: '南宋儒学复兴，朱熹承二程，兼采周敦颐、张载，建构庞大的理学体系。',
       impact: '朱熹《四书章句集注》成科举标准，理学为元明清官方哲学，塑造后世思想七百年。',
-      figures: [{ name: '朱熹' }, { name: '陆九渊' }],
+      figures: [
+        { name: '朱熹', personId: 'zhuxi-3257' },
+        { name: '陆九渊', personId: 'lujiu-3632' },
+      ],
     },
     {
       name: '市舶司与海上贸易',
@@ -74,7 +85,7 @@ export const SONG_E: DynastyProfile = {
       background: '金灭北宋后，北宋宗室赵构在宗泽等拥戴下南渡称帝。',
       outcome: '1127年赵构即位（宋高宗），后定都临安；宋室偏安东南。',
       impact: '北宋终结、南宋开启，宋金南北对峙格局形成。',
-      figures: [{ name: '宋高宗' }, { name: '宗泽' }],
+      figures: [{ name: '宋高宗' }, { name: '宗泽', personId: 'zongze-3897' }],
     },
     {
       year: 1140,
@@ -84,7 +95,10 @@ export const SONG_E: DynastyProfile = {
       background: '岳飞力主北伐，练岳家军，连战皆捷，金人叹「撼山易，撼岳家军难」。',
       outcome: '郾城、颍昌大捷后进军朱仙镇；高宗、秦桧连发金牌召还，功败垂成。',
       impact: '南宋错失收复良机；岳飞次年冤死风波亭，成千古之痛。',
-      figures: [{ name: '岳飞' }, { name: '岳云' }],
+      figures: [
+        { name: '岳飞', personId: 'yuefei-8175' },
+        { name: '岳云', personId: 'yueyun-22853' },
+      ],
     },
     {
       year: 1141,
@@ -94,7 +108,11 @@ export const SONG_E: DynastyProfile = {
       background: '高宗、秦桧决意议和，先解除诸将兵权，再构陷岳飞。',
       outcome: '宋金以淮河—大散关为界，宋称臣纳贡；岳飞以「莫须有」被杀于大理寺。',
       impact: '确立南宋偏安格局二十余年；「绍兴和议」与岳飞之死成南宋政治之伤。',
-      figures: [{ name: '秦桧' }, { name: '宋高宗' }, { name: '岳飞' }],
+      figures: [
+        { name: '秦桧', personId: 'qingui-8008' },
+        { name: '宋高宗' },
+        { name: '岳飞', personId: 'yuefei-8175' },
+      ],
     },
     {
       year: 1161,
@@ -104,7 +122,10 @@ export const SONG_E: DynastyProfile = {
       background: '金主完颜亮撕毁和议大举南侵，直抵长江采石。',
       outcome: '虞允文督师力战，宋军以水师破金，完颜亮为部下所杀，金军北撤。',
       impact: '南宋转危为安，此后宋金维持相对均势近四十年。',
-      figures: [{ name: '虞允文' }, { name: '完颜亮' }],
+      figures: [
+        { name: '虞允文', personId: 'yuyun-8170' },
+        { name: '完颜亮', personId: 'wanyan-339712' },
+      ],
     },
     {
       year: 1234,
@@ -114,7 +135,7 @@ export const SONG_E: DynastyProfile = {
       background: '金为蒙古所迫南迁，宋理宗纳「联蒙灭金」之议。',
       outcome: '1234年宋蒙合攻蔡州，金哀宗自缢，金亡。',
       impact: '灭金之「捷」实为失策，宋直面更强大的蒙古，四十年后亦亡。',
-      figures: [{ name: '宋理宗' }, { name: '孟珙' }],
+      figures: [{ name: '宋理宗' }, { name: '孟珙', personId: 'menggong-22681' }],
     },
     {
       year: 1276,
@@ -124,7 +145,11 @@ export const SONG_E: DynastyProfile = {
       background: '蒙古（元）大举南侵，襄樊失守后长江防线崩溃。',
       outcome: '1276年临安陷落，太皇太后率恭帝出降；文天祥等拥立益王、卫王于闽广。',
       impact: '南宋中央政权覆灭，然东南抗元残部仍在坚持。',
-      figures: [{ name: '文天祥' }, { name: '陆秀夫' }, { name: '宋恭帝' }],
+      figures: [
+        { name: '文天祥', personId: 'wentian-19123' },
+        { name: '陆秀夫', personId: 'luxiu-17112' },
+        { name: '宋恭帝' },
+      ],
     },
     {
       year: 1279,
@@ -134,7 +159,11 @@ export const SONG_E: DynastyProfile = {
       background: '元将张弘范合围崖山，南宋残军据海死战。',
       outcome: '崖山一战宋舟师尽覆，陆秀夫背幼帝蹈海，十万军民殉难，宋亡。',
       impact: '两宋三百二十年国祚终结；「崖山之后」成汉族士人痛史之叹。',
-      figures: [{ name: '张弘范' }, { name: '陆秀夫' }, { name: '文天祥' }],
+      figures: [
+        { name: '张弘范', personId: 'zhanghong-17111' },
+        { name: '陆秀夫', personId: 'luxiu-17112' },
+        { name: '文天祥', personId: 'wentian-19123' },
+      ],
     },
   ],
   culture: [
@@ -144,7 +173,11 @@ export const SONG_E: DynastyProfile = {
       desc: '南宋词坛激荡，辛弃疾、陆游、李清照等抒豪情、寄家国之痛。',
       background: '国难当头、山河破碎，词人托物言志、慷慨悲歌，爱国主题突出。',
       impact: '与北宋词并称，「豪放」「婉约」两派均达高峰，辛词尤为「词中之龙」。',
-      figures: [{ name: '辛弃疾' }, { name: '陆游' }, { name: '李清照' }],
+      figures: [
+        { name: '辛弃疾', personId: 'xinqi-30359' },
+        { name: '陆游', personId: 'luyou-3640' },
+        { name: '李清照', personId: 'liqing-19713' },
+      ],
       works: ['《稼轩长短句》', '《示儿》', '《声声慢》'],
     },
     {
@@ -154,7 +187,7 @@ export const SONG_E: DynastyProfile = {
       desc: '朱熹集理学大成，著《四书章句集注》，确立「存天理、灭人欲」的思想体系。',
       background: '与陆九渊「鹅湖之会」辩「理」，朱学以「格物致知」为修养路径。',
       impact: '理学成元代以来官方正统，支配中国思想七百余年，影响及东亚。',
-      figures: [{ name: '朱熹' }],
+      figures: [{ name: '朱熹', personId: 'zhuxi-3257' }],
       works: ['《四书章句集注》', '《朱子语类》'],
     },
     {
@@ -172,7 +205,10 @@ export const SONG_E: DynastyProfile = {
       desc: '马远、夏圭「马一角、夏半边」，刘松年、李唐等「南宋四家」开院体新貌。',
       background: '宋室南渡，画院续设，题材多寄故国之思、江南之景。',
       impact: '南宋山水以简驭繁、意境空灵，成中国绘画史上又一高峰。',
-      figures: [{ name: '马远' }, { name: '夏圭' }],
+      figures: [
+        { name: '马远', personId: 'mayuan-44099' },
+        { name: '夏圭', personId: 'xiagui-285017' },
+      ],
       works: ['《踏歌图》', '《溪山清远图》'],
     },
     {

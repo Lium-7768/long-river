@@ -23,7 +23,11 @@ export const HAN_W: DynastyProfile = {
         '汉初惩秦孤立而亡，刘邦既行郡县，又大封同姓子弟为王以藩屏汉室，然异姓诸侯先被翦除，同姓诸侯渐成尾大不掉之势。',
       impact:
         '景帝、武帝朝经削藩、推恩令，封国名存实亡，实质回归郡县集权；郡国并行是汉初过渡形态。',
-      figures: [{ name: '刘邦' }, { name: '汉景帝' }, { name: '主父偃' }],
+      figures: [
+        { name: '刘邦', personId: 'liubang-16622' },
+        { name: '汉景帝' },
+        { name: '主父偃', personId: 'sj-zhufuyan-58' },
+      ],
     },
     {
       name: '察举制',
@@ -36,7 +40,10 @@ export const HAN_W: DynastyProfile = {
         '汉初选官多凭军功、荫任。文帝始诏举「贤良方正能直言极谏者」，武帝从董仲舒议，令郡国岁举孝廉，察举遂成定制。',
       impact:
         '打破军功与世袭垄断，为士人入仕开辟正途，开中国「选举取士」之先河，后演为东汉重「孝廉」的门第之风。',
-      figures: [{ name: '汉武帝' }, { name: '董仲舒' }],
+      figures: [
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+        { name: '董仲舒', personId: 'dongzhong-21906' },
+      ],
     },
     {
       name: '内外朝制',
@@ -49,7 +56,7 @@ export const HAN_W: DynastyProfile = {
         '汉初丞相权重，武帝欲揽权而防相权坐大，遂擢用侍中、尚书、给事中等近臣议政，形成内朝。',
       impact:
         '中枢决策权由外朝转归内朝近臣，强化皇权；然内朝官渐成定制，为后世尚书省、中书省之远源。',
-      figures: [{ name: '汉武帝' }],
+      figures: [{ name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' }],
     },
     {
       name: '推恩令',
@@ -61,7 +68,10 @@ export const HAN_W: DynastyProfile = {
       background:
         '七国之乱后，诸侯仍据大郡。武帝采主父偃策，许诸侯王除嫡长子外诸子皆得受封，国土自然分割。',
       impact: '不费一兵而解诸侯之患，封国愈分愈小，中央集权彻底巩固，成为削藩的经典之策。',
-      figures: [{ name: '主父偃' }, { name: '汉武帝' }],
+      figures: [
+        { name: '主父偃', personId: 'sj-zhufuyan-58' },
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+      ],
     },
     {
       name: '盐铁官营·均输平准',
@@ -74,7 +84,7 @@ export const HAN_W: DynastyProfile = {
         '武帝连年用兵、兴作浩繁，国库支绌。桑弘羊等遂行盐铁专卖、均输平准、算缗告缗，广辟财源。',
       impact:
         '国用充裕以支军旅，然与民争利、工商凋敝，民负担加重；此为国家垄断经济之始，后世多效之。',
-      figures: [{ name: '桑弘羊' }, { name: '汉武帝' }],
+      figures: [{ name: '桑弘羊' }, { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' }],
     },
     {
       name: '独尊儒术',
@@ -86,7 +96,10 @@ export const HAN_W: DynastyProfile = {
       background:
         '董仲舒对天人三策，倡「诸不在六艺之科、孔子之术者，皆绝其道」，武帝纳之，兴太学、置五经博士。',
       impact: '儒学由诸子之一跃为国家意识形态，奠定两千余年中国士人政治与文化的思想主轴。',
-      figures: [{ name: '董仲舒' }, { name: '汉武帝' }],
+      figures: [
+        { name: '董仲舒', personId: 'dongzhong-21906' },
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+      ],
     },
   ],
   events: [
@@ -100,7 +113,11 @@ export const HAN_W: DynastyProfile = {
       outcome:
         '汉军四面楚歌，项羽突围至乌江自刎。前202年二月，刘邦于定陶氾水之阳称帝，国号汉，后定都长安。',
       impact: '结束秦末大乱，开启两汉四百年基业；「楚汉相争」成中国史上经典对决。',
-      figures: [{ name: '刘邦' }, { name: '项羽' }, { name: '韩信' }],
+      figures: [
+        { name: '刘邦', personId: 'liubang-16622' },
+        { name: '项羽', personId: 'wk-Q182266' },
+        { name: '韩信', personId: 'hanxin-22437' },
+      ],
     },
     {
       year: -200,
@@ -111,7 +128,11 @@ export const HAN_W: DynastyProfile = {
       background: '韩王信叛降匈奴，刘邦亲率大军北征，轻敌冒进，被冒顿单于四十万骑围于白登山七日。',
       outcome: '用陈平计重赂阏氏得脱。此后汉对匈奴行「和亲」：嫁公主、输缯絮酒食，以缓边患。',
       impact: '汉初国力未复，忍辱和亲以图休养；至武帝时国力充实，乃转守为攻。',
-      figures: [{ name: '刘邦' }, { name: '陈平' }, { name: '冒顿单于' }],
+      figures: [
+        { name: '刘邦', personId: 'liubang-16622' },
+        { name: '陈平', personId: 'chenping-139383' },
+        { name: '冒顿单于' },
+      ],
     },
     {
       year: -180,
@@ -135,7 +156,7 @@ export const HAN_W: DynastyProfile = {
       background: '晁错上《削藩策》，力主削夺诸侯支郡，吴王刘濞遂联合楚、赵等七国举兵反。',
       outcome: '景帝一度斩晁错以求和，乱不止；乃命周亚夫击之，绝吴楚粮道，三月平定，吴王濞被杀。',
       impact: '中央威信大振，诸侯势力大削，为武帝推行推恩令、彻底集权铺路。',
-      figures: [{ name: '汉景帝' }, { name: '晁错' }, { name: '周亚夫' }],
+      figures: [{ name: '汉景帝' }, { name: '晁错', personId: 'chaocuo-3019' }, { name: '周亚夫' }],
     },
     {
       year: -138,
@@ -147,7 +168,10 @@ export const HAN_W: DynastyProfile = {
       outcome:
         '张骞历大宛、康居、大月氏、大夏而归，前后十余年；后又再度出使乌孙，西域诸国多遣使通汉。',
       impact: '开辟丝绸之路，中原与中亚、西亚互通有无，世界文明交流格局自此展开。',
-      figures: [{ name: '张骞' }, { name: '汉武帝' }],
+      figures: [
+        { name: '张骞', personId: 'zhangqian-176395' },
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+      ],
     },
     {
       year: -127,
@@ -158,7 +182,11 @@ export const HAN_W: DynastyProfile = {
       background: '国力既盛，武帝改和亲为征伐，先后以卫青、霍去病统军出塞。',
       outcome: '前119年漠北之战，卫青、霍去病分道深入，霍去病封狼居胥，匈奴远遁，「漠南无王庭」。',
       impact: '解除匈奴对北疆的威胁，汉置河西四郡、通西域，帝国声威远播。',
-      figures: [{ name: '卫青' }, { name: '霍去病' }, { name: '汉武帝' }],
+      figures: [
+        { name: '卫青', personId: 'weiqing-67604' },
+        { name: '霍去病', personId: 'huoqu-432543' },
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+      ],
     },
     {
       year: -91,
@@ -169,7 +197,11 @@ export const HAN_W: DynastyProfile = {
       background: '武帝晚年多病，宠臣江充与太子有隙，遂借「巫蛊」构陷，言宫中有蛊气。',
       outcome: '太子刘据被迫起兵诛江充，兵败亡走，自杀于湖县；事后武帝悔悟，族江充、筑思子宫。',
       impact: '武帝晚年政局的重大转折，储位空虚，后立幼子刘弗陵，托孤霍光，西汉由盛转衰。',
-      figures: [{ name: '汉武帝' }, { name: '江充' }, { name: '刘据' }],
+      figures: [
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+        { name: '江充', personId: 'jiangchong-411169' },
+        { name: '刘据', personId: 'liuju-31738' },
+      ],
     },
     {
       year: -60,
@@ -180,7 +212,7 @@ export const HAN_W: DynastyProfile = {
       background: '经武帝以来经营，汉与匈奴争夺西域；宣帝时匈奴日衰，西域诸国多附汉。',
       outcome: '以郑吉为首任西域都护，监护南北道诸国，西域正式归属汉朝版图。',
       impact: '标志西域纳入中国中央政权管辖之始，丝路畅通，中西交流鼎盛。',
-      figures: [{ name: '郑吉' }, { name: '汉宣帝' }],
+      figures: [{ name: '郑吉', personId: 'zhengji-27970' }, { name: '汉宣帝' }],
     },
   ],
   culture: [
@@ -193,7 +225,7 @@ export const HAN_W: DynastyProfile = {
       background:
         '司马迁承父司马谈之志，继任太史令；因李陵之祸受宫刑，忍辱著述，以「究天人之际，通古今之变」自期。',
       impact: '开创纪传体史书体例，为后世「二十四史」之典范，亦为中国传记文学的高峰。',
-      figures: [{ name: '司马迁' }],
+      figures: [{ name: '司马迁', personId: 'sima-166814' }],
       works: ['《史记》'],
     },
     {
@@ -203,7 +235,10 @@ export const HAN_W: DynastyProfile = {
       source: '《汉书·艺文志·诗赋略》',
       background: '大一统帝国的气象与宫廷的铺张，催生了以铺叙夸饰见长的大赋。',
       impact: '与唐诗、宋词并称一代文学，「赋」体确立并影响后世骈文。',
-      figures: [{ name: '司马相如' }, { name: '扬雄' }],
+      figures: [
+        { name: '司马相如', personId: 'sima-135327' },
+        { name: '扬雄', personId: 'wk-Q553520' },
+      ],
       works: ['《子虚赋》', '《上林赋》', '《长杨赋》'],
     },
     {
@@ -256,7 +291,7 @@ export const HAN_W: DynastyProfile = {
       source: '《汉书·西域传》《张骞传》',
       background: '张骞通西域后，汉置河西四郡、西域都护，保障商路安全。',
       impact: '丝绸、瓷器西传，葡萄、苜蓿、胡麻、佛教东来，成为东西文明交流的大动脉。',
-      figures: [{ name: '张骞' }],
+      figures: [{ name: '张骞', personId: 'zhangqian-176395' }],
       works: [],
     },
   ],

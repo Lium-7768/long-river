@@ -22,7 +22,10 @@ export const MING: DynastyProfile = {
         '太祖以胡惟庸案为由，罢中书省、废丞相，永废之，权分六部；然政事繁巨，后世遂设殿阁大学士入直文渊阁，参预机务，是为内阁。',
       impact:
         '皇权空前强化，丞相制度终结；内阁无丞相之名而行部分相权之实，然票拟须经司礼监批红，遂开中后期内阁与宦官相制衡、相勾结之局。',
-      figures: [{ name: '朱元璋' }, { name: '张居正' }],
+      figures: [
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+        { name: '张居正', personId: 'zhangju-69011' },
+      ],
     },
     {
       name: '厂卫特务制度',
@@ -34,7 +37,10 @@ export const MING: DynastyProfile = {
       background:
         '太祖为监察百官、巩固皇权，设锦衣卫掌诏狱；成祖设东厂，由宦官领之，后又有西厂、内行厂。',
       impact: '法外侦缉、刑讯横行，成为明代政治黑暗与恐怖统治的象征，激化君臣、官民矛盾。',
-      figures: [{ name: '朱元璋' }, { name: '朱棣' }],
+      figures: [
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+        { name: '朱棣', personId: 'zhudi-30151' },
+      ],
     },
     {
       name: '卫所制',
@@ -46,7 +52,10 @@ export const MING: DynastyProfile = {
       background: '太祖仿府兵之意，以卫所编军，寓兵于农，军屯自给，力图「养兵百万不费百姓一粟」。',
       impact:
         '前期兵源稳定、军费较省；然承平日久、屯田废弛、军户逃亡，卫所制崩坏，中后期改行募兵（戚家军等）。',
-      figures: [{ name: '朱元璋' }, { name: '戚继光' }],
+      figures: [
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+        { name: '戚继光', personId: 'qiji-29605' },
+      ],
     },
     {
       name: '八股取士',
@@ -59,7 +68,7 @@ export const MING: DynastyProfile = {
         '太祖定科举程式，成化后八股（破题、承题、起讲、八比）定型，考生须「代圣贤立言」。',
       impact:
         '选拔公平、标准统一，然内容僵化、窒息思想，士人皓首穷经，科举沦为利禄之途，为后世诟病。',
-      figures: [{ name: '朱元璋' }],
+      figures: [{ name: '朱元璋', personId: 'zhuyuan-30148' }],
     },
     {
       name: '一条鞭法',
@@ -72,7 +81,7 @@ export const MING: DynastyProfile = {
         '明中叶赋役繁重、簿册紊乱，张居正执政，于万历九年推行一条鞭法，将田赋、徭役、杂税合并按亩折银。',
       impact:
         '简化税制、以银代役，促进商品经济发展与白银货币化；然推行有欠彻底，明末加派「三饷」反致民困。',
-      figures: [{ name: '张居正' }, { name: '明神宗' }],
+      figures: [{ name: '张居正', personId: 'zhangju-69011' }, { name: '明神宗' }],
     },
     {
       name: '督抚与地方三司',
@@ -95,7 +104,7 @@ export const MING: DynastyProfile = {
       background: '太祖惩张士诚、方国珍余部通海，行海禁；以册封—朝贡为对外交往主渠道。',
       impact:
         '前期保境安民、府库充盈，然禁海阻绝民间贸易，东南倭患与走私因之而起，至隆庆开关（1567）始局部弛禁。',
-      figures: [{ name: '朱元璋' }],
+      figures: [{ name: '朱元璋', personId: 'zhuyuan-30148' }],
     },
   ],
   events: [
@@ -110,7 +119,11 @@ export const MING: DynastyProfile = {
       outcome:
         '1368年正月朱元璋称帝于应天（南京），国号大明，年号洪武；同年徐达北伐，元顺帝北遁，元亡。',
       impact: '结束蒙元近百年统治，恢复汉族政权，开明朝二百七十六年基业。',
-      figures: [{ name: '朱元璋' }, { name: '徐达' }, { name: '刘伯温' }],
+      figures: [
+        { name: '朱元璋', personId: 'zhuyuan-30148' },
+        { name: '徐达', personId: 'xuda-66290' },
+        { name: '刘伯温' },
+      ],
     },
     {
       year: 1399,
@@ -121,7 +134,10 @@ export const MING: DynastyProfile = {
       background: '太祖立皇太孙允炆（建文帝），削藩，燕王朱棣起兵反，号「靖难」。',
       outcome: '经三年余鏖战，1402年朱棣攻入南京，建文帝下落不明，朱棣即位，改元永乐。',
       impact: '成祖迁都北京、下西洋、修《永乐大典》，然「靖难」开藩王夺位之例，皇室相残。',
-      figures: [{ name: '朱棣' }, { name: '建文帝' }],
+      figures: [
+        { name: '朱棣', personId: 'zhudi-30151' },
+        { name: '建文帝', personId: 'zhuyun-30150' },
+      ],
     },
     {
       year: 1405,
@@ -134,7 +150,10 @@ export const MING: DynastyProfile = {
         '1405–1433年七次远航，最远抵东非、红海，宝船巨舰、随行二万余人，遍历东南亚、印度、阿拉伯、非洲。',
       impact:
         '宣扬明朝声威、促进中外交流，是地理大发现前的航海高峰；然耗资巨大、随国力转衰而止，未转为持续的海上经营。',
-      figures: [{ name: '郑和' }, { name: '朱棣' }],
+      figures: [
+        { name: '郑和', personId: 'zhenghe-132376' },
+        { name: '朱棣', personId: 'zhudi-30151' },
+      ],
     },
     {
       year: 1449,
@@ -145,7 +164,7 @@ export const MING: DynastyProfile = {
       background: '瓦剌太师也先南下，宦官王振怂恿英宗亲征，仓促出师，指挥失当。',
       outcome: '明军溃于土木堡，英宗被俘；于谦拥立景帝、率军民死守，北京保卫战获胜，后英宗获释。',
       impact: '明朝由盛转衰之始，军力大损、边患日深；于谦北京保卫战成民族气节之典范。',
-      figures: [{ name: '于谦' }, { name: '明英宗' }],
+      figures: [{ name: '于谦', personId: 'yuqian-34504' }, { name: '明英宗' }],
     },
     {
       year: 1573,
@@ -157,7 +176,11 @@ export const MING: DynastyProfile = {
       outcome:
         '行考成法整肃吏治，清丈田亩、推行一条鞭法，用戚继光、李成梁固边防，十年间太仓粟可支数年。',
       impact: '「万历中兴」短暂回光；然改革死后遭反攻、多被废，明政复趋败坏。',
-      figures: [{ name: '张居正' }, { name: '戚继光' }, { name: '明神宗' }],
+      figures: [
+        { name: '张居正', personId: 'zhangju-69011' },
+        { name: '戚继光', personId: 'qiji-29605' },
+        { name: '明神宗' },
+      ],
     },
     {
       year: 1604,
@@ -170,7 +193,11 @@ export const MING: DynastyProfile = {
       outcome:
         '天启年间魏忠贤擅权，兴「东林党狱」，捕杀杨涟、左光斗等；崇祯初平反，然党争尾大不掉。',
       impact: '党争消耗国力、延误国事，官场倾轧不已，为明亡之内因之一。',
-      figures: [{ name: '顾宪成' }, { name: '杨涟' }, { name: '魏忠贤' }],
+      figures: [
+        { name: '顾宪成', personId: 'guxian-34742' },
+        { name: '杨涟', personId: 'yanglian-35127' },
+        { name: '魏忠贤', personId: 'weizhong-65954' },
+      ],
     },
     {
       year: 1616,
@@ -181,7 +208,10 @@ export const MING: DynastyProfile = {
       background: '建州女真努尔哈赤统一各部，1616年称汗建后金（后改清），以「七大恨」告天伐明。',
       outcome: '1619年萨尔浒之战，明军四路进剿被各个击破，辽东自此转攻为守。',
       impact: '明朝东北防线崩溃，辽饷加派、民变四起，内外交困之局成。',
-      figures: [{ name: '努尔哈赤' }, { name: '杨镐' }],
+      figures: [
+        { name: '努尔哈赤', personId: 'nuer-339768' },
+        { name: '杨镐', personId: 'yanggao-16250' },
+      ],
     },
     {
       year: 1627,
@@ -192,7 +222,10 @@ export const MING: DynastyProfile = {
       background: '明末灾荒频仍、赋役（辽饷、剿饷、练饷）苛重，陕西等地饥民揭竿。',
       outcome: '高迎祥、李自成、张献忠转战南北，「迎闯王、不纳粮」深入人心；1644年李自成破北京。',
       impact: '与辽东兵事两面夹击，耗尽明朝国力，为明朝覆亡的直接推手。',
-      figures: [{ name: '李自成' }, { name: '张献忠' }],
+      figures: [
+        { name: '李自成', personId: 'lizi-65627' },
+        { name: '张献忠', personId: 'zhangxian-47348' },
+      ],
     },
     {
       year: 1644,
@@ -203,7 +236,11 @@ export const MING: DynastyProfile = {
       background: '李自成大顺军经山西直逼北京，明廷无力抵御；关外清军虎视。',
       outcome: '1644年三月李自成入北京，崇祯自缢于煤山；吴三桂引清兵入关，李自成败走，清定鼎北京。',
       impact: '明朝二百七十六年而亡，中国进入清朝统治；「甲申之变」成明清易代的关键节点。',
-      figures: [{ name: '崇祯帝' }, { name: '李自成' }, { name: '吴三桂' }],
+      figures: [
+        { name: '崇祯帝' },
+        { name: '李自成', personId: 'lizi-65627' },
+        { name: '吴三桂', personId: 'wusan-58844' },
+      ],
     },
   ],
   culture: [
@@ -214,7 +251,11 @@ export const MING: DynastyProfile = {
       source: '《明史·艺文志》',
       background: '明代城市经济繁荣、市民文化兴起、印刷业发达，章回小说得以广泛流传。',
       impact: '开创并确立章回体长篇小说的典范，深刻影响中国文学与民间文化。',
-      figures: [{ name: '罗贯中' }, { name: '施耐庵' }, { name: '吴承恩' }],
+      figures: [
+        { name: '罗贯中', personId: 'luoguan-690980' },
+        { name: '施耐庵', personId: 'shinai-511354' },
+        { name: '吴承恩', personId: 'wucheng-128185' },
+      ],
       works: ['《三国演义》', '《水浒传》', '《西游记》'],
     },
     {
@@ -225,7 +266,7 @@ export const MING: DynastyProfile = {
       source: '《明史·方伎传·李时珍》（万历十八年，1580年成书）',
       background: '李时珍遍访名医、采集标本、亲尝药性，穷毕生之力重修本草。',
       impact: '被誉为「东方药物巨典」，收载植物、动物、矿物，达尔文称之为「中国古代百科全书」。',
-      figures: [{ name: '李时珍' }],
+      figures: [{ name: '李时珍', personId: 'lishi-127882' }],
       works: ['《本草纲目》'],
     },
     {
@@ -236,7 +277,7 @@ export const MING: DynastyProfile = {
       source: '《明史·艺文志》',
       background: '明末实学思潮与工商业发展，促成对生产技术的系统总结。',
       impact: '收录冶金、纺织、造纸、制盐、火药等技术，是研究古代科技的珍贵文献。',
-      figures: [{ name: '宋应星' }],
+      figures: [{ name: '宋应星', personId: 'songying-65601' }],
       works: ['《天工开物》'],
     },
     {
@@ -247,7 +288,10 @@ export const MING: DynastyProfile = {
       source: '《明史·艺文志》（永乐六年，1408年）',
       background: '成祖欲「辑天下古今事物」，荟萃群书成一大典。',
       impact: '共二万二千余卷、三亿余字，早于西方百科全书数百年；惜多散佚，现存不足百分之四。',
-      figures: [{ name: '解缙' }, { name: '朱棣' }],
+      figures: [
+        { name: '解缙', personId: 'jiejin-34469' },
+        { name: '朱棣', personId: 'zhudi-30151' },
+      ],
       works: ['《永乐大典》'],
     },
     {
@@ -279,7 +323,10 @@ export const MING: DynastyProfile = {
       source: '《明史·徐光启传》',
       background: '明末耶稣会士来华，徐光启等士人接纳西方科学，翻译介绍。',
       impact: '汇通中西，为中国近代科学的启蒙；《几何原本》前六卷为此后三百年之标准译本。',
-      figures: [{ name: '徐光启' }, { name: '利玛窦' }],
+      figures: [
+        { name: '徐光启', personId: 'xuguang-30598' },
+        { name: '利玛窦', personId: 'lima-30597' },
+      ],
       works: ['《农政全书》', '《几何原本》译'],
     },
   ],
