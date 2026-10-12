@@ -203,4 +203,16 @@ export const api = {
         reign_end: number | null;
       }[];
     }>('/api/emperors', dynasty ? { dynasty } : {}),
+  nianhao: (dynasty?: string, q?: string) =>
+    get<{
+      ok: true;
+      data: {
+        id: number;
+        dynasty: string;
+        dynasty_id: string;
+        name: string;
+        start: number | null;
+        end: number | null;
+      }[];
+    }>('/api/nianhao', { ...(dynasty ? { dynasty } : {}), ...(q ? { q } : {}) }),
 };

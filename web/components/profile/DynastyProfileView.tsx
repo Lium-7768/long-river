@@ -11,6 +11,7 @@ import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 import { EmperorPanel } from '@/components/profile/EmperorPanel';
+import { NianhaoPanel } from '@/components/profile/NianhaoPanel';
 import type { PersonBrief } from '@/lib/api';
 import type { Dynasty } from '@/content/dynasties';
 
@@ -74,6 +75,11 @@ export function DynastyProfileView({
         {/* 帝王世系 */}
         <Block title="帝王世系" sub="按即位年排序 · 来自 Wikidata + 正史本名">
           <EmperorPanel dynastyId={dynasty.id} />
+        </Block>
+
+        {/* 年号 */}
+        <Block title="年号" sub="按起始年排序 · 年号 ↔ 公元纪年">
+          <NianhaoPanel dynastyId={dynasty.id} />
         </Block>
 
         {/* ① 代表人物 */}

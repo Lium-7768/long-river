@@ -367,6 +367,39 @@ function handle(pathname, searchParams) {
     return ok(rows, { dynasty: dynasty || 'all', n: rows.length });
   }
 
+  if (p === '/api/nianhao') {
+    const dynasty = searchParams.get('dynasty');
+    const q = searchParams.get('q');
+    const w = [];
+    const b = [];
+    if (dynasty) { w.push('dynasty_id = ?'); b.push(dynasty); }
+    if (q) { w.push('name LIKE ?'); b.push(`%${q}%`); }
+    const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
+    const rows = db.prepare(
+      `SELECT id, dynasty, dynasty_id, name, start, end
+       FROM nianhao ${wsql} ORDER BY COALESCE(start, 9999) ASC`
+    ).all(...b);
+    return ok(rows, { dynasty: dynasty || 'all', q: q || '', n: rows.length });
+  }
+
+  if (p === '/api/nianhao-lookup') {
+    // 年号 + 年序 → 公元年：?dynasty=tang&name=贞观&year=1
+    const name = searchParams.get('name');
+    if (!name) return err('需要 name 参数');
+    const year = parseInt(searchParams.get('year') || '1', 10);
+    const dynasty = searchParams.get('dynasty');
+    const w = dynasty ? 'AND dynasty_id = ?' : '';
+    const b = dynasty ? [name, dynasty] : [name];
+    const rows = db.prepare(
+      `SELECT id, dynasty, dynasty_id, name, start, end
+       FROM nianhao WHERE name = ? ${w} ORDER BY COALESCE(start, 9999) ASC LIMIT 5`
+    ).all(...b);
+    if (!rows.length) return ok({ found: false, name, year });
+    const r = rows[0];
+    const ad = r.start != null ? r.start + (year - 1) : null;
+    return ok({ found: true, ...r, year, ad_year: ad });
+  }
+
   return err('not found', 404);
 }
 
