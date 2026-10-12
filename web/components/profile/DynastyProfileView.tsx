@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import type { DynastyProfile } from '@/content/profiles/types';
-import { fmtRange, fmtRangeBP, fmtYear, fmtYearBP } from '@/components/river/year';
+import { fmtRange, fmtYear } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { useDynastyPoems } from '@/components/persons/use-poems';
 import { getCoverage } from '@/content/territory/coverage';
@@ -278,7 +278,7 @@ function Card({
   onClick: () => void;
 }) {
   const c = COLOR[color];
-  const yr = year != null ? (endYear != null ? fmtRangeBP(year, endYear) : fmtYear(year)) : '';
+  const yr = year != null ? (endYear != null ? fmtRange(year, endYear) : fmtYear(year)) : '';
   return (
     <button
       onClick={onClick}
@@ -301,12 +301,12 @@ function Card({
 }
 
 function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => void }) {
-  // 卡片位置紧张：用短格式（不带公元），title 里放完整
+  // 完整格式（始终带「公元前/公元」前缀）
   const lifeShort =
     person.birth && person.death
-      ? fmtRangeBP(person.birth, person.death)
+      ? fmtRange(person.birth, person.death)
       : person.birth
-        ? fmtYearBP(person.birth)
+        ? fmtYear(person.birth)
         : '';
   const lifeFull =
     person.birth && person.death
