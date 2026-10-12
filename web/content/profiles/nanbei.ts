@@ -32,7 +32,10 @@ export const NANBEI: DynastyProfile = {
       desc: '五家一邻长、五邻一里长、五里一党长，取代宗主督护，清理户籍。',
       background: '北魏初行宗主督护、户籍隐匿，冯太后纳李冲议立三长。',
       impact: '户口大增、赋税足额，强化中央对基层的控制，均田得以推行。',
-      figures: [{ name: '冯太后' }, { name: '李冲', personId: 'lichong-19785' }],
+      figures: [
+        { name: '冯太后', personId: 'wk-Q3276928' },
+        { name: '李冲', personId: 'lichong-19785' },
+      ],
     },
     {
       name: '孝文帝汉化改革',
@@ -74,7 +77,10 @@ export const NANBEI: DynastyProfile = {
       background: '鲜卑拓跋部建北魏，历数代征战，逐一翦灭十六国诸政权。',
       outcome: '439年灭北凉，北方统一；南方为刘宋，南北对峙格局确立。',
       impact: '北朝统一为汉化改革与北强南弱之势奠定基础。',
-      figures: [{ name: '北魏太武帝' }, { name: '崔浩', personId: 'cuihao-168749' }],
+      figures: [
+        { name: '北魏太武帝', personId: 'wk-Q1194963' },
+        { name: '崔浩', personId: 'cuihao-168749' },
+      ],
     },
     {
       year: 494,
@@ -107,7 +113,10 @@ export const NANBEI: DynastyProfile = {
       background: '北周行府兵、整吏治，国势日强；北齐君主昏暴、政治腐败。',
       outcome: '577年北周武帝宇文邕攻灭北齐，北方复归一统。',
       impact: '北方统一、国力鼎盛，为隋代周并统一南北铺路。',
-      figures: [{ name: '北周武帝', personId: 'cbdb-31773' }, { name: '高纬' }],
+      figures: [
+        { name: '北周武帝', personId: 'cbdb-31773' },
+        { name: '高纬', personId: 'wk-Q718181' },
+      ],
     },
     {
       year: 589,
@@ -130,7 +139,10 @@ export const NANBEI: DynastyProfile = {
       desc: '南北朝佛教鼎盛，译经、造像、石窟艺术蔚为大观。',
       background: '乱世求安，南北君主多崇佛，寺院经济与译经事业发达。',
       impact: '云冈、龙门、敦煌石窟相继开凿，佛教艺术达于高峰。',
-      figures: [{ name: '鸠摩罗什' }, { name: '达摩' }],
+      figures: [
+        { name: '鸠摩罗什', personId: 'wk-Q335293' },
+        { name: '达摩', personId: 'wk-Q187172' },
+      ],
       works: ['云冈石窟', '龙门石窟'],
     },
     {
@@ -139,7 +151,10 @@ export const NANBEI: DynastyProfile = {
       desc: '刘勰《文心雕龙》总结文学理论，钟嵘《诗品》评骘五言诗。',
       background: '南朝文风绮丽、文学自觉，理论批评随之兴盛。',
       impact: '中国文学批评史上的里程碑，体系宏阔、影响深远。',
-      figures: [{ name: '刘勰' }, { name: '钟嵘' }],
+      figures: [
+        { name: '刘勰', personId: 'wk-Q704558' },
+        { name: '钟嵘', personId: 'wk-Q6353207' },
+      ],
       works: ['《文心雕龙》', '《诗品》'],
     },
     {
@@ -148,7 +163,10 @@ export const NANBEI: DynastyProfile = {
       desc: '谢灵运开山水诗一派，与陶渊明并称「陶谢」。',
       background: '南朝士人寄情山水，山水审美兴盛。',
       impact: '确立山水诗传统，为唐诗山水田园一脉之源。',
-      figures: [{ name: '谢灵运', personId: 'xieling-524277' }, { name: '谢朓' }],
+      figures: [
+        { name: '谢灵运', personId: 'xieling-524277' },
+        { name: '谢朓', personId: 'wk-Q6133576' },
+      ],
       works: ['《登池上楼》'],
     },
     {
@@ -157,7 +175,10 @@ export const NANBEI: DynastyProfile = {
       desc: '郦道元《水经注》疏证水道地理；贾思勰《齐民要术》总结农学。',
       background: '南北地理、农业知识积累，实学著作涌现。',
       impact: '《水经注》为地理名著、《齐民要术》为现存最早最完整农书。',
-      figures: [{ name: '郦道元', personId: 'lidao-460969' }, { name: '贾思勰' }],
+      figures: [
+        { name: '郦道元', personId: 'lidao-460969' },
+        { name: '贾思勰', personId: 'wk-Q6697537' },
+      ],
       works: ['《水经注》', '《齐民要术》'],
     },
     {
@@ -166,7 +187,7 @@ export const NANBEI: DynastyProfile = {
       desc: '南帖北碑：南朝帖学承王羲之，北朝碑刻雄强（魏碑）。',
       background: '南北朝书风分野，南朝尚韵、北朝尚质。',
       impact: '「魏碑」与南帖并为中国书法两大传统，影响隋唐书风。',
-      figures: [{ name: '郑道昭' }],
+      figures: [{ name: '郑道昭', personId: 'wk-Q11643938' }],
       works: ['《张猛龙碑》'],
     },
     {
@@ -175,7 +196,7 @@ export const NANBEI: DynastyProfile = {
       desc: '北魏开凿云冈、龙门石窟，佛像雄伟，融印度、西域与汉式风格。',
       background: '北魏崇佛，皇室开窟造像，以彰功德、固信仰。',
       impact: '中国佛教石窟艺术的巅峰之一，见证民族与艺术的大融合。',
-      figures: [{ name: '昙曜' }],
+      figures: [{ name: '昙曜', personId: 'wk-Q10322249' }],
       works: ['云冈石窟', '龙门石窟'],
     },
   ],

@@ -185,7 +185,10 @@ export const TANG: DynastyProfile = {
         '641年文成公主入吐蕃，携佛像、典籍、工匠、种子，唐蕃「和同为一家」，松赞干布为公主筑城。',
       impact:
         '促进汉藏文化交流与经济往来，佛教与先进技术传入吐蕃，奠定唐蕃虽时有战而终以和为主之格局。',
-      figures: [{ name: '文成公主' }, { name: '松赞干布', personId: 'bosu-551218' }],
+      figures: [
+        { name: '文成公主', personId: 'wk-Q256555' },
+        { name: '松赞干布', personId: 'bosu-551218' },
+      ],
     },
     {
       year: 690,

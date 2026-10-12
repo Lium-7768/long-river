@@ -20,7 +20,7 @@ export const WUDAI: DynastyProfile = {
       impact: '政权更替频繁、社会动荡；北宋「强干弱枝、重文抑武」即因之而发。',
       figures: [
         { name: '朱温', personId: 'cbdb-377600' },
-        { name: '李存勖' },
+        { name: '李存勖', personId: 'wk-Q706815' },
         { name: '石敬瑭', personId: 'wk-Q1189495' },
       ],
     },
@@ -153,7 +153,7 @@ export const WUDAI: DynastyProfile = {
       figures: [
         { name: '荆浩', personId: 'jinghao-43819' },
         { name: '董源', personId: 'dongyuan-49698' },
-        { name: '巨然' },
+        { name: '巨然', personId: 'wk-Q2671678' },
       ],
       works: ['《匡庐图》', '《潇湘图》'],
     },

@@ -35,7 +35,7 @@ export const ZHOU_E: DynastyProfile = {
       figures: [
         { name: '商鞅', personId: 'sj-shangyang-23' },
         { name: '吴起', personId: 'wuqi-592854' },
-        { name: '李悝' },
+        { name: '李悝', personId: 'wk-Q716190' },
       ],
     },
     {
@@ -69,7 +69,7 @@ export const ZHOU_E: DynastyProfile = {
       figures: [
         { name: '孔子', personId: 'sj-kongzi-68' },
         { name: '老子', personId: 'sj-laozi-18' },
-        { name: '墨子' },
+        { name: '墨子', personId: 'wk-Q272411' },
         { name: '韩非', personId: 'sj-hanfei-41' },
       ],
     },
@@ -108,7 +108,7 @@ export const ZHOU_E: DynastyProfile = {
       impact: '晋楚争霸成为春秋主线，华夏与楚文化加速交融。',
       figures: [
         { name: '晋文公', personId: 'wk-Q561973' },
-        { name: '先轸' },
+        { name: '先轸', personId: 'wk-Q10827174' },
         { name: '楚成王', personId: 'wk-Q795905' },
       ],
     },
@@ -123,7 +123,7 @@ export const ZHOU_E: DynastyProfile = {
       figures: [
         { name: '赵襄子', personId: 'ws-史记-卷043-赵襄子' },
         { name: '魏桓子', personId: 'ws-史记-卷044-魏桓子' },
-        { name: '韩康子' },
+        { name: '韩康子', personId: 'wk-Q7195043' },
       ],
     },
     {
@@ -175,7 +175,7 @@ export const ZHOU_E: DynastyProfile = {
       desc: '《左传》以编年叙事详述春秋历史，文笔精妙，为史学名著。',
       background: '春秋战国史官文化发达，记言记事之史书涌现。',
       impact: '中国叙事散文与史学传统之典范，影响《史记》以降。',
-      figures: [{ name: '左丘明' }],
+      figures: [{ name: '左丘明', personId: 'wk-Q230192' }],
       works: ['《左传》', '《国语》'],
     },
     {

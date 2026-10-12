@@ -164,7 +164,7 @@ export const QIN: DynastyProfile = {
       figures: [
         { name: '秦始皇', personId: 'wk-Q7192' },
         { name: '李斯', personId: 'wk-Q152919' },
-        { name: '扶苏' },
+        { name: '扶苏', personId: 'wk-Q1268605' },
       ],
     },
     {
@@ -257,7 +257,7 @@ export const QIN: DynastyProfile = {
       source: '《说文解字·叙》',
       background: '秦政事繁剧，篆书笔画圆转费时，下层书吏遂以「草篆」为便，是为隶书之滥觞。',
       impact: '「隶变」是汉字发展史上的关键转折，推动书写效率与书法艺术的解放。',
-      figures: [{ name: '程邈' }],
+      figures: [{ name: '程邈', personId: 'wk-Q10452184' }],
       works: ['秦简隶书'],
     },
     {

@@ -124,7 +124,10 @@ export const HAN_E: DynastyProfile = {
         '和帝幼立，窦太后临朝，窦宪专权；和帝长成后借宦官郑众诛窦宪。此后如邓、阎、梁诸外戚与宦官反复争权。',
       outcome: '窦宪、梁冀等外戚嚣张一时，宦官五侯亦擅权乱政，皇帝多短寿，权柄屡易其手。',
       impact: '朝纲败坏、吏治黑暗，为东汉中后期的最大毒瘤，与党锢、黄巾并为其灭亡之因。',
-      figures: [{ name: '梁冀' }, { name: '汉桓帝', personId: 'liuzhi-30264' }],
+      figures: [
+        { name: '梁冀', personId: 'wk-Q1276331' },
+        { name: '汉桓帝', personId: 'liuzhi-30264' },
+      ],
     },
     {
       year: 166,
@@ -154,7 +157,7 @@ export const HAN_E: DynastyProfile = {
         '张角兄弟率黄巾军起，京师震动。灵帝解党锢、遣皇甫嵩、卢植等讨之，起义主力年余溃散，然余部绵延廿余年。',
       impact: '为镇压黄巾，朝廷放权地方州牧、刺史募兵，地方割据之势成，东汉名存实亡。',
       figures: [
-        { name: '张角' },
+        { name: '张角', personId: 'wk-Q197202' },
         { name: '皇甫嵩', personId: 'sj-huangfusong-95' },
         { name: '卢植', personId: 'luzhi-31521' },
       ],
@@ -259,7 +262,7 @@ export const HAN_E: DynastyProfile = {
       source: '《后汉书·张机传》',
       background: '汉末疫病流行、十室九空，张仲景遂精研医术，著书济世。',
       impact: '奠定中医临床医学基础，与《黄帝内经》同为中医经典，影响东亚医学千余年。',
-      figures: [{ name: '张仲景' }],
+      figures: [{ name: '张仲景', personId: 'wk-Q197350' }],
       works: ['《伤寒杂病论》'],
     },
     {

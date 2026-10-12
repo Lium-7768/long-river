@@ -21,7 +21,7 @@ export const ZHOU_W: DynastyProfile = {
       figures: [
         { name: '周武王', personId: 'ws-史记-卷004-周武王' },
         { name: '周公旦', personId: 'sj-zhougongdan-5' },
-        { name: '姜子牙' },
+        { name: '姜子牙', personId: 'wk-Q701488' },
       ],
     },
     {
@@ -80,7 +80,7 @@ export const ZHOU_W: DynastyProfile = {
       figures: [
         { name: '周武王', personId: 'ws-史记-卷004-周武王' },
         { name: '周公旦', personId: 'sj-zhougongdan-5' },
-        { name: '姜子牙' },
+        { name: '姜子牙', personId: 'wk-Q701488' },
       ],
     },
     {

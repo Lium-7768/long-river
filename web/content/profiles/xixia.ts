@@ -48,7 +48,10 @@ export const XIXIA: DynastyProfile = {
       desc: '创西夏文（国书），设蕃学以本族文字教学取士，兼行汉学。',
       background: '李元昊为强化民族认同，命野利仁荣创制西夏文字。',
       impact: '西夏文用于公文、佛经、碑刻，是研究党项历史文化的钥匙。',
-      figures: [{ name: '李元昊', personId: 'liyuan-339687' }, { name: '野利仁荣' }],
+      figures: [
+        { name: '李元昊', personId: 'liyuan-339687' },
+        { name: '野利仁荣', personId: 'wk-Q8051522' },
+      ],
     },
   ],
   events: [
@@ -83,7 +86,10 @@ export const XIXIA: DynastyProfile = {
       background: '宋神宗用兵西夏，徐禧筑永乐城，孤军突出。',
       outcome: '西夏倾国来攻，永乐城陷，宋军覆没，神宗为之痛悔。',
       impact: '宋夏战争再度受挫，双方长期拉锯于横山、河湟一线。',
-      figures: [{ name: '宋神宗', personId: 'zhaoxu-9006' }, { name: '梁太后' }],
+      figures: [
+        { name: '宋神宗', personId: 'zhaoxu-9006' },
+        { name: '梁太后', personId: 'wk-Q11113805' },
+      ],
     },
     {
       year: 1227,
@@ -106,7 +112,7 @@ export const XIXIA: DynastyProfile = {
       desc: '大量西夏文佛经、字典、文书传世，如《番汉合时掌中珠》。',
       background: '西夏立国后译经、编字书，西夏文广泛使用。',
       impact: '黑水城出土西夏文献震惊学界，成为「西夏学」之基石。',
-      figures: [{ name: '野利仁荣' }],
+      figures: [{ name: '野利仁荣', personId: 'wk-Q8051522' }],
       works: ['《番汉合时掌中珠》', '西夏文佛经'],
     },
     {

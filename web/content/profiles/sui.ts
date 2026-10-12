@@ -153,7 +153,7 @@ export const SUI: DynastyProfile = {
       desc: '隋崇佛教，广建寺院、度僧译经，天台宗、三论宗等开宗立派。',
       background: '隋文帝、炀帝都崇佛，以佛教维系人心、巩固统治。',
       impact: '佛教义学大兴，天台宗智顗创宗，为唐代佛教鼎盛铺路。',
-      figures: [{ name: '智顗' }],
+      figures: [{ name: '智顗', personId: 'wk-Q197778' }],
       works: ['《法华玄义》'],
     },
     {

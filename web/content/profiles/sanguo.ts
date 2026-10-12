@@ -17,7 +17,10 @@ export const SANGUO: DynastyProfile = {
       desc: '曹操招流民屯田、分军屯民屯，收租以供军国之用。',
       background: '汉末战乱、粮食奇缺，曹操采枣祗、韩浩之议许下屯田。',
       impact: '解决军粮问题、恢复生产，成为曹魏立国与统一北方之经济基础。',
-      figures: [{ name: '曹操', personId: 'caocao-30257' }, { name: '枣祗' }],
+      figures: [
+        { name: '曹操', personId: 'caocao-30257' },
+        { name: '枣祗', personId: 'wk-Q6150507' },
+      ],
     },
     {
       name: '九品中正制',
@@ -27,7 +30,10 @@ export const SANGUO: DynastyProfile = {
       desc: '各州郡设中正官，品评士人分九等，据以授官。',
       background: '汉末察举败坏，曹丕纳陈群之议立九品官人之法。',
       impact: '初期兼顾才德，后渐为门阀垄断，「上品无寒门」成门阀政治之阶。',
-      figures: [{ name: '曹丕', personId: 'wk-Q313333' }, { name: '陈群' }],
+      figures: [
+        { name: '曹丕', personId: 'wk-Q313333' },
+        { name: '陈群', personId: 'wk-Q11658395' },
+      ],
     },
     {
       name: '蜀汉丞相制',
@@ -155,7 +161,10 @@ export const SANGUO: DynastyProfile = {
       desc: '钟繇、皇象等善书，顾恺之等开人物画新风。',
       background: '汉末魏晋艺术自觉，士人寄情书画。',
       impact: '为中国书法、绘画艺术的自律发展奠定基础。',
-      figures: [{ name: '钟繇' }, { name: '顾恺之', personId: 'gb-晋书-卷92-顾恺之' }],
+      figures: [
+        { name: '钟繇', personId: 'wk-Q197825' },
+        { name: '顾恺之', personId: 'gb-晋书-卷92-顾恺之' },
+      ],
       works: ['《洛神赋图》'],
     },
     {

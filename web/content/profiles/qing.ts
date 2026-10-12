@@ -95,7 +95,10 @@ export const QING: DynastyProfile = {
       background:
         '清朝为压制汉人反清意识与异端思想，康、雍、乾三朝屡兴文字狱，如《南山集》案、《字贯》案。',
       impact: '士人噤若寒蝉、转向考据训诂（乾嘉学派），思想活力受抑，是清朝思想专制的典型。',
-      figures: [{ name: '康熙帝', personId: 'xuanye-339772' }, { name: '乾隆帝' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '乾隆帝', personId: 'aixin-55870' },
+      ],
     },
     {
       name: '闭关锁国与广州十三行',
@@ -107,7 +110,7 @@ export const QING: DynastyProfile = {
       background:
         '清以天朝自居，视外贸为「怀柔远人」；乾隆二十二年（1757）令西洋贸易限于广州，由「公行」代理。',
       impact: '短期维持了社会「稳定」，长期则隔绝于世界工业化潮流，埋下近代落后挨打之祸根。',
-      figures: [{ name: '乾隆帝' }],
+      figures: [{ name: '乾隆帝', personId: 'aixin-55870' }],
     },
   ],
   events: [
@@ -164,7 +167,10 @@ export const QING: DynastyProfile = {
       background: '沙俄东侵黑龙江流域，筑雅克萨城；康熙两次用兵克雅克萨，遂议和。',
       outcome: '1689年索额图与戈洛文订约于尼布楚：以格尔必齐河、额尔古纳河为界，俄撤雅克萨。',
       impact: '确立中俄东段边界，保东北百余年安宁；是清朝对外关系中难得的平等条约。',
-      figures: [{ name: '康熙帝', personId: 'xuanye-339772' }, { name: '索额图' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '索额图', personId: 'wk-Q7561262' },
+      ],
     },
     {
       year: 1722,
@@ -179,7 +185,7 @@ export const QING: DynastyProfile = {
       figures: [
         { name: '康熙帝', personId: 'xuanye-339772' },
         { name: '雍正帝', personId: 'aixin-63801' },
-        { name: '乾隆帝' },
+        { name: '乾隆帝', personId: 'aixin-55870' },
       ],
     },
     {
@@ -251,7 +257,7 @@ export const QING: DynastyProfile = {
       outcome: '行新政百余日，触动守旧势力；慈禧发动政变，囚光绪、废新政，谭嗣同等六君子遇害。',
       impact: '变法虽败，然启蒙思想、传播新知，为辛亥革命作了思想与舆论准备。',
       figures: [
-        { name: '康有为' },
+        { name: '康有为', personId: 'wk-Q360135' },
         { name: '梁启超', personId: 'liangqi-691198' },
         { name: '光绪帝', personId: 'zaitian-339779' },
       ],
@@ -267,8 +273,8 @@ export const QING: DynastyProfile = {
       outcome: '各省纷纷独立，孙中山任临时大总统于南京；1912年2月12日宣统帝颁布退位诏书，清亡。',
       impact: '结束两千余年君主专制，建立亚洲第一个共和国，中国历史翻开新的一页。',
       figures: [
-        { name: '孙中山' },
-        { name: '袁世凯' },
+        { name: '孙中山', personId: 'wk-Q8573' },
+        { name: '袁世凯', personId: 'wk-Q210329' },
         { name: '宣统帝', personId: 'puyi-339780' },
       ],
     },
@@ -282,7 +288,10 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》（乾隆四十七年，1782年）',
       background: '乾隆为「稽古右文」、寓禁于征，开馆征书、编修十年而成。',
       impact: '保存大量典籍，然编修中查禁、删改、「焚毁」违碍之书，文化功过并存。',
-      figures: [{ name: '乾隆帝' }, { name: '纪昀', personId: 'jiyun-30080' }],
+      figures: [
+        { name: '乾隆帝', personId: 'aixin-55870' },
+        { name: '纪昀', personId: 'jiyun-30080' },
+      ],
       works: ['《四库全书》'],
     },
     {
@@ -292,7 +301,7 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》',
       background: '曹家由盛而衰，作者以切身之痛，写贾府兴衰、世情百态。',
       impact: '以细腻笔触与深刻悲剧意识，达中国古典小说艺术之极，形成「红学」。',
-      figures: [{ name: '曹雪芹' }],
+      figures: [{ name: '曹雪芹', personId: 'wk-Q182874' }],
       works: ['《红楼梦》'],
     },
     {
@@ -302,7 +311,10 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》及清代戏曲史料',
       background: '乾隆五十五年（1790）徽班进京，与汉调等合流，经不断融合而成京剧。',
       impact: '集中国戏曲之大成，行当齐全、唱念做打并重，成为最具代表性的国粹。',
-      figures: [{ name: '程长庚' }, { name: '谭鑫培' }],
+      figures: [
+        { name: '程长庚', personId: 'wk-Q7216102' },
+        { name: '谭鑫培', personId: 'wk-Q4451367' },
+      ],
       works: ['《贵妃醉酒》', '《霸王别姬》'],
     },
     {
@@ -342,7 +354,7 @@ export const QING: DynastyProfile = {
       figures: [
         { name: '徐光启', personId: 'xuguang-30598' },
         { name: '利玛窦', personId: 'lima-30597' },
-        { name: '严复' },
+        { name: '严复', personId: 'wk-Q559957' },
       ],
       works: ['《农政全书》', '《天演论》（严复译）'],
     },

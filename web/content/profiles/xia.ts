@@ -18,7 +18,10 @@ export const XIA: DynastyProfile = {
       desc: '废禅让而行父子兄弟世袭，王位在夏后氏一族内传承。',
       background: '禹死后其子启继位，击败有扈氏，确立「家天下」。',
       impact: '中国王朝制度之始，王权世袭成为此后三千年之常态。',
-      figures: [{ name: '禹' }, { name: '启', personId: 'wk-Q186544' }],
+      figures: [
+        { name: '禹', personId: 'wk-Q627784' },
+        { name: '启', personId: 'wk-Q186544' },
+      ],
     },
     {
       name: '九州与贡赋',
@@ -28,7 +31,7 @@ export const XIA: DynastyProfile = {
       desc: '传说禹划天下为九州，依土定贡赋，为早期国家赋税之雏形。',
       background: '禹治水遍行天下，据山川地理划定九州、定贡赋等差。',
       impact: '「九州」成为中国的代称，贡赋之制为后世赋税制度之滥觞。',
-      figures: [{ name: '禹' }],
+      figures: [{ name: '禹', personId: 'wk-Q627784' }],
     },
     {
       name: '夏历与天文',
@@ -50,7 +53,11 @@ export const XIA: DynastyProfile = {
       background: '禹治水有功、部落联盟推其为领袖；禹卒后启夺位自立。',
       outcome: '启击败不服的有扈氏，确立世袭王权，夏朝立国。',
       impact: '中国从部落联盟迈入王朝国家，「家天下」制度由此开端。',
-      figures: [{ name: '禹' }, { name: '启', personId: 'wk-Q186544' }, { name: '有扈氏' }],
+      figures: [
+        { name: '禹', personId: 'wk-Q627784' },
+        { name: '启', personId: 'wk-Q186544' },
+        { name: '有扈氏', personId: 'wk-Q4898049' },
+      ],
     },
     {
       year: -1600,
@@ -60,7 +67,11 @@ export const XIA: DynastyProfile = {
       background: '夏末桀荒淫暴虐、诸侯叛离，商族汤修德任贤（伊尹）。',
       outcome: '鸣条之战夏军溃败，桀逃亡而死，夏亡。',
       impact: '「汤武革命」成为后世改朝换代的典范叙事。',
-      figures: [{ name: '夏桀' }, { name: '商汤' }, { name: '伊尹', personId: 'wk-Q981363' }],
+      figures: [
+        { name: '夏桀', personId: 'wk-Q465081' },
+        { name: '商汤', personId: 'wk-Q471820' },
+        { name: '伊尹', personId: 'wk-Q981363' },
+      ],
     },
   ],
   culture: [

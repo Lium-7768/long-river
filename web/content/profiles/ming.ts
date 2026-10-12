@@ -125,7 +125,7 @@ export const MING: DynastyProfile = {
       figures: [
         { name: '朱元璋', personId: 'zhuyuan-30148' },
         { name: '徐达', personId: 'xuda-66290' },
-        { name: '刘伯温' },
+        { name: '刘伯温', personId: 'wk-Q699485' },
       ],
     },
     {
@@ -167,7 +167,10 @@ export const MING: DynastyProfile = {
       background: '瓦剌太师也先南下，宦官王振怂恿英宗亲征，仓促出师，指挥失当。',
       outcome: '明军溃于土木堡，英宗被俘；于谦拥立景帝、率军民死守，北京保卫战获胜，后英宗获释。',
       impact: '明朝由盛转衰之始，军力大损、边患日深；于谦北京保卫战成民族气节之典范。',
-      figures: [{ name: '于谦', personId: 'yuqian-34504' }, { name: '明英宗' }],
+      figures: [
+        { name: '于谦', personId: 'yuqian-34504' },
+        { name: '明英宗', personId: 'zhuqi-30154' },
+      ],
     },
     {
       year: 1573,
@@ -305,7 +308,7 @@ export const MING: DynastyProfile = {
       source: '《明史·王守仁传》',
       background: '王守仁龙场悟道，反对程朱理学之支离，主张向内求理、事上磨练。',
       impact: '打破程朱理学的僵化，影响明清思想及日本、朝鲜；然末流流于空谈。',
-      figures: [{ name: '王阳明' }],
+      figures: [{ name: '王阳明', personId: 'wk-Q378462' }],
       works: ['《传习录》', '《大学问》'],
     },
     {

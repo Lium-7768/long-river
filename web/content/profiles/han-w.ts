@@ -84,7 +84,10 @@ export const HAN_W: DynastyProfile = {
         '武帝连年用兵、兴作浩繁，国库支绌。桑弘羊等遂行盐铁专卖、均输平准、算缗告缗，广辟财源。',
       impact:
         '国用充裕以支军旅，然与民争利、工商凋敝，民负担加重；此为国家垄断经济之始，后世多效之。',
-      figures: [{ name: '桑弘羊' }, { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' }],
+      figures: [
+        { name: '桑弘羊', personId: 'wk-Q847703' },
+        { name: '汉武帝', personId: 'ws-史记-卷116-汉武帝' },
+      ],
     },
     {
       name: '独尊儒术',
@@ -131,7 +134,7 @@ export const HAN_W: DynastyProfile = {
       figures: [
         { name: '刘邦', personId: 'liubang-16622' },
         { name: '陈平', personId: 'chenping-139383' },
-        { name: '冒顿单于' },
+        { name: '冒顿单于', personId: 'wk-Q382816' },
       ],
     },
     {
@@ -162,7 +165,7 @@ export const HAN_W: DynastyProfile = {
       figures: [
         { name: '汉景帝', personId: 'liuqi-16625' },
         { name: '晁错', personId: 'chaocuo-3019' },
-        { name: '周亚夫' },
+        { name: '周亚夫', personId: 'wk-Q3235773' },
       ],
     },
     {
@@ -259,7 +262,7 @@ export const HAN_W: DynastyProfile = {
       source: '《汉书·律历志》（前104年）',
       background: '汉初沿用秦《颛顼历》，误差渐显；武帝诏落下闳、邓平等改历。',
       impact: '确立以寅月（正月）为岁首的历法传统，奠定中国农历基本框架。',
-      figures: [{ name: '落下闳' }],
+      figures: [{ name: '落下闳', personId: 'wk-Q7212224' }],
       works: ['《太初历》'],
     },
     {
@@ -280,7 +283,7 @@ export const HAN_W: DynastyProfile = {
       source: '《汉书·律历志》',
       background: '为历法与天文观测需要，汉代学者提出浑天、盖天等宇宙论。',
       impact: '浑天说逐渐成为主流宇宙观，推动中国古代天文观测与仪器的进步。',
-      figures: [{ name: '落下闳' }],
+      figures: [{ name: '落下闳', personId: 'wk-Q7212224' }],
       works: ['浑仪'],
     },
     {

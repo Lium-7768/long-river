@@ -20,7 +20,7 @@ export const JIN: DynastyProfile = {
       impact: '形成「王与马、共天下」的政治格局，士族政治达于极盛，也埋下内争之患。',
       figures: [
         { name: '王导', personId: 'wangdao-243627' },
-        { name: '司马睿' },
+        { name: '司马睿', personId: 'wk-Q7392' },
         { name: '谢安', personId: 'xiean-3365' },
       ],
     },
@@ -42,7 +42,10 @@ export const JIN: DynastyProfile = {
       desc: '设都督诸州军事，镇守要地，军政合一；东晋以荆、扬二州为重。',
       background: '晋防内乱与外患，置都督统军镇守，渐成地方实力派。',
       impact: '都督、方镇拥兵自重，是晋末与南朝政局动荡的根源之一。',
-      figures: [{ name: '司马睿' }, { name: '桓温', personId: 'cbdb-467951' }],
+      figures: [
+        { name: '司马睿', personId: 'wk-Q7392' },
+        { name: '桓温', personId: 'cbdb-467951' },
+      ],
     },
     {
       name: '侨州郡县与土断',
@@ -80,7 +83,11 @@ export const JIN: DynastyProfile = {
       background: '晋武大封宗室、授兵权，惠帝昏弱，贾后干政，诸王遂起。',
       outcome: '汝南王、楚王、赵王、齐王、长沙王、成都王、河间王、东海王等混战，至306年方息。',
       impact: '西晋统治崩溃、军力耗竭，为外族入主与永嘉之祸埋下祸根。',
-      figures: [{ name: '司马亮', personId: 'sima-38865' }, { name: '贾南风' }, { name: '司马越' }],
+      figures: [
+        { name: '司马亮', personId: 'sima-38865' },
+        { name: '贾南风', personId: 'wk-Q712318' },
+        { name: '司马越', personId: 'wk-Q985736' },
+      ],
     },
     {
       year: 311,
@@ -93,7 +100,7 @@ export const JIN: DynastyProfile = {
       figures: [
         { name: '刘曜', personId: 'liuyao-190310' },
         { name: '石勒', personId: 'cbdb-31360' },
-        { name: '晋怀帝' },
+        { name: '晋怀帝', personId: 'wk-Q7361' },
       ],
     },
     {
@@ -105,7 +112,7 @@ export const JIN: DynastyProfile = {
       outcome: '谢玄率北府兵于淝水大破秦军，苻坚败退，前秦随之瓦解。',
       impact: '以少胜多的经典，保全东晋与江南文化；北方重陷分裂。',
       figures: [
-        { name: '谢玄' },
+        { name: '谢玄', personId: 'wk-Q1285752' },
         { name: '苻坚', personId: 'gb-晋书-卷113-苻坚' },
         { name: '谢安', personId: 'xiean-3365' },
       ],
@@ -141,7 +148,10 @@ export const JIN: DynastyProfile = {
       desc: '王羲之、王献之父子书法冠绝古今，《兰亭序》为「天下第一行书」。',
       background: '晋人尚韵，士族重书法，行草大兴。',
       impact: '确立中国书法的审美典范，王羲之被尊为「书圣」。',
-      figures: [{ name: '王羲之', personId: 'cbdb-25793' }, { name: '王献之' }],
+      figures: [
+        { name: '王羲之', personId: 'cbdb-25793' },
+        { name: '王献之', personId: 'wk-Q559425' },
+      ],
       works: ['《兰亭集序》'],
     },
     {

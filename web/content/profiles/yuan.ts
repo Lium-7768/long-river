@@ -190,7 +190,7 @@ export const YUAN: DynastyProfile = {
       desc: '驿站畅通、海陆丝路鼎盛，马可·波罗等游历中国，中西交流空前。',
       background: '元帝国横跨欧亚，色目人掌驿传、理财，西方商人、教士、使者络绎来华。',
       impact: '中国的火药、印刷、纸币西传，西方天文、医药东来，世界文明交流达于高峰。',
-      figures: [{ name: '马可·波罗' }],
+      figures: [{ name: '马可·波罗', personId: 'wk-Q6101' }],
       works: ['《马可·波罗行纪》'],
     },
     {

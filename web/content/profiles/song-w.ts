@@ -226,7 +226,10 @@ export const SONG_W: DynastyProfile = {
       desc: '范宽《溪山行旅图》、张择端《清明上河图》，宋画写实与意境并重。',
       background: '宫廷画院（翰林图画院）制度与文人画的兴起，共同推动绘画大盛。',
       impact: '山水、花鸟、人物、风俗画全面成熟，成为中国绘画史的巅峰之一。',
-      figures: [{ name: '范宽', personId: 'fankuan-38864' }, { name: '张择端' }],
+      figures: [
+        { name: '范宽', personId: 'fankuan-38864' },
+        { name: '张择端', personId: 'wk-Q197342' },
+      ],
       works: ['《溪山行旅图》', '《清明上河图》'],
     },
     {
