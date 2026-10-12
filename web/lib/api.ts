@@ -244,4 +244,94 @@ export const api = {
         q: string;
       };
     }>('/api/evidence-sources', params),
+
+  // ── 朝代档案（编辑层内容，统一走 API）──
+  dynasties: () => get<{ ok: true; data: DynastyMeta[] }>('/api/dynasties'),
+  dynastyProfile: (dynasty: string) =>
+    get<{ ok: true; data: DynastyProfileData }>('/api/dynasty-profile', { dynasty }),
+  territoryCoverage: () =>
+    get<{ ok: true; data: Record<string, { provinces: string[]; note?: string }> }>(
+      '/api/territory-coverage',
+    ),
 };
+
+// ── 朝代档案类型 ──
+export interface DynastyMeta {
+  id: string;
+  name: string;
+  start: number;
+  end: number;
+  note: string;
+  color_var: string;
+  ord: number;
+}
+
+export interface ArchiveFigure {
+  name: string;
+  personId?: string;
+}
+
+export interface ArchiveInstitution {
+  name: string;
+  category?: string;
+  year?: number;
+  endYear?: number;
+  desc: string;
+  background?: string;
+  impact?: string;
+  source?: string;
+  figures: ArchiveFigure[];
+}
+
+export interface ArchiveEvent {
+  name: string;
+  category?: string;
+  year?: number;
+  desc: string;
+  background?: string;
+  outcome?: string;
+  impact?: string;
+  source?: string;
+  figures: ArchiveFigure[];
+}
+
+export interface ArchiveCulture {
+  name: string;
+  category?: string;
+  year?: number;
+  desc: string;
+  background?: string;
+  impact?: string;
+  works?: string[];
+  source?: string;
+  figures: ArchiveFigure[];
+}
+
+export interface ArchiveTerritory {
+  capital: string;
+  extent: string;
+  note?: string;
+  bounds?: { east?: string; west?: string; south?: string; north?: string };
+  divisions?: string[];
+  neighbors?: { name: string; relation: string }[];
+  area?: string;
+  population?: string;
+  source?: string;
+}
+
+export interface DynastyProfileData {
+  id: string;
+  name: string;
+  start: number;
+  end: number;
+  note: string;
+  colorVar: string;
+  overview: string;
+  keywords: string[];
+  sources?: string[];
+  completeness: 'draft' | 'reviewed';
+  institutions: ArchiveInstitution[];
+  events: ArchiveEvent[];
+  culture: ArchiveCulture[];
+  territory?: ArchiveTerritory;
+}

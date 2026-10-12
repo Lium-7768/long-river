@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { DYNASTIES } from '@/content/dynasties';
 
 /**
  * 河道曲线：朝代沿一条 CatmullRom 曲线分布，相机沿它飞行。
@@ -29,9 +28,9 @@ export const riverCurve = new THREE.CatmullRomCurve3(
 );
 
 /** 每个朝代在曲线上的参数位置（等距，而非按年数——解决秦朝不可见问题） */
-export const DYNASTY_T = DYNASTIES.map((_, i) =>
-  DYNASTIES.length > 1 ? i / (DYNASTIES.length - 1) : 0,
-);
+export function dynastyT(count: number): number[] {
+  return Array.from({ length: count }, (_, i) => (count > 1 ? i / (count - 1) : 0));
+}
 
 /** 取曲线上 t 处的点 */
 export function pointAt(t: number): THREE.Vector3 {

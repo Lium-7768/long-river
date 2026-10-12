@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
-import { getCoverage } from '@/content/territory/coverage';
+import { useCoverage } from '@/lib/territory-coverage';
 import { useThemeColor } from '@/lib/use-theme-color';
 
 /**
@@ -138,7 +138,7 @@ function CameraLook() {
 
 export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; height?: number }) {
   const [features, setFeatures] = useState<GeoFeature[] | null>(null);
-  const cov = getCoverage(dynastyId);
+  const cov = useCoverage(dynastyId);
 
   useEffect(() => {
     fetch('/geo/china.json')

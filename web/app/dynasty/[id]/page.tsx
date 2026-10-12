@@ -1,22 +1,35 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { DYNASTIES } from '@/content/dynasties';
-import { getProfile } from '@/content/profiles';
+import { fetchDynastyProfile, fetchDynastyIds } from '@/lib/dynasty-server';
 import { DynastyProfileView } from '@/components/profile/DynastyProfileView';
 
-export function generateStaticParams() {
-  return DYNASTIES.map((d) => ({ id: d.id }));
+/**
+ * 第二层：朝代档案。
+ * 数据全部来自后端 API（/api/dynasty-profile），不再是前端硬编码。
+ */
+export async function generateStaticParams() {
+  const ids = await fetchDynastyIds();
+  return ids.map((id) => ({ id }));
 }
 
 export const dynamicParams = false;
 
 export default async function DynastyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const dynasty = DYNASTIES.find((d) => d.id === id);
-  if (!dynasty) notFound();
+  const profile = await fetchDynastyProfile(id);
+  if (!profile) notFound();
 
-  const profile = getProfile(id);
-  if (!profile) {
+  const dynasty = {
+    id: profile.id,
+    name: profile.name,
+    start: profile.start,
+    end: profile.end,
+    note: profile.note,
+    colorVar: profile.colorVar,
+  };
+
+  // 有朝代但档案为空的情况
+  if (!profile.overview && !profile.institutions?.length) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#03060f] px-6 text-white">
         <h1 className="text-5xl font-semibold">{dynasty.name}</h1>

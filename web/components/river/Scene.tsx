@@ -5,19 +5,18 @@ import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
-import { DYNASTIES, DYNASTIES_WITH_DATA } from '@/content/dynasties';
-import { riverCurve, DYNASTY_T, pointAt } from './curve';
+import { riverCurve, pointAt, dynastyT } from './curve';
 import { fmtYear } from './year';
 import { computeCamera, type CameraMode } from './cameraModes';
 import { getStarTexture, getStarTextureTight } from './starTexture';
 import { useThemeColor } from '@/lib/use-theme-color';
+import type { Dynasty } from '@/lib/dynasty-data';
 
 /**
  * 滚动驱动的时间长河。
  * 相机沿 riverCurve 飞行，progress∈[0,1] 由外部滚动控制（用 ref 传入，避免重渲染）。
+ * 朝代轴由 props 传入（来自 /api/dynasties）。
  */
-
-const hasData = (id: string) => DYNASTIES_WITH_DATA.has(id);
 
 /* ---------- 河道：沿曲线的一串光带 + 粒子 ---------- */
 function RiverRibbon() {
@@ -215,9 +214,19 @@ function Starfield() {
 }
 
 /* ---------- 单个朝代节点：光点 + 光晕（极简） ---------- */
-function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => void }) {
-  const d = DYNASTIES[index];
-  const usable = hasData(d.id);
+function DynastyNode({
+  d,
+  t,
+  usable,
+  onPick,
+  index,
+}: {
+  d: Dynasty;
+  t: number;
+  usable: boolean;
+  onPick: (i: number) => void;
+  index: number;
+}) {
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
   const accent2 = useThemeColor('--lr-accent-2', [0.5, 0.35, 1]);
   const [hover, setHover] = useState(false);
@@ -229,7 +238,6 @@ function DynastyNode({ index, onPick }: { index: number; onPick: (i: number) => 
   const textRef = useRef<THREE.Group>(null);
   const dustRef = useRef<THREE.Points>(null);
 
-  const t = DYNASTY_T[index];
   const base = useMemo(() => pointAt(t), [t]);
   const col = usable ? accent : [0.4, 0.46, 0.58];
   const color = new THREE.Color(col[0], col[1], col[2]);
@@ -435,14 +443,18 @@ function CameraRig({
 }
 
 export function Scene({
+  dynasties,
   progress,
   mode,
   onPick,
 }: {
+  dynasties: Dynasty[];
   progress: React.MutableRefObject<number>;
   mode: CameraMode;
   onPick: (i: number) => void;
 }) {
+  const ts = useMemo(() => dynastyT(dynasties.length), [dynasties.length]);
+  const usableIds = useMemo(() => dynasties.map((d) => d.id), [dynasties]);
   return (
     <>
       <color attach="background" args={['#03060f']} />
@@ -451,8 +463,15 @@ export function Scene({
       <directionalLight position={[5, 10, 5]} intensity={0.7} />
       <Starfield />
       <RiverRibbon />
-      {DYNASTIES.map((_, i) => (
-        <DynastyNode key={i} index={i} onPick={onPick} />
+      {dynasties.map((d, i) => (
+        <DynastyNode
+          key={d.id}
+          index={i}
+          d={d}
+          t={ts[i]}
+          usable={usableIds.includes(d.id)}
+          onPick={onPick}
+        />
       ))}
       <CameraRig progress={progress} mode={mode} />
       <EffectComposer multisampling={0}>

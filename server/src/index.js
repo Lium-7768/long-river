@@ -464,6 +464,82 @@ function handle(pathname, searchParams) {
     return ok({ found: true, ...r, year, ad_year: ad });
   }
 
+  // ── 朝代档案（编辑层内容，原前端硬编码 .ts，现统一走 API）──
+  if (p === '/api/dynasties') {
+    const rows = db.prepare(
+      `SELECT id, name, start, "end" AS end, note, color_var, ord
+       FROM dynasty_meta ORDER BY ord`
+    ).all();
+    return ok(rows);
+  }
+
+  if (p === '/api/dynasty-profile') {
+    const id = searchParams.get('dynasty');
+    if (!id) return err('需要 dynasty 参数');
+    const meta = db.prepare(
+      `SELECT id, name, start, "end" AS end, note, color_var FROM dynasty_meta WHERE id = ?`
+    ).get(id);
+    if (!meta) return err('dynasty not found', 404);
+
+    const prof = db.prepare(
+      `SELECT overview, keywords, sources, completeness FROM dynasty_profile WHERE dynasty_id = ?`
+    ).get(id) || {};
+
+    const figures = db.prepare(
+      `SELECT kind, item_name, name, person_id FROM dynasty_figure WHERE dynasty_id = ?`
+    ).all(id);
+    const figOf = (kind, item) =>
+      figures.filter((f) => f.kind === kind && f.item_name === item)
+             .map((f) => ({ name: f.name, ...(f.person_id ? { personId: f.person_id } : {}) }));
+
+    const institutions = db.prepare(
+      `SELECT name, category, year, end_year AS endYear, desc, background, impact, source
+       FROM dynasty_institution WHERE dynasty_id = ? ORDER BY ord`
+    ).all(id).map((x) => ({ ...x, figures: figOf('institution', x.name) }));
+
+    const events = db.prepare(
+      `SELECT name, category, year, desc, background, outcome, impact, source
+       FROM dynasty_event WHERE dynasty_id = ? ORDER BY ord`
+    ).all(id).map((x) => ({ ...x, figures: figOf('event', x.name) }));
+
+    const culture = db.prepare(
+      `SELECT name, category, year, desc, background, impact, works, source
+       FROM dynasty_culture WHERE dynasty_id = ? ORDER BY ord`
+    ).all(id).map((x) => ({
+      ...x,
+      works: x.works ? JSON.parse(x.works) : undefined,
+      figures: figOf('culture', x.name),
+    }));
+
+    const t = db.prepare(`SELECT * FROM dynasty_territory WHERE dynasty_id = ?`).get(id);
+    const territory = t ? {
+      capital: t.capital, extent: t.extent, note: t.note,
+      bounds: t.bounds ? JSON.parse(t.bounds) : undefined,
+      divisions: t.divisions ? JSON.parse(t.divisions) : undefined,
+      neighbors: t.neighbors ? JSON.parse(t.neighbors) : undefined,
+      area: t.area, population: t.population, source: t.source,
+    } : undefined;
+
+    return ok({
+      id: meta.id, name: meta.name, start: meta.start, end: meta.end,
+      note: meta.note, colorVar: meta.color_var,
+      overview: prof.overview,
+      keywords: prof.keywords ? JSON.parse(prof.keywords) : [],
+      sources: prof.sources ? JSON.parse(prof.sources) : undefined,
+      completeness: prof.completeness || 'draft',
+      institutions, events, culture, territory,
+    });
+  }
+
+  if (p === '/api/territory-coverage') {
+    const rows = db.prepare(
+      `SELECT dynasty_id AS dynastyId, provinces, note FROM territory_coverage`
+    ).all().map((r) => ({ ...r, provinces: JSON.parse(r.provinces || '[]') }));
+    const obj = {};
+    for (const r of rows) obj[r.dynastyId] = { provinces: r.provinces, note: r.note };
+    return ok(obj);
+  }
+
   return err('not found', 404);
 }
 

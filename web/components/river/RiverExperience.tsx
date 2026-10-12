@@ -7,22 +7,23 @@ import * as THREE from 'three';
 import { Scene } from './Scene';
 import type { CameraMode } from './cameraModes';
 import { fmtRange } from './year';
-import { DYNASTIES, DYNASTIES_WITH_DATA, type Dynasty } from '@/content/dynasties';
-
-const hasData = (id: string) => DYNASTIES_WITH_DATA.has(id);
+import { useDynasties, type Dynasty } from '@/lib/dynasty-data';
 
 /**
  * 滚动驱动的时间长河。
  * 滚轮/拖动 → progress 0→1 → 相机沿河道飞行，朝代依次经过。
  * 用 ref 传 progress 给 R3F（避免每帧重渲染 React）。
  * 覆盖层用 DOM 渲染中文（清晰）。
+ * 朝代轴数据来自后端 /api/dynasties。
  */
 export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynasty) => void }) {
+  const { dynasties, loading } = useDynasties();
   const progress = useRef(0);
   const target = useRef(0);
   const [picked, setPicked] = useState<Dynasty | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [mode, setMode] = useState<CameraMode>('fly');
+  const hasData = (id: string) => dynasties.some((d) => d.id === id);
 
   // 滚轮 → 目标进度
   useEffect(() => {
@@ -53,19 +54,28 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
 
   // 每帧缓动 progress，并算出当前朝代
   useEffect(() => {
+    if (!dynasties.length) return;
     let raf = 0;
     const tick = () => {
       progress.current += (target.current - progress.current) * 0.08;
-      const idx = Math.round(progress.current * (DYNASTIES.length - 1));
+      const idx = Math.round(progress.current * (dynasties.length - 1));
       setActiveIdx((p) => (p === idx ? p : idx));
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [dynasties.length]);
 
-  const cur = DYNASTIES[activeIdx];
+  const cur = dynasties[activeIdx];
   const pct = Math.round(progress.current * 100);
+
+  if (loading || !cur) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#03060f] text-white/40">
+        载入时间长河…
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#03060f]">
@@ -75,11 +85,12 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
         dpr={[1, 1.75]}
       >
         <Scene
+          dynasties={dynasties}
           progress={progress}
           mode={mode}
           onPick={(i) => {
-            if (onEnterDynasty) onEnterDynasty(DYNASTIES[i]);
-            else setPicked(DYNASTIES[i]);
+            if (onEnterDynasty) onEnterDynasty(dynasties[i]);
+            else setPicked(dynasties[i]);
           }}
         />
       </Canvas>

@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api, type PersonDetail } from '@/lib/api';
-import { DYNASTIES } from '@/content/dynasties';
+import { useDynastyName } from '@/lib/dynasty-data';
 import { fmtRange, fmtYear } from '@/components/river/year';
 import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
@@ -17,7 +17,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
   const [editions, setEditions] = useState<
     Record<string, { edition: string | null; pub_year: number | null; pub_loc: string | null }[]>
   >({});
-  const dynasty = DYNASTIES.find((d) => d.id === id);
+  const dynastyName = useDynastyName(id);
 
   useEffect(() => {
     api
@@ -42,7 +42,7 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
         <Breadcrumb
           items={[
             { label: '长河', href: '/' },
-            { label: dynasty?.name ?? '朝代', href: `/dynasty/${id}` },
+            { label: dynastyName, href: `/dynasty/${id}` },
             { label: p?.name ?? '人物' },
           ]}
         />

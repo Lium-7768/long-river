@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api, type Poem } from '@/lib/api';
-import { DYNASTIES } from '@/content/dynasties';
+import { useDynastyName } from '@/lib/dynasty-data';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 
 type PoemDetail = Poem & {
@@ -15,7 +15,7 @@ export default function PoemPage({ params }: { params: Promise<{ id: string; pid
   const { id, pid } = use(params);
   const [poem, setPoem] = useState<PoemDetail | null>(null);
   const [state, setState] = useState<'loading' | 'ok' | 'err'>('loading');
-  const dynasty = DYNASTIES.find((d) => d.id === id);
+  const dynastyName = useDynastyName(id);
 
   useEffect(() => {
     api
@@ -33,7 +33,7 @@ export default function PoemPage({ params }: { params: Promise<{ id: string; pid
         <Breadcrumb
           items={[
             { label: '长河', href: '/' },
-            { label: dynasty?.name ?? '朝代', href: `/dynasty/${id}` },
+            { label: dynastyName, href: `/dynasty/${id}` },
             { label: poem?.title ?? '诗词' },
           ]}
         />

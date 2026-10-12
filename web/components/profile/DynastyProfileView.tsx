@@ -3,17 +3,16 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
-import type { DynastyProfile } from '@/content/profiles/types';
+import type { DynastyProfileData, PersonBrief } from '@/lib/api';
 import { fmtRange, fmtYear } from '@/components/river/year';
 import { useDynastyPersons, usePersonSearch } from '@/components/persons/use-persons';
 import { useDynastyPoems } from '@/components/persons/use-poems';
-import { getCoverage } from '@/content/territory/coverage';
-import { itemSlug } from '@/content/profiles/slug';
+import { useCoverage } from '@/lib/territory-coverage';
+import { itemSlug } from '@/lib/slug';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 import { EmperorPanel } from '@/components/profile/EmperorPanel';
 import { NianhaoPanel } from '@/components/profile/NianhaoPanel';
-import type { PersonBrief } from '@/lib/api';
-import type { Dynasty } from '@/content/dynasties';
+import type { Dynasty } from '@/lib/dynasty-data';
 
 /**
  * 第二层：朝代档案（分块）。
@@ -24,13 +23,13 @@ export function DynastyProfileView({
   profile,
 }: {
   dynasty: Dynasty;
-  profile: DynastyProfile;
+  profile: DynastyProfileData;
 }) {
   const router = useRouter();
   const { persons } = useDynastyPersons(dynasty.id, 24);
   const { results, run, q } = usePersonSearch();
   const poems = useDynastyPoems(dynasty.id);
-  const cov = getCoverage(dynasty.id);
+  const cov = useCoverage(dynasty.id);
 
   const searching = q.trim().length > 0;
   const base = searching ? results : persons;
@@ -200,7 +199,7 @@ export function DynastyProfileView({
                 )}
               </div>
               <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
-                都城 {profile.territory.capital}
+                都城 {profile.territory?.capital ?? '—'}
               </p>
             </button>
           </div>

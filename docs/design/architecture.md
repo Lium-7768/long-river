@@ -123,7 +123,7 @@ D1 的**读**几乎无限制，瓶颈只在写。所以线上仍可用 Worker + 
 - 3D 透视时间轴，横贯屏幕，**从公元前 2070（夏）到 1912（清）**
 - 每个朝代 = 一个发光时间块，长度 ∝ 实际年数
 - 悬停高亮 + 朝代名浮出；点击 → 镜头推进进入第二层
-- 数据：`web/content/dynasties.ts`（22 个朝代，本地静态）
+- 数据：`/api/dynasties`（22 个朝代，本地 SQLite）
 
 ### 第二层 · 分类星群
 - 进入朝代后，该朝代的代表人物 / 事件 / 著作等**按类别分组**
@@ -183,7 +183,7 @@ export function cssRgb(name: string): [number, number, number] {
 ```
 
 Three.js 材质颜色从 `cssRgb('--lr-accent')` 取，主题切换时重新读取 → **两套主题 3D 同步变色**。
-`dynasties.ts` 里每个朝代的 color 也走 CSS 变量（`--lr-dynasty-*`），保证 3D 与 DOM 一致。
+朝代色（`dynasty_meta.color_var` → `--lr-dynasty-*`）也走 CSS 变量，保证 3D 与 DOM 一致。
 
 ---
 
@@ -217,10 +217,10 @@ web/
       Graph.tsx
     ui/                     shadcn 组件
     theme-provider.tsx
-  content/
-    dynasties.ts            朝代轴数据（22 个）
   lib/
-    api.ts                  API 客户端（封装 CF Worker）
+    api.ts                  API 客户端（本地 SQLite 后端）
+    dynasty-data.ts         朝代数据层（运行时 hook，走 /api/*）
+    dynasty-server.ts       朝代数据层（服务端/构建期 fetch）
     theme.ts                CSS 变量 → Three.js 颜色
     utils.ts                cn() 等
   .husky/                   git 钩子
