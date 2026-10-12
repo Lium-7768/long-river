@@ -35,3 +35,9 @@ cd web && pnpm install && pnpm dev
 - 每条数据可回溯至具体史料出处。
 
 详见 [`AGENTS.md`](AGENTS.md)（协作规则）与 [`data/数据来源与可信度总报告.md`](data/数据来源与可信度总报告.md)（数据溯源）。
+
+## 仓库维护
+
+- 本仓库**不提交**数据库二进制、备份分卷与 ETL 中间产物（见 `data/.gitignore`、`etl/.gitignore`）。
+- 2026-10-12 曾用 `git filter-repo` 重写历史，移除误入库的 ~264MB 数据库备份（.git 13GB → 3.8MB）。
+  重写后**所有 commit SHA 变更**，需 `git fetch && git reset --hard origin/dev` 重新同步。
