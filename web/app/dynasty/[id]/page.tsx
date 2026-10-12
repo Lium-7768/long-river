@@ -4,6 +4,12 @@ import { DYNASTIES } from '@/content/dynasties';
 import { getProfile } from '@/content/profiles';
 import { DynastyProfileView } from '@/components/profile/DynastyProfileView';
 
+export function generateStaticParams() {
+  return DYNASTIES.map((d) => ({ id: d.id }));
+}
+
+export const dynamicParams = false;
+
 export default async function DynastyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const dynasty = DYNASTIES.find((d) => d.id === id);
