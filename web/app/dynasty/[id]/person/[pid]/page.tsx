@@ -14,6 +14,9 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
   const [p, setP] = useState<PersonDetail | null>(null);
   const [state, setState] = useState<'loading' | 'ok' | 'err'>('loading');
   const [drawer, setDrawer] = useState<{ id: string; name: string } | null>(null);
+  const [editions, setEditions] = useState<
+    Record<string, { edition: string | null; pub_year: number | null; pub_loc: string | null }[]>
+  >({});
   const dynasty = DYNASTIES.find((d) => d.id === id);
 
   useEffect(() => {
@@ -22,6 +25,13 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
       .then((r) => {
         setP(r.data);
         setState('ok');
+        const titles = (r.data.texts ?? []).map((t) => t.title).filter(Boolean);
+        if (titles.length) {
+          api
+            .bookEditions(titles)
+            .then((er) => setEditions(er.data))
+            .catch(() => {});
+        }
       })
       .catch(() => setState('err'));
   }, [pid]);
@@ -238,20 +248,33 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
             {p.texts?.length ? (
               <Section title={`书目著录（${p.texts.length}）`}>
                 <div className="flex flex-wrap gap-2">
-                  {p.texts.map((t, i) => (
-                    <span
-                      key={i}
-                      className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base text-white/70"
-                      title={[t.role && `角色：${t.role}`, t.year > 0 && `公元${t.year}`]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    >
-                      {t.title}
-                      {t.role && t.role !== '未详' ? (
-                        <span className="ml-2 text-white/40">{t.role}</span>
-                      ) : null}
-                    </span>
-                  ))}
+                  {p.texts.map((t, i) => {
+                    const eds = editions[t.title] ?? [];
+                    const edTxt = eds
+                      .map((e) => e.edition)
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .join(' · ');
+                    return (
+                      <span
+                        key={i}
+                        className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base text-white/70"
+                        title={[
+                          t.role && `角色：${t.role}`,
+                          t.year > 0 && `公元${t.year}`,
+                          edTxt && `版本：${edTxt}`,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      >
+                        {t.title}
+                        {t.role && t.role !== '未详' ? (
+                          <span className="ml-2 text-white/40">{t.role}</span>
+                        ) : null}
+                        {edTxt ? <span className="ml-2 text-amber-200/50">{edTxt}</span> : null}
+                      </span>
+                    );
+                  })}
                 </div>
               </Section>
             ) : null}

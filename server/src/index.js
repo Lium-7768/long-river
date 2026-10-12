@@ -295,6 +295,31 @@ function handle(pathname, searchParams) {
     return ok(rows, { total: cnt, q });
   }
 
+  if (p === '/api/book-editions') {
+    const title = searchParams.get('title');
+    const titles = searchParams.get('titles');
+    if (titles) {
+      const list = titles.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 100);
+      if (!list.length) return ok({});
+      const ph = list.map(() => '?').join(',');
+      const rows = db.prepare(
+        `SELECT title, edition, pub_year, pub_loc, imprint, extant
+         FROM book_editions WHERE title IN (${ph})`
+      ).all(...list);
+      const out = {};
+      for (const r of rows) {
+        (out[r.title] = out[r.title] || []).push(r);
+      }
+      return ok(out, { n: list.length });
+    }
+    if (!title) return err('需要 title 参数');
+    const rows = db.prepare(
+      `SELECT title, edition, pub_year, pub_loc, imprint, extant
+       FROM book_editions WHERE title = ? LIMIT 20`
+    ).all(title);
+    return ok(rows, { title, n: rows.length });
+  }
+
   if (p === '/api/person-geo') {
     const dynasty = searchParams.get('dynasty');
     const limit = Math.min(parseInt(searchParams.get('limit') || '300', 10), 1000);
@@ -363,6 +388,7 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM evidence_sources) AS ev_sources,
          (SELECT COUNT(*) FROM region_stats) AS regions,
          (SELECT COUNT(*) FROM emperor) AS emperors,
+         (SELECT COUNT(*) FROM book_editions) AS book_editions,
          (SELECT COUNT(*) FROM persons WHERE source='维基百科(CC BY-SA)') AS wiki_persons`
     ).get();
     return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: 'local-sqlite' });

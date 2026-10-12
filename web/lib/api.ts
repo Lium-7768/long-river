@@ -217,4 +217,12 @@ export const api = {
         end: number | null;
       }[];
     }>('/api/nianhao', { ...(dynasty ? { dynasty } : {}), ...(q ? { q } : {}) }),
+  bookEditions: (titles: string[]) =>
+    get<{
+      ok: true;
+      data: Record<
+        string,
+        { edition: string | null; pub_year: number | null; pub_loc: string | null }[]
+      >;
+    }>('/api/book-editions', { titles: titles.join(',') }),
 };
