@@ -114,7 +114,10 @@ export const SONG_W: DynastyProfile = {
       outcome:
         '宰相寇准力主真宗亲征，宋军射杀辽将萧挞凛，辽方求和，双方约为兄弟之国，宋岁输银十万两、绢二十万匹。',
       impact: '换来宋辽百余年和平与榷场贸易，然开「以岁币换和平」之先例，亦被后世讥为屈辱。',
-      figures: [{ name: '寇准', personId: 'kouzhun-898' }, { name: '宋真宗' }],
+      figures: [
+        { name: '寇准', personId: 'kouzhun-898' },
+        { name: '宋真宗', personId: 'zhaoheng-9003' },
+      ],
     },
     {
       year: 1043,
@@ -139,7 +142,10 @@ export const SONG_W: DynastyProfile = {
       outcome:
         '设制置三司条例司，颁青苗、募役、方田均税、保甲诸法，富国与强兵并行，然执行苛急，扰民甚广。',
       impact: '一时国库充盈、军力提振，但激化新旧党争，变法几度反复，终随北宋覆亡而废。',
-      figures: [{ name: '王安石', personId: 'wangan-1762' }, { name: '宋神宗' }],
+      figures: [
+        { name: '王安石', personId: 'wangan-1762' },
+        { name: '宋神宗', personId: 'zhaoxu-9006' },
+      ],
     },
     {
       year: 1086,
@@ -163,7 +169,10 @@ export const SONG_W: DynastyProfile = {
       background: '宋金海上之盟联灭辽后，金人窥见宋之虚弱，遂南下攻宋。',
       outcome: '金军两度围开封，城破，徽、钦二帝及后妃宗室数千人被掳北迁，北宋覆亡。',
       impact: '北宋终结，赵构南渡建立南宋，宋室偏安江南；中原沦陷，成为中国史上的一大变局。',
-      figures: [{ name: '宋徽宗' }, { name: '宋钦宗' }],
+      figures: [
+        { name: '宋徽宗', personId: 'zhaoji-9008' },
+        { name: '宋钦宗', personId: 'zhaohuan-9009' },
+      ],
     },
   ],
   culture: [

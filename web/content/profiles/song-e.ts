@@ -21,7 +21,7 @@ export const SONG_E: DynastyProfile = {
         '靖康之变后，赵构南渡称帝，几经辗转定都临安；国力不及北宋，遂以江淮为屏障，长期与金（后与蒙）对峙。',
       impact: '维持了东南半壁一百五十年的安定与繁荣，然守势外交、岁币议和，始终未能恢复中原。',
       figures: [
-        { name: '宋高宗' },
+        { name: '宋高宗', personId: 'zhaogou-9010' },
         { name: '岳飞', personId: 'yuefei-8175' },
         { name: '韩世忠', personId: 'hanshi-8050' },
       ],
@@ -63,7 +63,7 @@ export const SONG_E: DynastyProfile = {
       desc: '设市舶司管理海贸，泉、广、明州等港鼎盛，海路贸易空前繁荣。',
       background: '陆上丝路被阻，南宋转向海洋；造船、罗盘技术进步，海贸成财政支柱。',
       impact: '泉州为「东方第一大港」，海贸收入可观；中国海上力量一度居世界前列。',
-      figures: [{ name: '宋高宗' }],
+      figures: [{ name: '宋高宗', personId: 'zhaogou-9010' }],
     },
     {
       name: '会子（纸币）与财政',
@@ -85,7 +85,10 @@ export const SONG_E: DynastyProfile = {
       background: '金灭北宋后，北宋宗室赵构在宗泽等拥戴下南渡称帝。',
       outcome: '1127年赵构即位（宋高宗），后定都临安；宋室偏安东南。',
       impact: '北宋终结、南宋开启，宋金南北对峙格局形成。',
-      figures: [{ name: '宋高宗' }, { name: '宗泽', personId: 'zongze-3897' }],
+      figures: [
+        { name: '宋高宗', personId: 'zhaogou-9010' },
+        { name: '宗泽', personId: 'zongze-3897' },
+      ],
     },
     {
       year: 1140,
@@ -110,7 +113,7 @@ export const SONG_E: DynastyProfile = {
       impact: '确立南宋偏安格局二十余年；「绍兴和议」与岳飞之死成南宋政治之伤。',
       figures: [
         { name: '秦桧', personId: 'qingui-8008' },
-        { name: '宋高宗' },
+        { name: '宋高宗', personId: 'zhaogou-9010' },
         { name: '岳飞', personId: 'yuefei-8175' },
       ],
     },
@@ -135,7 +138,10 @@ export const SONG_E: DynastyProfile = {
       background: '金为蒙古所迫南迁，宋理宗纳「联蒙灭金」之议。',
       outcome: '1234年宋蒙合攻蔡州，金哀宗自缢，金亡。',
       impact: '灭金之「捷」实为失策，宋直面更强大的蒙古，四十年后亦亡。',
-      figures: [{ name: '宋理宗' }, { name: '孟珙', personId: 'menggong-22681' }],
+      figures: [
+        { name: '宋理宗', personId: 'zhaoyun-9014' },
+        { name: '孟珙', personId: 'menggong-22681' },
+      ],
     },
     {
       year: 1276,
@@ -148,7 +154,7 @@ export const SONG_E: DynastyProfile = {
       figures: [
         { name: '文天祥', personId: 'wentian-19123' },
         { name: '陆秀夫', personId: 'luxiu-17112' },
-        { name: '宋恭帝' },
+        { name: '宋恭帝', personId: 'zhaoxian-9016' },
       ],
     },
     {

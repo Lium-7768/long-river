@@ -85,7 +85,7 @@ export const JIN_CHAO: DynastyProfile = {
       impact: '中国历史上著名之「靖康之耻」，宋金南北对峙格局形成。',
       figures: [
         { name: '完颜宗望', personId: 'wanyan-556531' },
-        { name: '宋钦宗' },
+        { name: '宋钦宗', personId: 'zhaohuan-9009' },
         { name: '岳飞', personId: 'yuefei-8175' },
       ],
     },

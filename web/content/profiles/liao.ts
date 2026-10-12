@@ -89,7 +89,11 @@ export const LIAO: DynastyProfile = {
       background: '辽承天太后、圣宗南下，宋真宗亲征澶州，双方相持后议和。',
       outcome: '1005年盟成：宋岁输银十万两、绢二十万匹，边界维持，通商互市。',
       impact: '宋辽结束大规模战事、维持百余年和好，经济文化交流频繁。',
-      figures: [{ name: '萧太后' }, { name: '宋真宗' }, { name: '寇准', personId: 'kouzhun-898' }],
+      figures: [
+        { name: '萧太后' },
+        { name: '宋真宗', personId: 'zhaoheng-9003' },
+        { name: '寇准', personId: 'kouzhun-898' },
+      ],
     },
     {
       year: 1125,

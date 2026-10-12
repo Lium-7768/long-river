@@ -25,7 +25,7 @@ export const HAN_W: DynastyProfile = {
         '景帝、武帝朝经削藩、推恩令，封国名存实亡，实质回归郡县集权；郡国并行是汉初过渡形态。',
       figures: [
         { name: '刘邦', personId: 'liubang-16622' },
-        { name: '汉景帝' },
+        { name: '汉景帝', personId: 'liuqi-16625' },
         { name: '主父偃', personId: 'sj-zhufuyan-58' },
       ],
     },
@@ -145,7 +145,10 @@ export const HAN_W: DynastyProfile = {
       outcome:
         '田租减至三十税一、一度全免，景帝削藩平七国之乱，仓廪充实，「京师之钱累巨万，贯朽而不可校」。',
       impact: '为武帝盛世奠定雄厚国力，与「贞观之治」并称中国史上治世典范。',
-      figures: [{ name: '汉文帝' }, { name: '汉景帝' }],
+      figures: [
+        { name: '汉文帝', personId: 'liuheng-16624' },
+        { name: '汉景帝', personId: 'liuqi-16625' },
+      ],
     },
     {
       year: -154,
@@ -156,7 +159,11 @@ export const HAN_W: DynastyProfile = {
       background: '晁错上《削藩策》，力主削夺诸侯支郡，吴王刘濞遂联合楚、赵等七国举兵反。',
       outcome: '景帝一度斩晁错以求和，乱不止；乃命周亚夫击之，绝吴楚粮道，三月平定，吴王濞被杀。',
       impact: '中央威信大振，诸侯势力大削，为武帝推行推恩令、彻底集权铺路。',
-      figures: [{ name: '汉景帝' }, { name: '晁错', personId: 'chaocuo-3019' }, { name: '周亚夫' }],
+      figures: [
+        { name: '汉景帝', personId: 'liuqi-16625' },
+        { name: '晁错', personId: 'chaocuo-3019' },
+        { name: '周亚夫' },
+      ],
     },
     {
       year: -138,
@@ -212,7 +219,10 @@ export const HAN_W: DynastyProfile = {
       background: '经武帝以来经营，汉与匈奴争夺西域；宣帝时匈奴日衰，西域诸国多附汉。',
       outcome: '以郑吉为首任西域都护，监护南北道诸国，西域正式归属汉朝版图。',
       impact: '标志西域纳入中国中央政权管辖之始，丝路畅通，中西交流鼎盛。',
-      figures: [{ name: '郑吉', personId: 'zhengji-27970' }, { name: '汉宣帝' }],
+      figures: [
+        { name: '郑吉', personId: 'zhengji-27970' },
+        { name: '汉宣帝', personId: 'liuxun-15293' },
+      ],
     },
   ],
   culture: [

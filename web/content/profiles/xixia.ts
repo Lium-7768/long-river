@@ -70,7 +70,10 @@ export const XIXIA: DynastyProfile = {
       background: '三川口、好水川、定川寨三战宋军屡败，夏亦疲于战争。',
       outcome: '1044年议和：元昊去帝号、称臣，宋岁赐银绢茶，重开榷场互市。',
       impact: '宋夏维持数十年和平，贸易兴盛，双方各得所需。',
-      figures: [{ name: '李元昊', personId: 'liyuan-339687' }, { name: '宋仁宗' }],
+      figures: [
+        { name: '李元昊', personId: 'liyuan-339687' },
+        { name: '宋仁宗', personId: 'zhaozhen-9004' },
+      ],
     },
     {
       year: 1085,
@@ -80,7 +83,7 @@ export const XIXIA: DynastyProfile = {
       background: '宋神宗用兵西夏，徐禧筑永乐城，孤军突出。',
       outcome: '西夏倾国来攻，永乐城陷，宋军覆没，神宗为之痛悔。',
       impact: '宋夏战争再度受挫，双方长期拉锯于横山、河湟一线。',
-      figures: [{ name: '宋神宗' }, { name: '梁太后' }],
+      figures: [{ name: '宋神宗', personId: 'zhaoxu-9006' }, { name: '梁太后' }],
     },
     {
       year: 1227,

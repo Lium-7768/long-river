@@ -81,7 +81,10 @@ export const MING: DynastyProfile = {
         '明中叶赋役繁重、簿册紊乱，张居正执政，于万历九年推行一条鞭法，将田赋、徭役、杂税合并按亩折银。',
       impact:
         '简化税制、以银代役，促进商品经济发展与白银货币化；然推行有欠彻底，明末加派「三饷」反致民困。',
-      figures: [{ name: '张居正', personId: 'zhangju-69011' }, { name: '明神宗' }],
+      figures: [
+        { name: '张居正', personId: 'zhangju-69011' },
+        { name: '明神宗', personId: 'zhuyi-30162' },
+      ],
     },
     {
       name: '督抚与地方三司',
@@ -179,7 +182,7 @@ export const MING: DynastyProfile = {
       figures: [
         { name: '张居正', personId: 'zhangju-69011' },
         { name: '戚继光', personId: 'qiji-29605' },
-        { name: '明神宗' },
+        { name: '明神宗', personId: 'zhuyi-30162' },
       ],
     },
     {
@@ -237,7 +240,7 @@ export const MING: DynastyProfile = {
       outcome: '1644年三月李自成入北京，崇祯自缢于煤山；吴三桂引清兵入关，李自成败走，清定鼎北京。',
       impact: '明朝二百七十六年而亡，中国进入清朝统治；「甲申之变」成明清易代的关键节点。',
       figures: [
-        { name: '崇祯帝' },
+        { name: '崇祯帝', personId: 'zhuyou-30165' },
         { name: '李自成', personId: 'lizi-65627' },
         { name: '吴三桂', personId: 'wusan-58844' },
       ],

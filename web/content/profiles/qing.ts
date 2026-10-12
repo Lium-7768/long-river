@@ -22,7 +22,10 @@ export const QING: DynastyProfile = {
         '雍正用兵西北（准噶尔），为保密与高效，设「办理军机处」，取代议政王大臣会议，成为皇帝直辖的枢要。',
       impact:
         '皇权达于极致，军机大臣「只供传述缮撰，而不能稍有赞画于其间」；内阁、议政王大臣会议形同虚设，是中国君主专制最集中之形态。',
-      figures: [{ name: '雍正帝' }, { name: '张廷玉', personId: 'zhangting-56675' }],
+      figures: [
+        { name: '雍正帝', personId: 'aixin-63801' },
+        { name: '张廷玉', personId: 'zhangting-56675' },
+      ],
     },
     {
       name: '八旗制度',
@@ -50,7 +53,10 @@ export const QING: DynastyProfile = {
         '康熙五十一年（1712）诏「滋生人丁，永不加赋」，固定丁银；雍正元年起推行摊丁入亩，丁银并入田赋。',
       impact:
         '中国赋税史上「人头税」终结的重要一步，减轻无地贫民负担、促进人口增长，人口统计随之激增。',
-      figures: [{ name: '康熙帝' }, { name: '雍正帝' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '雍正帝', personId: 'aixin-63801' },
+      ],
     },
     {
       name: '密折制',
@@ -61,7 +67,7 @@ export const QING: DynastyProfile = {
       source: '《清史稿·世宗本纪》',
       background: '康熙末年试行密折，雍正大加推广，使地方大员与皇帝直接单线联系。',
       impact: '强化皇帝对官僚的监控，提高决策效率，然亦使大权更集中于君主一身。',
-      figures: [{ name: '雍正帝' }],
+      figures: [{ name: '雍正帝', personId: 'aixin-63801' }],
     },
     {
       name: '理藩院与改土归流',
@@ -74,7 +80,10 @@ export const QING: DynastyProfile = {
         '清以满蒙联盟立国，设理藩院统辖藩部；雍正朝在西南大规模「改土归流」，以流官取代世袭土司。',
       impact:
         '强化对边疆与西南少数民族地区的中央管辖，推动内地的政治整合，深远影响中国的疆域与民族格局。',
-      figures: [{ name: '雍正帝' }, { name: '鄂尔泰', personId: 'eer-368608' }],
+      figures: [
+        { name: '雍正帝', personId: 'aixin-63801' },
+        { name: '鄂尔泰', personId: 'eer-368608' },
+      ],
     },
     {
       name: '文字狱',
@@ -86,7 +95,7 @@ export const QING: DynastyProfile = {
       background:
         '清朝为压制汉人反清意识与异端思想，康、雍、乾三朝屡兴文字狱，如《南山集》案、《字贯》案。',
       impact: '士人噤若寒蝉、转向考据训诂（乾嘉学派），思想活力受抑，是清朝思想专制的典型。',
-      figures: [{ name: '康熙帝' }, { name: '乾隆帝' }],
+      figures: [{ name: '康熙帝', personId: 'xuanye-339772' }, { name: '乾隆帝' }],
     },
     {
       name: '闭关锁国与广州十三行',
@@ -128,7 +137,7 @@ export const QING: DynastyProfile = {
       figures: [
         { name: '多尔衮', personId: 'duoer-339770' },
         { name: '吴三桂', personId: 'wusan-58844' },
-        { name: '顺治帝' },
+        { name: '顺治帝', personId: 'fulin-339771' },
       ],
     },
     {
@@ -141,7 +150,10 @@ export const QING: DynastyProfile = {
         '清初封吴三桂、尚可喜、耿精忠为藩王镇守云南、广东、福建，尾大不掉。康熙决意撤藩。',
       outcome: '1673年吴三桂起兵，三藩并反，一度据半壁；康熙分化瓦解、逐一击破，1681年平定。',
       impact: '消除割据、巩固统一，为而后收台湾、平准部奠定基础。',
-      figures: [{ name: '康熙帝' }, { name: '吴三桂', personId: 'wusan-58844' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '吴三桂', personId: 'wusan-58844' },
+      ],
     },
     {
       year: 1689,
@@ -152,7 +164,7 @@ export const QING: DynastyProfile = {
       background: '沙俄东侵黑龙江流域，筑雅克萨城；康熙两次用兵克雅克萨，遂议和。',
       outcome: '1689年索额图与戈洛文订约于尼布楚：以格尔必齐河、额尔古纳河为界，俄撤雅克萨。',
       impact: '确立中俄东段边界，保东北百余年安宁；是清朝对外关系中难得的平等条约。',
-      figures: [{ name: '康熙帝' }, { name: '索额图' }],
+      figures: [{ name: '康熙帝', personId: 'xuanye-339772' }, { name: '索额图' }],
     },
     {
       year: 1722,
@@ -164,7 +176,11 @@ export const QING: DynastyProfile = {
       outcome:
         '统一台湾、平定准噶尔与回部、巩固西藏，疆域达一千三百余万平方公里；人口破三亿，经济总量居世界前列。',
       impact: '中国帝制时代的最后辉煌；然闭关自守、人口压力、吏治腐化已伏危机，盛世之后即衰。',
-      figures: [{ name: '康熙帝' }, { name: '雍正帝' }, { name: '乾隆帝' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '雍正帝', personId: 'aixin-63801' },
+        { name: '乾隆帝' },
+      ],
     },
     {
       year: 1840,
@@ -175,7 +191,10 @@ export const QING: DynastyProfile = {
       background: '清禁烟，林则徐虎门销烟；英国以「自由贸易」为名发动战争，坚船利炮破关。',
       outcome: '1840–1842年英军北上，清军屡败；1842年订《南京条约》：割香港、赔款、开五口通商。',
       impact: '中国开始沦为半殖民地半封建社会，被迫卷入世界体系，为近代屈辱与救亡之起点。',
-      figures: [{ name: '林则徐', personId: 'linze-54819' }, { name: '道光帝' }],
+      figures: [
+        { name: '林则徐', personId: 'linze-54819' },
+        { name: '道光帝', personId: 'minning-339776' },
+      ],
     },
     {
       year: 1851,
@@ -219,7 +238,7 @@ export const QING: DynastyProfile = {
       figures: [
         { name: '李鸿章', personId: 'lihong-58961' },
         { name: '邓世昌', personId: 'dengshi-25052' },
-        { name: '光绪帝' },
+        { name: '光绪帝', personId: 'zaitian-339779' },
       ],
     },
     {
@@ -234,7 +253,7 @@ export const QING: DynastyProfile = {
       figures: [
         { name: '康有为' },
         { name: '梁启超', personId: 'liangqi-691198' },
-        { name: '光绪帝' },
+        { name: '光绪帝', personId: 'zaitian-339779' },
       ],
     },
     {
@@ -247,7 +266,11 @@ export const QING: DynastyProfile = {
         '清末新政、预备立宪未能挽回人心，革命党人屡举义（黄花岗等）；1911年10月武昌起义成功。',
       outcome: '各省纷纷独立，孙中山任临时大总统于南京；1912年2月12日宣统帝颁布退位诏书，清亡。',
       impact: '结束两千余年君主专制，建立亚洲第一个共和国，中国历史翻开新的一页。',
-      figures: [{ name: '孙中山' }, { name: '袁世凯' }, { name: '宣统帝' }],
+      figures: [
+        { name: '孙中山' },
+        { name: '袁世凯' },
+        { name: '宣统帝', personId: 'puyi-339780' },
+      ],
     },
   ],
   culture: [
@@ -303,7 +326,10 @@ export const QING: DynastyProfile = {
       source: '《清史稿·艺文志》（康熙五十五年，1716年）',
       background: '康熙为「昭同文之治」，命儒臣编修字典，规范字形音义。',
       impact: '集历代字书之大成，长期为汉字研究之重要参考，影响东亚。',
-      figures: [{ name: '康熙帝' }, { name: '张玉书', personId: 'zhangyu-64173' }],
+      figures: [
+        { name: '康熙帝', personId: 'xuanye-339772' },
+        { name: '张玉书', personId: 'zhangyu-64173' },
+      ],
       works: ['《康熙字典》'],
     },
     {

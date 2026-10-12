@@ -19,6 +19,11 @@ def main():
     by_alias = {}
     for pid, al in con.execute("SELECT person_id, alias FROM aliases"):
         by_alias.setdefault(al, pid)
+    # 帝王表：庙号/称号 → 本名（CBDB 只收本名，如 宋仁宗=赵祯）
+    emp_alt = {}
+    for title, native in con.execute("SELECT title, native FROM emperor"):
+        if native:
+            emp_alt.setdefault(title, native)
 
     def resolve(nm):
         r = by_name.get(nm) or by_alias.get(nm)
@@ -29,7 +34,21 @@ def main():
             "SELECT id FROM persons WHERE name LIKE ? OR name LIKE ? LIMIT 1",
             (f'{nm}(%', f'%({nm})%'),
         ).fetchone()
-        return row[0] if row else None
+        if row:
+            return row[0]
+        # 三次：帝王庙号 → 本名 → 查 persons/aliases
+        alt = emp_alt.get(nm)
+        if alt:
+            r2 = by_name.get(alt) or by_alias.get(alt)
+            if r2:
+                return r2
+            row2 = con.execute(
+                "SELECT id FROM persons WHERE name LIKE ? OR name LIKE ? LIMIT 1",
+                (f'{alt}(%', f'%({alt})%'),
+            ).fetchone()
+            if row2:
+                return row2[0]
+        return None
 
     total_added = 0
     for f in sorted(os.listdir(DIR)):

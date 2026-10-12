@@ -19,7 +19,10 @@ export const NANBEI: DynastyProfile = {
       desc: '按丁口授田、还受有法，露田桑田有别，稳定小农、增赋税。',
       background: '北朝战乱地荒、豪强兼并，孝文帝纳李安世之议行均田。',
       impact: '重建国家编户、抑制兼并，为北朝富强与隋唐均田制所本。',
-      figures: [{ name: '北魏孝文帝' }, { name: '李安世', personId: 'lian-77517' }],
+      figures: [
+        { name: '北魏孝文帝', personId: 'yuanhong-157386' },
+        { name: '李安世', personId: 'lian-77517' },
+      ],
     },
     {
       name: '三长制',
@@ -39,7 +42,7 @@ export const NANBEI: DynastyProfile = {
       desc: '迁都洛阳、改汉姓、易汉服、通婚姻、行汉制，全面汉化。',
       background: '北魏统一北方后，为融胡汉、固统治，孝文帝锐意改革。',
       impact: '加速民族融合、推动北方汉化，为隋唐统合胡汉奠定基础。',
-      figures: [{ name: '北魏孝文帝' }],
+      figures: [{ name: '北魏孝文帝', personId: 'yuanhong-157386' }],
     },
     {
       name: '府兵制（西魏北周）',
@@ -81,7 +84,7 @@ export const NANBEI: DynastyProfile = {
       background: '平城偏北、保守势力强，孝文帝以南伐为名，实则迁都洛阳。',
       outcome: '494年迁都洛阳，改官制、汉姓、服饰、语言、婚姻，全面汉化。',
       impact: '民族大融合加速，为隋唐统一与文化整合奠定基础。',
-      figures: [{ name: '北魏孝文帝' }],
+      figures: [{ name: '北魏孝文帝', personId: 'yuanhong-157386' }],
     },
     {
       year: 548,
@@ -91,7 +94,10 @@ export const NANBEI: DynastyProfile = {
       background: '梁武帝晚年佞佛、政事废弛，侯景降而复叛。',
       outcome: '548年侯景围攻台城，549年梁武帝饿死，江南大乱；后陈霸先平之。',
       impact: '江南经济文化遭重创，南朝门阀几尽，士族衰落、寒人崛起。',
-      figures: [{ name: '侯景', personId: 'houjing-194562' }, { name: '梁武帝' }],
+      figures: [
+        { name: '侯景', personId: 'houjing-194562' },
+        { name: '梁武帝', personId: 'xiaoyan-148978' },
+      ],
     },
     {
       year: 577,
@@ -111,7 +117,10 @@ export const NANBEI: DynastyProfile = {
       background: '隋代北周、国力强盛；南陈君昏国弱。',
       outcome: '589年隋灭陈，俘陈后主，南北统一。',
       impact: '魏晋南北朝近三百年分裂终结，隋唐大一统由此开启。',
-      figures: [{ name: '隋文帝' }, { name: '陈后主', personId: 'wk-Q718206' }],
+      figures: [
+        { name: '隋文帝', personId: 'yangjian-23644' },
+        { name: '陈后主', personId: 'wk-Q718206' },
+      ],
     },
   ],
   culture: [

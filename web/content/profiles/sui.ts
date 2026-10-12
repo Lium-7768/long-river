@@ -18,7 +18,10 @@ export const SUI: DynastyProfile = {
       desc: '中书取旨、门下审议、尚书执行，下设六部，确立中央官制基本框架。',
       background: '隋文帝废北周六官之弊，采汉魏以来官制之优，创三省六部，权责分明。',
       impact: '为唐所承并完善，成中国古代中央官制成熟范式，沿用至明清。',
-      figures: [{ name: '隋文帝' }, { name: '高颎', personId: 'gb-隋书-卷41-高颎' }],
+      figures: [
+        { name: '隋文帝', personId: 'yangjian-23644' },
+        { name: '高颎', personId: 'gb-隋书-卷41-高颎' },
+      ],
     },
     {
       name: '科举制创立',
@@ -38,7 +41,7 @@ export const SUI: DynastyProfile = {
       desc: '按丁授田，行租庸调之法，轻徭薄赋、休养生息。',
       background: '承北朝均田之制，隋初地广人稀，均田以安民、增赋税。',
       impact: '开皇年间户口、仓储大增，国用丰足；为唐初制度所承。',
-      figures: [{ name: '隋文帝' }],
+      figures: [{ name: '隋文帝', personId: 'yangjian-23644' }],
     },
     {
       name: '府兵制',
@@ -48,7 +51,7 @@ export const SUI: DynastyProfile = {
       desc: '兵农合一，府兵受田、轮番宿卫，军权集于中央。',
       background: '承西魏北周府兵之制，隋设十二卫统领、军府遍布，寓兵于农。',
       impact: '强化中央军权、减轻军费，为隋统一与唐初军事强盛奠基。',
-      figures: [{ name: '隋文帝' }],
+      figures: [{ name: '隋文帝', personId: 'yangjian-23644' }],
     },
     {
       name: '大运河',
@@ -70,7 +73,10 @@ export const SUI: DynastyProfile = {
       background: '北周宣帝崩，外戚杨坚辅政，受禅代周建隋，渐次统一北方。',
       outcome: '581年杨坚称帝建隋，行均田、轻赋役、整吏治，仓库充盈，史称「开皇之治」。',
       impact: '为统一南北、缔造盛世奠定基础。',
-      figures: [{ name: '隋文帝' }, { name: '高颎', personId: 'gb-隋书-卷41-高颎' }],
+      figures: [
+        { name: '隋文帝', personId: 'yangjian-23644' },
+        { name: '高颎', personId: 'gb-隋书-卷41-高颎' },
+      ],
     },
     {
       year: 589,
@@ -81,7 +87,7 @@ export const SUI: DynastyProfile = {
       outcome: '589年晋王杨广、贺若弼、韩擒虎等渡江攻建康，陈后主被俘，陈亡。',
       impact: '结束魏晋南北朝分裂，中国重归一统，隋制影响深远。',
       figures: [
-        { name: '隋文帝' },
+        { name: '隋文帝', personId: 'yangjian-23644' },
         { name: '韩擒虎', personId: 'hanqin-432925' },
         { name: '贺若弼', personId: 'heruo-466025' },
       ],
@@ -138,7 +144,7 @@ export const SUI: DynastyProfile = {
       desc: '隋广建官仓（含嘉仓、回洛仓等），储粮之丰为历代所罕见。',
       background: '隋文帝重积蓄、轻徭赋，国库粮仓盈溢，「计天下储积，得供五六十年」。',
       impact: '反映隋初经济的恢复与国家的富足，仓储制度亦为唐所承。',
-      figures: [{ name: '隋文帝' }],
+      figures: [{ name: '隋文帝', personId: 'yangjian-23644' }],
       works: ['含嘉仓遗址'],
     },
     {

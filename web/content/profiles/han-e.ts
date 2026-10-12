@@ -22,7 +22,7 @@ export const HAN_E: DynastyProfile = {
         '光武惩西汉外朝权臣（如王莽）之弊，将机要政务归尚书台，由皇帝近臣领之，三公仅备位。',
       impact:
         '皇权高度集中，然皇帝若幼弱，则权柄落入辅政的外戚或亲信的宦官之手，为东汉外戚宦官交替专权之制度根源。',
-      figures: [{ name: '汉光武帝' }],
+      figures: [{ name: '汉光武帝', personId: 'liuxiu-24661' }],
     },
     {
       name: '察举·征辟与门阀化',
@@ -49,7 +49,7 @@ export const HAN_E: DynastyProfile = {
       background: '天下初定，豪强兼并、隐瞒田产户口，赋税不均。光武下度田令，遣官检核州郡。',
       impact:
         '遭豪强大族激烈反抗，光武虽诛戮失职官吏高压推行，然终难彻底，「度田不实」成东汉难解之弊。',
-      figures: [{ name: '汉光武帝' }],
+      figures: [{ name: '汉光武帝', personId: 'liuxiu-24661' }],
     },
     {
       name: '西域都护·戊己校尉',
@@ -91,7 +91,7 @@ export const HAN_E: DynastyProfile = {
       impact:
         '开创「光武中兴」，轻徭薄赋、释放奴婢、整顿吏治，东汉前期重现治世，为明章之治奠定基础。',
       figures: [
-        { name: '汉光武帝' },
+        { name: '汉光武帝', personId: 'liuxiu-24661' },
         { name: '邓禹', personId: 'dengyu-135103' },
         { name: '冯异', personId: 'fengyi-30683' },
       ],
@@ -195,7 +195,10 @@ export const HAN_E: DynastyProfile = {
       background: '曹操挟献帝、平北方，权倾天下；曹操死后，子曹丕嗣魏王。',
       outcome: '汉献帝被迫「禅让」，曹丕称帝建魏；次年刘备称帝于蜀，孙权建吴，三国鼎立。',
       impact: '两汉四百年帝业终结，中国历史进入三国魏晋南北朝分裂时期。',
-      figures: [{ name: '曹丕', personId: 'wk-Q313333' }, { name: '汉献帝' }],
+      figures: [
+        { name: '曹丕', personId: 'wk-Q313333' },
+        { name: '汉献帝', personId: 'liuxie-30267' },
+      ],
     },
   ],
   culture: [
