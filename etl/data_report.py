@@ -33,7 +33,9 @@ def main():
               "mourning", "nianhao", "editions", "person_notes", "possessions", "addr_belongs",
               "text_types", "lineage", "poem_persons", "addr_geo", "addr_geo_more", "qid_verify",
 "aliases", "person_occupations", "person_birthplace", "office_dict",
-"bibliography", "assoc_dict", "person_network", "bio_excerpt", "evid", "texts"]:
+"bibliography", "assoc_dict", "person_network", "bio_excerpt", "evid", "texts",
+"person_status", "person_texts", "ref_dict", "evidence_sources", "region_stats",
+"person_merge", "book_meta", "ctext_titles", "emperor", "hist_alias"]:
         try:
             L.append(f"| {t} | {q(f'SELECT COUNT(*) FROM {t}'):,} |")
         except Exception:
