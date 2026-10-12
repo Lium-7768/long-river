@@ -106,6 +106,13 @@ function handle(pathname, searchParams) {
        FROM lineage l JOIN persons p ON p.id = l.student
        WHERE l.teacher = ? LIMIT 200`
     ).all(id);
+    // 人物合并依据（消歧）：person_merge 以 cbdb_id 关联
+    const merges = person.cbdb_id != null
+      ? db.prepare(
+          `SELECT merged_from, substr(note,1,200) AS note, source
+           FROM person_merge WHERE person_id = ? LIMIT 50`
+        ).all(String(person.cbdb_id))
+      : [];
     const officeAddrs = db.prepare(
       `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? LIMIT 100`
     ).all(id);
@@ -151,7 +158,7 @@ function handle(pathname, searchParams) {
       addr: parseJsonArr(person.addr),
       sources: parseJsonArr(person.sources),
       kinships, offices, entries, works, texts, assocs,
-      masters, disciples,
+      masters, disciples, merges,
       officeAddrs: officeAddrs.map((r) => r.addr),
       evid,
       poems: poems.length ? poems : poemsByName,

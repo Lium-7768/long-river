@@ -399,6 +399,22 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 </div>
               </Section>
             ) : null}
+
+            {p.merges?.length ? (
+              <Section title={`数据说明（合并依据 ${p.merges.length}）`}>
+                <ul className="space-y-2">
+                  {p.merges.map((m, i) => (
+                    <li
+                      key={i}
+                      className="rounded-lg border border-white/10 bg-white/[0.02] px-4 py-2 text-base leading-relaxed text-white/55"
+                    >
+                      <span className="text-white/40">CBDB #{m.merged_from}：</span>
+                      {m.note}
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            ) : null}
           </>
         )}
       </div>

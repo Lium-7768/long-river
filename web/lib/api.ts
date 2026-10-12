@@ -134,6 +134,7 @@ export interface PersonDetail extends PersonBrief {
   assocs?: { rel_name: string; id: string; name: string }[];
   masters?: { rel: string; id: string; name: string }[];
   disciples?: { rel: string; id: string; name: string }[];
+  merges?: { merged_from: number; note: string; source: string }[];
   excerpts?: { book: string; volume: string; excerpt: string }[];
 }
 
