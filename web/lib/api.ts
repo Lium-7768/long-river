@@ -122,6 +122,7 @@ export interface PersonDetail extends PersonBrief {
   offices: Office[];
   entries: Entry[];
   works: Work[];
+  texts?: { title: string; role: string; year: number }[];
   qid?: string | null;
   birth_exact?: string | null;
   death_exact?: string | null;

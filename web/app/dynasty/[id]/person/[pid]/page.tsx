@@ -235,6 +235,27 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
               </Section>
             )}
 
+            {p.texts?.length ? (
+              <Section title={`书目著录（${p.texts.length}）`}>
+                <div className="flex flex-wrap gap-2">
+                  {p.texts.map((t, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-base text-white/70"
+                      title={[t.role && `角色：${t.role}`, t.year > 0 && `公元${t.year}`]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    >
+                      {t.title}
+                      {t.role && t.role !== '未详' ? (
+                        <span className="ml-2 text-white/40">{t.role}</span>
+                      ) : null}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
+
             {p.nPoems ? (
               <Section title={`诗词作品（${p.nPoems}）`}>
                 <div className="space-y-3">
