@@ -185,4 +185,9 @@ export const api = {
       '/api/person-geo',
       { dynasty, limit },
     ),
+  regionStats: (q?: string) =>
+    get<{ ok: true; data: { region: string; kaiyuan_hu: number; yuanhe_hu: number }[] }>(
+      '/api/region-stats',
+      q ? { q } : {},
+    ),
 };

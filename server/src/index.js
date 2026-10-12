@@ -299,6 +299,19 @@ function handle(pathname, searchParams) {
     return ok(rows);
   }
 
+  if (p === '/api/region-stats') {
+    const q = searchParams.get('q');
+    const rows = q
+      ? db.prepare(
+          `SELECT region, kaiyuan_hu, yuanhe_hu FROM region_stats
+           WHERE region LIKE ? ORDER BY kaiyuan_hu DESC LIMIT 200`
+        ).all(`%${q}%`)
+      : db.prepare(
+          `SELECT region, kaiyuan_hu, yuanhe_hu FROM region_stats ORDER BY kaiyuan_hu DESC LIMIT 200`
+        ).all();
+    return ok(rows);
+  }
+
   if (p === '/api/stats') {
     const s = db.prepare(
       `SELECT
@@ -316,7 +329,12 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM persons WHERE qid IS NOT NULL) AS with_qid,
          (SELECT COUNT(*) FROM persons WHERE female = 1) AS female,
          (SELECT COUNT(*) FROM persons WHERE summary IS NOT NULL) AS with_summary,
-         (SELECT COUNT(*) FROM persons WHERE prominence >= 5) AS prom5`
+         (SELECT COUNT(*) FROM persons WHERE prominence >= 5) AS prom5,
+         (SELECT COUNT(*) FROM person_status) AS statuses,
+         (SELECT COUNT(*) FROM person_texts) AS person_texts,
+         (SELECT COUNT(*) FROM ref_dict) AS ref_terms,
+         (SELECT COUNT(*) FROM evidence_sources) AS ev_sources,
+         (SELECT COUNT(*) FROM region_stats) AS regions`
     ).get();
     return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + CHGIS + 维基文库', backend: 'local-sqlite' });
   }
