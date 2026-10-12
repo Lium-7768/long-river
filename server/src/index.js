@@ -120,6 +120,9 @@ function handle(pathname, searchParams) {
     const birthplaces = db.prepare(
       `SELECT place FROM person_birthplace WHERE person_id = ? LIMIT 10`
     ).all(id).map((r) => r.place);
+    const statuses = db.prepare(
+      `SELECT status, fy, ly FROM person_status WHERE person_id = ? LIMIT 20`
+    ).all(person.cbdb_id != null ? String(person.cbdb_id) : id);
     const network = db.prepare(
       `SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?`
     ).get(id) || null;
@@ -144,6 +147,7 @@ function handle(pathname, searchParams) {
       aliases,
       occupations,
       birthplaces,
+      statuses,
       network,
       excerpts,
     });

@@ -128,6 +128,7 @@ export interface PersonDetail extends PersonBrief {
   aliases?: { alias: string; type_desc: string }[];
   occupations?: string[];
   birthplaces?: string[];
+  statuses?: { status: string; fy: number; ly: number }[];
   network?: { n_out: number; n_in: number; n_types: number } | null;
   excerpts?: { book: string; volume: string; excerpt: string }[];
 }

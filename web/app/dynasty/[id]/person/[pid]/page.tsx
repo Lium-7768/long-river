@@ -84,6 +84,21 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                   ))}
                 </div>
               ) : null}
+              {p.statuses?.length ? (
+                <div className="mt-3">
+                  <div className="mb-2 text-base text-white/40">身份 / 技能</div>
+                  <div className="flex flex-wrap gap-2">
+                    {p.statuses.map((s, i) => (
+                      <span
+                        key={i}
+                        className="rounded-lg border border-sky-400/20 bg-sky-400/[0.06] px-3 py-1 text-base text-sky-100/80"
+                      >
+                        {s.status}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               {p.summary && (
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">
                   {p.summary}
