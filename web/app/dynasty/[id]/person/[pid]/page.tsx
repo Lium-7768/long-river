@@ -340,6 +340,42 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                 </div>
               </Section>
             ) : null}
+
+            {p.masters?.length ? (
+              <Section title={`师承（${p.masters.length}）`}>
+                <div className="flex flex-wrap gap-2">
+                  {p.masters.map((m, i) => (
+                    <button
+                      key={`${m.id}-${i}`}
+                      onClick={() => setDrawer({ id: m.id, name: m.name })}
+                      className="cursor-pointer rounded-lg border border-indigo-400/20 bg-indigo-400/[0.06] px-3 py-1 text-base text-indigo-100/80 transition hover:border-indigo-400/50 hover:bg-indigo-400/[0.12]"
+                      title={m.rel || undefined}
+                    >
+                      {m.rel ? <span className="text-indigo-300/60">{m.rel}·</span> : null}
+                      {m.name}
+                    </button>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
+
+            {p.disciples?.length ? (
+              <Section title={`门人（${p.disciples.length}）`}>
+                <div className="flex flex-wrap gap-2">
+                  {p.disciples.map((d, i) => (
+                    <button
+                      key={`${d.id}-${i}`}
+                      onClick={() => setDrawer({ id: d.id, name: d.name })}
+                      className="cursor-pointer rounded-lg border border-cyan-400/20 bg-cyan-400/[0.06] px-3 py-1 text-base text-cyan-100/80 transition hover:border-cyan-400/50 hover:bg-cyan-400/[0.12]"
+                      title={d.rel || undefined}
+                    >
+                      {d.rel ? <span className="text-cyan-300/60">{d.rel}·</span> : null}
+                      {d.name}
+                    </button>
+                  ))}
+                </div>
+              </Section>
+            ) : null}
           </>
         )}
       </div>

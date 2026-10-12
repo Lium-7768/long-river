@@ -132,6 +132,8 @@ export interface PersonDetail extends PersonBrief {
   statuses?: { status: string; fy: number; ly: number }[];
   network?: { n_out: number; n_in: number; n_types: number } | null;
   assocs?: { rel_name: string; id: string; name: string }[];
+  masters?: { rel: string; id: string; name: string }[];
+  disciples?: { rel: string; id: string; name: string }[];
   excerpts?: { book: string; volume: string; excerpt: string }[];
 }
 

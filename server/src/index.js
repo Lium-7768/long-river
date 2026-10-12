@@ -95,6 +95,17 @@ function handle(pathname, searchParams) {
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ? LIMIT 200`
     ).all(id);
+    // 师徒传承：作为老师(门人) / 作为学生(师承)
+    const masters = db.prepare(
+      `SELECT l.rel, l.teacher AS id, p.name
+       FROM lineage l JOIN persons p ON p.id = l.teacher
+       WHERE l.student = ? LIMIT 100`
+    ).all(id);
+    const disciples = db.prepare(
+      `SELECT l.rel, l.student AS id, p.name
+       FROM lineage l JOIN persons p ON p.id = l.student
+       WHERE l.teacher = ? LIMIT 200`
+    ).all(id);
     const officeAddrs = db.prepare(
       `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? LIMIT 100`
     ).all(id);
@@ -140,6 +151,7 @@ function handle(pathname, searchParams) {
       addr: parseJsonArr(person.addr),
       sources: parseJsonArr(person.sources),
       kinships, offices, entries, works, texts, assocs,
+      masters, disciples,
       officeAddrs: officeAddrs.map((r) => r.addr),
       evid,
       poems: poems.length ? poems : poemsByName,
