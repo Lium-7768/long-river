@@ -13,7 +13,7 @@ import sqlite3, os, re, json, urllib.request, urllib.parse, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from opencc import OpenCC
 t2s = OpenCC('t2s')
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 API = "https://zh.wikisource.org/w/api.php"
 UA = "long-river-research/1.0"
 OP = urllib.request.build_opener(urllib.request.ProxyHandler())

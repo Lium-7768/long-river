@@ -12,7 +12,7 @@ from opencc import OpenCC
 
 _t2s = OpenCC('t2s')
 _OP = urllib.request.build_opener(urllib.request.ProxyHandler())
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 
 # 缺失的著名人物（通称 → 维基条目标题/可选重定向）

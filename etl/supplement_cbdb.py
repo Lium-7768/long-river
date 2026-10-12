@@ -16,7 +16,7 @@
 import json, os, re, sqlite3, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB = os.path.join(ROOT, "data", "lr-song.sqlite3")
+DB = os.path.join(ROOT, "data", "db", "lr-song.sqlite3")
 
 # 扩展映射：未映射的 CBDB 朝代代码 → 我们的 22 档（中国史），None = 不纳入
 DY2DYNASTY_EXT = {

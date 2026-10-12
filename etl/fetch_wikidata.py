@@ -7,7 +7,7 @@ CBDB 对先秦—三国覆盖极差（秦0/夏0/商0/西周0/新0/五代0），
 来源可核验：每条带 Wikidata Qid（可直链 wikidata.org/entity/Qxxx）。
 
 用法:
-    python3 etl/fetch_wikidata.py -o etl/build/wikidata_persons.jsonl
+    python3 etl/fetch_wikidata.py -o data/build/wikidata_persons.jsonl
 """
 import argparse, json, sys, time, urllib.parse, urllib.request
 
@@ -151,7 +151,7 @@ def sane(birth, death):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-o", "--out", default="etl/build/wikidata_persons.jsonl")
+    ap.add_argument("-o", "--out", default="data/build/wikidata_persons.jsonl")
     args = ap.parse_args()
 
     all_rows = {}

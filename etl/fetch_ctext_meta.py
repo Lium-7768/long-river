@@ -6,7 +6,7 @@ ctext gettextinfo 提供：成书朝代区间 / 版本 / 题名。
 """
 import sqlite3, os, json, time, urllib.request, urllib.parse
 _OP = urllib.request.build_opener(urllib.request.ProxyHandler())
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 
 # 书名 → ctext urn 候选（人工/规则）

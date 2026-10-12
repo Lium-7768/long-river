@@ -9,7 +9,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 # 噪声：未詳占位、朝代名、路名过于宽泛
 NOISE = re.compile(r"^\[?未詳\]?$|^[唐宋元明清漢汉秦隋晉晋周郑陳陈]朝$|^宋$|^唐$|^元$|^明$|^清$")

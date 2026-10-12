@@ -12,7 +12,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 NEWBOOKS = {
     "三国志": "sanguo", "晋书": "jin", "宋书": "nanbei", "南齐书": "nanbei",

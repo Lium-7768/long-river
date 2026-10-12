@@ -19,7 +19,7 @@
 import sqlite3
 import sys
 
-DB = sys.argv[1] if len(sys.argv) > 1 else 'data/lr-song.sqlite3'
+DB = sys.argv[1] if len(sys.argv) > 1 else 'data/db/lr-song.sqlite3'
 
 # 朝代边界（与 web/content/dynasties.ts 一致）
 RANGES = [

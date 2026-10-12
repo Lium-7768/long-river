@@ -4,7 +4,7 @@
 从 cbdb_ALTNAME_DATA（208,959）整合为 aliases(person_id, alias, type, type_desc, source)。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 
 def main():

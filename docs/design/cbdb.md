@@ -10,7 +10,7 @@
 |---|---|
 | 官方仓库 | https://github.com/cbdb-project/cbdb_sqlite |
 | 下载源 | HuggingFace dataset `cbdb/cbdb-sqlite` |
-| 版本元数据 | `etl/data/latest.json`（含文件名 / SHA-256 / 直链） |
+| 版本元数据 | `data/db/cbdb/latest.json`（含文件名 / SHA-256 / 直链） |
 | 获取方式 | `bash etl/fetch.sh`（自动校验 sqlite 本体 SHA-256） |
 | 许可 | CBDB Data Licensing Terms（同 HuggingFace dataset 声明） |
 
@@ -18,7 +18,7 @@
 
 ## 2. 版本核对结论
 
-原先 `doc/data-model.md` 的映射表**大部分正确**，但有以下偏差：
+原先 `docs/design/data-model.md` 的映射表**大部分正确**，但有以下偏差：
 
 | 文档原写 | 实际 | 说明 |
 |---|---|---|
@@ -68,7 +68,7 @@
 | 12 | 閩國 | 909 | 945 | 闽 |
 | 13 | 南漢 | 917 | 971 | 南汉 |
 
-## 5. 覆盖面与分层（`etl/build/stats.json`）
+## 5. 覆盖面与分层（`data/build/stats.json`）
 
 **筛选政权 (7,8,10,11,12,13,15,16,17) → 86,474 人**
 
@@ -102,7 +102,7 @@
 
 **所有 86,474 人一律入库、可检索、可统计**；`prominence` 仅供视觉层决定呈现密度（对齐"不隐藏数据、改 UI"原则）。
 
-## 6. 与现有原型数据的校核（`etl/build/audit_report.json`）
+## 6. 与现有原型数据的校核（`data/build/audit_report.json`）
 
 | 项 | 数 |
 |---|---|
@@ -136,7 +136,7 @@
 ```bash
 bash etl/fetch.sh                      # 下载 + 校验 CBDB
 python3 etl/inspect_schema.py          # 核对表结构（本文档依据）
-python3 etl/build_from_cbdb.py         # 生成 etl/build/*.jsonl
+python3 etl/build_from_cbdb.py         # 生成 data/build/*.jsonl
 python3 etl/audit_against_prototype.py # 与 prototype/data.js 校核
 ```
 

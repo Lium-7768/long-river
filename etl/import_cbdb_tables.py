@@ -18,8 +18,8 @@ LOCAL_TABLES = {"persons", "kinships", "offices", "entries", "works"}
 
 
 def main():
-    src_path = sys.argv[1] if len(sys.argv) > 1 else "etl/data/cbdb_20261003.sqlite3"
-    dst_path = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else "data/lr-song.sqlite3"
+    src_path = sys.argv[1] if len(sys.argv) > 1 else "data/db/cbdb/cbdb_20261003.sqlite3"
+    dst_path = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else "data/db/lr-song.sqlite3"
     force = "--force" in sys.argv
 
     src = sqlite3.connect(src_path)

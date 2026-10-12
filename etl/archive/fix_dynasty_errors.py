@@ -12,7 +12,7 @@
 import sqlite3, json, os, re
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 # 正史来源权重
 def source_rank(src):

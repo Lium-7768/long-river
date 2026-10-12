@@ -7,7 +7,7 @@ Wikidata 对清帝/部分帝王 native 缺失或为满文，补一张公认的�
 """
 import sqlite3, os
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 庙号/通称 → (本名, 朝代id, 在位起, 在位止)
 MANUAL = {

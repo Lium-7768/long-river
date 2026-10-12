@@ -6,7 +6,7 @@
 import sqlite3, os, random
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                    "data", "可信度报告.md")
 

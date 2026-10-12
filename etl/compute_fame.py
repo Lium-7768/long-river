@@ -5,7 +5,7 @@ fame ≈ office*2 + kinship + works*3
 用聚合表一次性算完（避免 O(n²) 相关子查询）。
 """
 import sqlite3, sys, time
-DB = sys.argv[1] if len(sys.argv) > 1 else 'data/lr-song.sqlite3'
+DB = sys.argv[1] if len(sys.argv) > 1 else 'data/db/lr-song.sqlite3'
 db = sqlite3.connect(DB)
 t0=time.time()
 

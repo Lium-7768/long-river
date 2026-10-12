@@ -6,9 +6,9 @@
 import sqlite3, os, json
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                   "etl", "build", "data_report.md")
+                   "data", "build", "data_report.md")
 
 DYN = [('xia', '夏'), ('shang', '商'), ('zhou-w', '西周'), ('zhou-e', '东周'),
        ('qin', '秦'), ('han-w', '西汉'), ('xin', '新'), ('han-e', '东汉'),
@@ -23,7 +23,7 @@ def main():
     q = lambda s, p=(): con.execute(s, p).fetchone()[0]
     L = []
     L.append("# 长河数据完整度报告\n")
-    L.append(f"数据源：本地 SQLite `data/lr-song.sqlite3`（唯一数据源）\n")
+    L.append(f"数据源：本地 SQLite `data/db/lr-song.sqlite3`（唯一数据源）\n")
 
     L.append("## 一、表规模\n")
     L.append("| 表 | 行数 |")

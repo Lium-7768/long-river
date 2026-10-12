@@ -8,7 +8,7 @@ import sqlite3, os, sys, re, json, time, urllib.request, urllib.parse
 _PROXY = urllib.request.ProxyHandler()  # 自动读 http_proxy/all_proxy
 _OPENER = urllib.request.build_opener(_PROXY)
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 API = "https://zh.wikisource.org/w/api.php"
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 

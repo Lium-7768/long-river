@@ -6,7 +6,7 @@ editions 原表以 text_id 链接、publisher 为缩写（CSJC/SKQSZB…）。
 """
 import sqlite3, os, re, json
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 常见丛书/版本缩写 → 全称（公知注释）
 LEGEND = {

@@ -1,13 +1,13 @@
 /**
  * 长河 · 本地后端（Node + better-sqlite3）
  * ------------------------------------------------------------
- * 唯一后端。数据源为本地 SQLite (data/lr-song.sqlite3)。
+ * 唯一后端。数据源为本地 SQLite (data/db/lr-song.sqlite3)。
  *
  * 目的：D1 免费层有「每日写入行数」限额，无法承载全史导入。
  *      本地 SQLite 不受限，作为唯一数据源（已弃用 Cloudflare D1）。
  *
  * 环境变量：
- *   LR_DB    SQLite 路径（默认 ../data/lr-song.sqlite3）
+ *   LR_DB    SQLite 路径（默认 ../data/db/lr-song.sqlite3）
  *   PORT     端口（默认 8787）
  */
 import { createServer } from 'node:http';
@@ -16,7 +16,7 @@ import { dirname, join, resolve } from 'node:path';
 import Database from 'better-sqlite3';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DB_PATH = resolve(process.env.LR_DB || join(__dirname, '..', '..', 'data', 'lr-song.sqlite3'));
+const DB_PATH = resolve(process.env.LR_DB || join(__dirname, '..', '..', 'data', 'db', 'lr-song.sqlite3'));
 const PORT = parseInt(process.env.PORT || '8787', 10);
 
 const db = new Database(DB_PATH, { readonly: true });

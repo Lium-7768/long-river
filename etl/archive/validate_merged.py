@@ -2,7 +2,7 @@
 """校验合并后的数据集是否满足本项目 schema 约束。
 
 检查项：id 唯一、必填字段、枚举合法、时间合理、繁简一致。
-用法: python3 etl/validate_merged.py [--file etl/build/merged_persons.jsonl]
+用法: python3 etl/validate_merged.py [--file data/build/merged_persons.jsonl]
 """
 import argparse
 import json

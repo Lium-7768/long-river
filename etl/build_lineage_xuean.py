@@ -11,7 +11,7 @@
 import sqlite3, os, re
 from opencc import OpenCC
 t2s = OpenCC("t2s")
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 正文首句：姓名 + 字/號
 BIO_START = re.compile(r'^[\u3000\s]*([\u4e00-\u9fa5]{2,4})[字號号]')

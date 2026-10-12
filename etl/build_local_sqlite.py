@@ -4,12 +4,12 @@
 保证本地库与 D1 语义一致（同源）。D1 额度受限时，本地库是权威副本。
 
 用法:
-    python3 etl/build_local_sqlite.py [-o data/lr-song.sqlite3]
+    python3 etl/build_local_sqlite.py [-o data/db/lr-song.sqlite3]
 """
 import argparse, json, os, sqlite3
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD = os.path.join(ROOT, "etl", "build")
+BUILD = os.path.join(ROOT, "data", "build")
 
 SCHEMA = """
 CREATE TABLE persons (
@@ -30,7 +30,7 @@ def jdump(v):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-o", "--out", default=os.path.join(ROOT, "data", "lr-song.sqlite3"))
+    ap.add_argument("-o", "--out", default=os.path.join(ROOT, "data", "db", "lr-song.sqlite3"))
     a = ap.parse_args()
 
     if os.path.exists(a.out):

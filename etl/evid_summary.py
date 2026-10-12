@@ -11,7 +11,7 @@ s2t = OpenCC('s2t')
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 BOOKS = ["史记", "汉书", "后汉书", "三国志", "晋书", "宋书", "南齐书", "梁书",
          "陈书", "魏书", "北齐书", "周书", "隋书", "南史", "北史", "旧唐书",

@@ -7,37 +7,43 @@
 
 ## 结构
 
-| 目录 | 说明 |
-|---|---|
-| `web/` | 前端（Next.js 15 App Router + React Three Fiber）|
-| `server/` | 后端（Node + better-sqlite3，端口 8787，**唯一后端**）|
-| `etl/` | 数据流水线（CBDB/Wikidata/维基 → SQLite）；见 [`etl/README.md`](etl/README.md) |
-| `data/` | 主库与数据报告；见 [`data/README.md`](data/README.md) |
-| `doc/` | 设计文档（架构/数据模型/需求）；见 [`doc/architecture.md`](doc/architecture.md) |
+```
+long-river/
+├── web/            前端（Next.js 15 + React Three Fiber）
+├── server/         后端（Node + better-sqlite3，端口 8787，唯一后端）
+├── etl/            数据流水线（脚本 + archive/）
+├── data/           数据（见 data/README.md）
+│   ├── db/         主库 + 备份 + cbdb/ 原料库
+│   └── build/      ETL 中间产物
+├── docs/           全部文档
+│   ├── design/     架构 / 数据模型 / 需求 / CBDB / 视觉
+│   ├── reports/    数据报告（可信度 / 史料互证 / 诗词核验 …）
+│   └── archive/    归档调研稿
+├── asset/          原型数据
+├── README.md       本文件
+└── AGENTS.md       协作规则（改代码前必读）
+```
 
 ## 快速开始
 
 ```bash
 # 1. 后端（本地 SQLite，端口 8787）
-node server/src/index.js
+node server/src/index.js          # 默认读 data/db/lr-song.sqlite3，可用 LR_DB 覆盖
 
 # 2. 前端（Next dev，端口 3000）
 cd web && pnpm install && pnpm dev
 ```
 
-前端默认连 `http://localhost:8787`，可用 `NEXT_PUBLIC_API_BASE` 覆盖。
-
 ## 核心约定
 
-- **本地 SQLite 是唯一数据源**（已弃用 Cloudflare D1）。
+- **本地 SQLite 是唯一数据源**（`data/db/lr-song.sqlite3`，已弃用 Cloudflare D1）。
 - 数据全部落入**自有表**；`cbdb_` 原始表仅作原料，不直连前端。
+- **二进制/备份不含 git**（见 `data/.gitignore`）。数据与文档分离：`data/` 放数据，`docs/` 放文档。
 - 年份展示一律带纪年前缀（`公元前221` / `公元960`），走 `web/components/river/year.ts`。
 - 每条数据可回溯至具体史料出处。
 
-详见 [`AGENTS.md`](AGENTS.md)（协作规则）与 [`data/数据来源与可信度总报告.md`](data/数据来源与可信度总报告.md)（数据溯源）。
-
 ## 仓库维护
 
-- 本仓库**不提交**数据库二进制、备份分卷与 ETL 中间产物（见 `data/.gitignore`、`etl/.gitignore`）。
-- 2026-10-12 曾用 `git filter-repo` 重写历史，移除误入库的 ~264MB 数据库备份（.git 13GB → 3.8MB）。
+- 不提交数据库二进制、备份分卷与 ETL 中间产物（见 `data/.gitignore`、`etl/.gitignore`）。
+- 2026-10-12 曾用 `git filter-repo` 重写历史，移除误入库的 ~264MB 数据库备份（.git 13GB → 8MB）。
   重写后**所有 commit SHA 变更**，需 `git fetch && git reset --hard origin/dev` 重新同步。

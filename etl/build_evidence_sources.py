@@ -5,7 +5,7 @@
 并标注哪些已收录全文（texts 表）、哪些可补。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 
 def main():

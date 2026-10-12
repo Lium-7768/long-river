@@ -10,7 +10,7 @@ import sqlite3, os, json, time, urllib.request, urllib.parse, re, sys
 
 _OPENER = urllib.request.build_opener(urllib.request.ProxyHandler())
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 API = "https://chgis.hudci.org/tgaz/placename"
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 

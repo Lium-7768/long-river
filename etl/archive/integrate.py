@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """把 CBDB 硬事实附加到现有原型人物上（不覆盖，仅并列）。
 
-产出 etl/build/enriched.jsonl：每个原型人物一条，含
+产出 data/build/enriched.jsonl：每个原型人物一条，含
   - 原型原值
   - CBDB 匹配（唯一/多名/无）
   - cbdb 事实块（生卒/字号/亲属数/官职数/入仕/威望）
   - conflicts：与原型的差异项（供 UI 标注"异说"）
 
-原则（doc/cbdb.md §6）：
+原则（docs/design/cbdb.md §6）：
   - 不覆盖任何现有值
   - 差异以多值并列形式保留
   - 无匹配的人物标 unmatched，保留原型数据不动
 
 用法:
-    python3 etl/integrate.py [--out etl/build]
+    python3 etl/integrate.py [--out data/build]
 """
 import argparse
 import json

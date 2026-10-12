@@ -33,7 +33,7 @@ def main():
     src, want_dy, out = sys.argv[1], sys.argv[2], sys.argv[3]
 
     # DB 中的姓名（限目标朝代）
-    con = sqlite3.connect("data/lr-song.sqlite3")
+    con = sqlite3.connect("data/db/lr-song.sqlite3")
     names = set()
     for (nm,) in con.execute(
             "SELECT DISTINCT name FROM persons WHERE dynasty_id=? AND length(name)>=2 AND length(name)<=4",

@@ -2,7 +2,7 @@
 # 在 lr-song.sqlite3 上补充 dynasty_id + fame_score
 # 用法：bash etl/enrich_sqlite.sh [db路径]
 set -e
-DB="${1:-data/lr-song.sqlite3}"
+DB="${1:-data/db/lr-song.sqlite3}"
 echo "== 1. 拆分朝代 =="
 python3 etl/split_dynasties.py "$DB"
 echo

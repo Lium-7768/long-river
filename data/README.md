@@ -1,18 +1,21 @@
-# 数据备份与重建
+# 数据目录
 
 > **本地 SQLite 是唯一数据源。** 已弃用 D1 接入方式。
 
-## 主库
+## 结构
 
-| 文件 | 大小 | 进 git | 说明 |
-|---|---|---|---|
-| `lr-song.sqlite3` | ~1.6 GB | ❌ | **主数据库**（本地唯一数据源）|
-| `lr-song.sql.gz.part-*` | 分卷 ~90 MB | ❌ | 备份分卷（SQL 压缩），**不入 git** |
+| 路径 | 内容 | 进 git |
+|---|---|---|
+| `db/lr-song.sqlite3` | **主数据库**（~1.6 GB，唯一数据源）| ❌ |
+| `db/lr-song.sql.gz.part-*` | 备份分卷（~90 MB/卷）| ❌ |
+| `db/cbdb/cbdb_20261003.sqlite3` | CBDB 原料库（560 MB）| ❌ |
+| `build/` | ETL 中间产物（JSONL/JSON）| 仅 `data_report.md` |
+| `README.md` | 本文件 | ✅ |
 
-> **备份不进 git。** `.sqlite3` 与 `.sql.gz(.part-*)` 均在 `data/.gitignore` 中，
-> 请将备份放对象存储/外部介质，或用 `etl/backup_db.sh` 生成本地分卷。
+> **二进制不进 git**（见 `.gitignore`）。备份请走对象存储，或用 `etl/backup_db.sh`。
+> 文档（报告/设计）统一在 [`../docs/`](../docs/)。
 
-## 主库内容（86 表）
+## 主库内容（127 表）
 
 ### 加工表（8）— 前端/后端直接用
 | 表 | 行数 | 说明 |
@@ -67,34 +70,34 @@ CBDB 全库零丢失并入，可随时补新字段。
 ## 恢复本地 SQLite
 
 ```bash
-cat data/lr-song.sql.gz.part-* | gunzip -c | sqlite3 data/lr-song.sqlite3
+cat data/db/lr-song.sql.gz.part-* | gunzip -c | sqlite3 data/db/lr-song.sqlite3
 ```
 
 ## 备份主库（自动分卷）
 
 ```bash
-bash etl/backup_db.sh                 # → data/lr-song.sql.gz.part-aa / -ab
+bash etl/backup_db.sh                 # → data/db/lr-song.sql.gz.part-aa / -ab
 ```
 
 ## 从 CBDB 源库重建（完整流水线）
 
 ```bash
 # 1. CBDB 源库（560MB，需自备，不入 git）
-#    → etl/data/cbdb_20261003.sqlite3
+#    → data/db/cbdb/cbdb_20261003.sqlite3
 
 # 2. 从 CBDB 构建加工表（persons/kinships/offices/entries/works）
 python3 etl/build_from_cbdb.py
 python3 etl/build_sqlite_full.py
 
 # 3. 并入 CBDB 全部 78 原始表（cbdb_ 前缀）
-python3 etl/import_cbdb_tables.py etl/data/cbdb_20261003.sqlite3 data/lr-song.sqlite3
+python3 etl/import_cbdb_tables.py data/db/cbdb/cbdb_20261003.sqlite3 data/db/lr-song.sqlite3
 
 # 4. Wikidata 扩充
 python3 etl/fetch_wikidata.py
-python3 etl/merge_wikidata.py data/lr-song.sqlite3 etl/build/wikidata_persons.jsonl
+python3 etl/merge_wikidata.py data/db/lr-song.sqlite3 data/build/wikidata_persons.jsonl
 
 # 5. 公版史书全文入库（需先下载到 /tmp，见下表来源）
-python3 etl/import_texts.py data/lr-song.sqlite3
+python3 etl/import_texts.py data/db/lr-song.sqlite3
 
 # 6. 结构修复（幂等）
 python3 etl/fix_structure.py

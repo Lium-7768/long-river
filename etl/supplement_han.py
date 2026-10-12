@@ -8,7 +8,7 @@
 import sqlite3, re, os, sys, json
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 PAT = re.compile(r"([\u4e00-\u9fff]{2,4})[，,]?\s*字\s*([\u4e00-\u9fff]{1,3})[，,]([\u4e00-\u9fff]{2,10}?)(?:人也|人|縣人)")
 

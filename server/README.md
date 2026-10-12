@@ -13,7 +13,7 @@ pnpm dev          # http://localhost:8787
 ```
 
 环境变量：
-- `LR_DB`  SQLite 路径（默认 `../data/lr-song.sqlite3`）
+- `LR_DB`  SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
 - `PORT`  端口（默认 8787）
 
 ## 端点（与 Worker 相同）

@@ -6,7 +6,7 @@ nianhao 原 dynasty 为细粒度政权名（北魏/北宋/三国吴…），
 """
 import sqlite3, os
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # nianhao.dynasty → app dynasty_id
 MAP = {

@@ -6,7 +6,7 @@ ctext gettexttitles 返回 49,646 部书/篇，建立古籍标题索引，
 """
 import sqlite3, os, json, urllib.request
 _OP = urllib.request.build_opener(urllib.request.ProxyHandler())
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 
 

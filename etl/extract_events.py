@@ -12,7 +12,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 DY2D = {15: "song-w", 16: "liao", 17: "jin-chao", 18: "yuan", 19: "ming",
         20: "qing", 6: "tang", 25: "han-e", 29: "han-w", 3: "sanguo",

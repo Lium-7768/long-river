@@ -7,7 +7,7 @@
 import sqlite3, os, re, sys
 from opencc import OpenCC
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB = os.path.join(ROOT, "data", "lr-song.sqlite3")
+DB = os.path.join(ROOT, "data", "db", "lr-song.sqlite3")
 DIR = os.path.join(ROOT, "web", "content", "profiles")
 SKIP = {'index.ts', 'types.ts', 'slug.ts', 'famous-poems.ts'}
 _T2S = OpenCC('t2s')

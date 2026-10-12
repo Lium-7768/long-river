@@ -6,12 +6,12 @@
 - source：Wikidata Qid（可核验）
 - prominence：5（有独立条目）
 用法:
-    python3 etl/merge_wikidata.py data/lr-song.sqlite3 etl/build/wikidata_persons.jsonl
+    python3 etl/merge_wikidata.py data/db/lr-song.sqlite3 data/build/wikidata_persons.jsonl
 """
 import json, sqlite3, sys, time
 
-DB = sys.argv[1] if len(sys.argv) > 1 else "data/lr-song.sqlite3"
-SRC = sys.argv[2] if len(sys.argv) > 2 else "etl/build/wikidata_persons.jsonl"
+DB = sys.argv[1] if len(sys.argv) > 1 else "data/db/lr-song.sqlite3"
+SRC = sys.argv[2] if len(sys.argv) > 2 else "data/build/wikidata_persons.jsonl"
 
 rows = [json.loads(l) for l in open(SRC, encoding="utf-8")]
 print(f"读取 {len(rows)} 条 Wikidata 人物")

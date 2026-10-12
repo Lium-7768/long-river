@@ -47,7 +47,7 @@ def main():
     print(f"待应用修复: {len(fixes)} 条")
 
     if a.local:
-        con = sqlite3.connect(os.path.join(ROOT, "data", "lr-song.sqlite3"))
+        con = sqlite3.connect(os.path.join(ROOT, "data", "db", "lr-song.sqlite3"))
         n = 0
         for r in fixes:
             n += con.execute("UPDATE persons SET summary=? WHERE id=?",

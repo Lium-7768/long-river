@@ -8,7 +8,7 @@
 """
 import sqlite3, sys
 
-DB = sys.argv[1] if len(sys.argv) > 1 else "data/lr-song.sqlite3"
+DB = sys.argv[1] if len(sys.argv) > 1 else "data/db/lr-song.sqlite3"
 
 # 公认生卒（±容差）。格式: name -> (birth, death, tolerance, 备注)
 FACTS = {

@@ -9,7 +9,7 @@
 产出 poem_persons(poem_id, author, person_id, confidence)。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 诗朝代 → 可接受的 persons.dynasty_id 集合（含跨代相容）
 COMPAT = {

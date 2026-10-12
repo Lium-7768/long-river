@@ -35,8 +35,8 @@ def norm_name(n):
 
 
 def main():
-    src = sys.argv[1] if len(sys.argv) > 1 else "etl/build/shiji_clean.jsonl"
-    db = sys.argv[2] if len(sys.argv) > 2 else "data/lr-song.sqlite3"
+    src = sys.argv[1] if len(sys.argv) > 1 else "data/build/shiji_clean.jsonl"
+    db = sys.argv[2] if len(sys.argv) > 2 else "data/db/lr-song.sqlite3"
     rows = [json.loads(l) for l in open(src, encoding="utf-8")]
 
     con = sqlite3.connect(db)

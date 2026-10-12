@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """CBDB schema 侦察 / 核对工具。
 
-用途：把 doc/data-model.md 里"按记忆写的" CBDB→本项目 映射，与真实 dump 对照。
+用途：把 docs/design/data-model.md 里"按记忆写的" CBDB→本项目 映射，与真实 dump 对照。
 输出：真实字段名、行数、以及每张映射表的可用性判定。
 
 用法:
-    python3 etl/inspect_schema.py [--db etl/data/cbdb_YYYYMMDD.sqlite3]
+    python3 etl/inspect_schema.py [--db data/db/cbdb/cbdb_YYYYMMDD.sqlite3]
 """
 import argparse
 import glob

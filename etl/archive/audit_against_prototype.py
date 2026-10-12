@@ -5,7 +5,7 @@
 校核现有 LLM 生成数据，标注差异，不改动 data.js。
 
 用法:
-    python3 etl/audit_against_prototype.py [--out etl/build]
+    python3 etl/audit_against_prototype.py [--out data/build]
 """
 import argparse
 import json

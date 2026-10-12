@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """合并 CBDB 硬事实与原型散文 → 生成完整宋段人物库。
 
-策略（对齐 doc/requirements.md §8.1 分工原则 + 用户"不隐藏数据"铁律）：
+策略（对齐 docs/design/requirements.md §8.1 分工原则 + 用户"不隐藏数据"铁律）：
 
   硬事实（生卒/字号/亲属/官职/入仕/籍贯）以 CBDB 为准；
   散文（summary）优先取原型已有者，无则留空待补；
   原型有而 CBDB 无的人物 → 保留（标 source=prototype）。
 
-输出 etl/build/merged_persons.jsonl：每行一个可直接进 data.js 的 person 对象。
+输出 data/build/merged_persons.jsonl：每行一个可直接进 data.js 的 person 对象。
 **不改动 prototype/data.js**——本脚本只产出候选数据集，合并入库需人工确认。
 
 用法:
-    python3 etl/merge_dataset.py [--out etl/build] [--only-core]
+    python3 etl/merge_dataset.py [--out data/build] [--only-core]
 """
 import argparse
 import json
@@ -20,7 +20,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD = os.path.join(ROOT, "etl", "build")
+BUILD = os.path.join(ROOT, "data", "build")
 
 try:
     from opencc import OpenCC

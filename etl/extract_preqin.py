@@ -14,7 +14,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 NOISE = re.compile(r"評論|评论|太史公|索隱|索隐|斠勘|年表|【|至|及|以上|之際|期間|論|论|評|评|贊|赞|曰$")
 # 卷 → 朝代

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """补数据C5：人物活动期 floruit + 生卒月日 + CBDB 备注 notes。"""
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 
 def main():

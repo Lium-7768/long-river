@@ -8,7 +8,7 @@ profiles 的 figures 用通称（汉明帝/天祚帝/魏徵/毕昇），CBDB 存
 
 import sqlite3, os
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 通称 → 库内本名/异体（公有领域正史）
 ALIAS = {

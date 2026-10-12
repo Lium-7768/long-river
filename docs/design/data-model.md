@@ -463,7 +463,7 @@ MDX frontmatter 存结构化字段，body 存散文长文。关系边与时间�
 ## CBDB 映射
 
 > **已核对真实 dump** —— 表名与字段已对照 CBDB `cbdb_20261003.sqlite3` 验证。
-> 完整映射、字段名、行数、政权 code 与覆盖率见 [`doc/cbdb.md`](./cbdb.md)；
+> 完整映射、字段名、行数、政权 code 与覆盖率见 [`cbdb.md`](./cbdb.md)；
 > 核对脚本 `etl/inspect_schema.py`。原文「按记忆写出，需核对」的表已作废。
 
 | CBDB 表 | 本项目目标 | 状态 |

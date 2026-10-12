@@ -19,7 +19,7 @@ import time
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD = os.path.join(ROOT, "etl", "build")
+BUILD = os.path.join(ROOT, "data", "build")
 
 BATCH = 50  # 每批行数（保守，避免 100KB / 100 参数限制）
 

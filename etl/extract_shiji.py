@@ -11,7 +11,7 @@
   - 篇名如「卷六十三 老子韩非列传」→ 传主
 
 用法：
-    python3 etl/extract_shiji.py /tmp/shiji etl/build/shiji_persons.jsonl
+    python3 etl/extract_shiji.py /tmp/shiji data/build/shiji_persons.jsonl
 """
 import json, os, re, sys
 
@@ -93,7 +93,7 @@ def parse_chapter(path):
 
 def main():
     src = sys.argv[1] if len(sys.argv) > 1 else "/tmp/shiji"
-    out = sys.argv[2] if len(sys.argv) > 2 else "etl/build/shiji_persons.jsonl"
+    out = sys.argv[2] if len(sys.argv) > 2 else "data/build/shiji_persons.jsonl"
     recs = {}
     for fn in sorted(os.listdir(src)):
         if not fn.endswith(".md"):

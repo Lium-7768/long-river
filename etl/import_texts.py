@@ -19,7 +19,7 @@ SOURCES = [
 ]
 
 def main():
-    db = sys.argv[1] if len(sys.argv) > 1 else "data/lr-song.sqlite3"
+    db = sys.argv[1] if len(sys.argv) > 1 else "data/db/lr-song.sqlite3"
     con = sqlite3.connect(db)
     con.execute("""CREATE TABLE IF NOT EXISTS texts (
         book TEXT, volume TEXT, content TEXT, chars INTEGER,

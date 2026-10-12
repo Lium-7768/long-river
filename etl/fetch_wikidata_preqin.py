@@ -106,7 +106,7 @@ for dy, (qid, name) in PLAN.items():
     print(f"[{dy}] {name}: {n} 人")
     time.sleep(1)
 
-fp = sys.argv[2] if len(sys.argv) > 2 else "etl/build/wikidata_preqin.jsonl"
+fp = sys.argv[2] if len(sys.argv) > 2 else "data/build/wikidata_preqin.jsonl"
 with open(fp, "w", encoding="utf-8") as f:
     for r in out:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")

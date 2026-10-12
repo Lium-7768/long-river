@@ -53,8 +53,8 @@ def is_person(name):
 
 
 def main():
-    src = sys.argv[1] if len(sys.argv) > 1 else "etl/build/shiji_persons.jsonl"
-    out = sys.argv[2] if len(sys.argv) > 2 else "etl/build/shiji_clean.jsonl"
+    src = sys.argv[1] if len(sys.argv) > 1 else "data/build/shiji_persons.jsonl"
+    out = sys.argv[2] if len(sys.argv) > 2 else "data/build/shiji_clean.jsonl"
     rows = [json.loads(l) for l in open(src, encoding="utf-8")]
 
     # 白名单：篇名主传主

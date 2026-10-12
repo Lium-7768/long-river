@@ -16,7 +16,7 @@
 import sqlite3, os, json
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 DY_MAP = {21: "minguo", 22: "minguo", 84: "chaoxian", 58: "chaoxian",
           67: "chaoxian", 59: "liao", 79: "yuan", 81: "tang", 0: None}

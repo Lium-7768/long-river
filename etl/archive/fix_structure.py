@@ -3,7 +3,7 @@
 可重复运行（幂等）。"""
 import sqlite3, json, sys
 
-def main(db="data/lr-song.sqlite3"):
+def main(db="data/db/lr-song.sqlite3"):
     con=sqlite3.connect(db)
     # 1. CBDB 用 0 表示未知 → NULL
     n1=con.execute("UPDATE persons SET birth=NULL WHERE birth=0").rowcount

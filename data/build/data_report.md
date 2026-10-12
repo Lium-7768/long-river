@@ -1,6 +1,6 @@
 # 长河数据完整度报告
 
-数据源：本地 SQLite `data/lr-song.sqlite3`（唯一数据源）
+数据源：本地 SQLite `data/db/lr-song.sqlite3`（唯一数据源）
 
 ## 一、表规模
 

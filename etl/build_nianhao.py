@@ -10,7 +10,7 @@
 import sqlite3, os
 from opencc import OpenCC
 t2s = OpenCC("t2s")
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 
 def main():

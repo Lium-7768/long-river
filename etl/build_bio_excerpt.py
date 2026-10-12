@@ -6,7 +6,7 @@
 这是「可回溯一手史料」的核心。
 """
 import sqlite3, os, re, sys
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 DYN_BOOK = {
     'song-w': '宋史', 'song-e': '宋史', 'tang': '旧唐书', 'han-w': '汉书',

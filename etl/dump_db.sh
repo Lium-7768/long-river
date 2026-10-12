@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 从 D1 导出一份本地 SQLite 备份 → data/lr-song.sqlite3
+# 从 D1 导出一份本地 SQLite 备份 → data/db/lr-song.sqlite3
 # 用途：D1 故障时本地仍可用；版本化管理数据快照
 # 用法：CLOUDFLARE_API_TOKEN=xxx bash etl/dump_db.sh [库名]
 set -euo pipefail

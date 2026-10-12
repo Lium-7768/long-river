@@ -5,7 +5,7 @@
 每条：朝代/事件名/起止年/概述/相关人物。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # (dynasty_id, 名称, 起年, 止年, 概述, 关键人物[*])
 EVENTS = [

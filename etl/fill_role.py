@@ -9,7 +9,7 @@ import sqlite3, os, sys
 from collections import defaultdict
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 # 优先级（越小越优先展示）
 PRIORITY = {

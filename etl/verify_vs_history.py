@@ -6,7 +6,7 @@
   与库内 death 对比，统计一致/矛盾，产出报告。
 """
 import sqlite3, os, re
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "史料互证报告.md")
 
 # 朝代 → 正史书名

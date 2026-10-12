@@ -1,16 +1,17 @@
 # ETL 流水线
 
-> 数据从 CBDB / Wikidata / 维基 / 正史全文 → `data/lr-song.sqlite3`（唯一数据源）。
+> 数据从 CBDB / Wikidata / 维基 / 正史全文 → `data/db/lr-song.sqlite3`（唯一数据源）。
 > **顺序执行**：`bash etl/run_all.sh`（见该脚本注释）。
 
 ## 目录结构
 
-| 目录 | 内容 |
+| 路径 | 内容 |
 |---|---|
 | `etl/*.py` | **现行流水线脚本**（构建/抓取/校验）|
 | `etl/archive/` | **一次性/历史脚本**（已执行完，保留供追溯）|
-| `etl/build/` | 中间产物（JSONL/JSON，不入库，可重生成）|
-| `etl/data/` | CBDB 原始库（560MB，不入库）|
+| `etl/backup_db.sh` | 备份分卷（输出到 `data/db/`，**不入 git**）|
+| `data/db/` | 主库 + CBDB 原料库（`data/db/cbdb/`）|
+| `data/build/` | ETL 中间产物（JSONL/JSON，不入库，可重生成）|
 | `etl/fixes/` | 人工订正数据（JSON）|
 
 ## 关键脚本（按阶段）
@@ -41,11 +42,6 @@
 ### 人物增强
 - `build_person_status.py` / `build_person_texts.py` / `build_person_merge.py`
 - `build_region_stats.py` / `build_ref_dict.py` / `build_bio_excerpt.py`
-
-### 运维
-- `backup_db.sh` — 备份分卷（**不入 git**）
-- `dump_db.sh` — 导出
-- `run_all.sh` — 全流程
 
 ## 归档说明（`etl/archive/`）
 

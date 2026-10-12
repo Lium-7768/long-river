@@ -9,7 +9,7 @@ C48 首段正则抽取有噪声（籍贯=「他也是北洋政府」、生年=3 
 """
 import sqlite3, os, re
 
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 ADDR_OK = re.compile(r'^[\u4e00-\u9fa5]{2,10}(县|郡|府|州|旗|人|道|路|府路)?$')
 ADDR_JUNK = ['今', '始祖', '创始人', '代表人', '僧人', '商人', '盲人', '政治人', '神话人', '圣人', '政府', '發音']

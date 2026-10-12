@@ -22,7 +22,7 @@ from opencc import OpenCC
 
 SRC = "/tmp/cp/po"
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 t2s = OpenCC("t2s")
 
 

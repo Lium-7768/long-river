@@ -51,7 +51,7 @@ def main():
     src, bookname, default_dy, out = (
         sys.argv[1], sys.argv[2],
         sys.argv[3] if len(sys.argv) > 3 else "auto",
-        sys.argv[4] if len(sys.argv) > 4 else "etl/build/hist.jsonl")
+        sys.argv[4] if len(sys.argv) > 4 else "data/build/hist.jsonl")
 
     recs = {}
     for fn in sorted(os.listdir(src)):

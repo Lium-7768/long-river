@@ -14,7 +14,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 BAD = {"名何", "某氏", "其先", "不知", "明年", "是歲"}
 

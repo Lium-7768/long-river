@@ -6,7 +6,7 @@
 """
 import sqlite3, sys
 
-DB = sys.argv[1] if len(sys.argv) > 1 else "data/lr-song.sqlite3"
+DB = sys.argv[1] if len(sys.argv) > 1 else "data/db/lr-song.sqlite3"
 
 # name -> (birth, death, 依据)   None 表示不修改该项
 FIX = {

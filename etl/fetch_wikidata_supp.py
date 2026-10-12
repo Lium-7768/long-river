@@ -156,7 +156,7 @@ rows_out = [r for r in rows_out
             and wrong_dynasty(r, r["_dynasty_id"]) is None]
 print(f"后过滤: {before} → {len(rows_out)}（剔除无生卒/跨代 {before-len(rows_out)}）")
 
-out = sys.argv[2] if len(sys.argv) > 2 else "etl/build/wikidata_supp.jsonl"
+out = sys.argv[2] if len(sys.argv) > 2 else "data/build/wikidata_supp.jsonl"
 with open(out, "w", encoding="utf-8") as f:
     for r in rows_out:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")

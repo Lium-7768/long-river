@@ -5,7 +5,7 @@
 OCR 常见讹字：万→元/无（如"六元四千"=六万四千），已修正。
 """
 import sqlite3, os, re
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 DIG = '零一二三四五六七八九十百千万'
 

@@ -6,7 +6,7 @@
 用于交叉核验「宋末元初」等跨代人物。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # (起始年, 结束年, dynasty_id) —— 按生年落入
 BANDS = [

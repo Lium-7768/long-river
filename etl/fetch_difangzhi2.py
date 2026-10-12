@@ -8,7 +8,7 @@ import sqlite3, os, re, json, time, urllib.request, urllib.parse
 from opencc import OpenCC
 t2s = OpenCC("t2s")
 _OP = urllib.request.build_opener(urllib.request.ProxyHandler())
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 API = "https://zh.wikisource.org/w/api.php"
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 

@@ -2,7 +2,7 @@
 """C9b：并发抓取缺失古籍（跳过已有书）。"""
 import sqlite3, os, json, urllib.request, urllib.parse, time, sys, re
 from concurrent.futures import ThreadPoolExecutor, as_completed
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 API = "https://zh.wikisource.org/w/api.php"
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 OP = urllib.request.build_opener(urllib.request.ProxyHandler())

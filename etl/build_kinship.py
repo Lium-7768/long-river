@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """把 CBDB 亲属边映射到本项目的 person id，输出可入库的关系表。
 
-输出 etl/build/kinship_edges.jsonl：{a, b, rel}
+输出 data/build/kinship_edges.jsonl：{a, b, rel}
   a/b 为本项目 id；仅保留两端都在合并集内的边。
   CBDB 亲属关系是单向记录，但语义对称，这里同时补一条反向边
-  （对齐 doc/requirements.md「构建期自动补全反向边」）。
+  （对齐 docs/design/requirements.md「构建期自动补全反向边」）。
 
 用法: python3 etl/build_kinship.py
 """
@@ -12,7 +12,7 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD = os.path.join(ROOT, "etl", "build")
+BUILD = os.path.join(ROOT, "data", "build")
 
 # 反向称谓（简表；补不完的保留原称谓）
 REVERSE = {

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """CBDB → long-river ETL。
 
-产物（写入 etl/build/）：
+产物（写入 data/build/）：
   persons.jsonl   全部宋代人物（含生卒/字号/籍贯/威望分层）
   kinships.jsonl  亲属边（双向）
   appointments.jsonl  官职任免
@@ -11,13 +11,13 @@
   works.jsonl      著作（BIOG_TEXT_DATA）
   stats.json       覆盖率 / 分层统计
 
-设计原则（对齐 doc/requirements.md §8）：
+设计原则（对齐 docs/design/requirements.md §8）：
   - 硬事实（生卒年/字号/亲属/官职/入仕）以 CBDB 为准
   - 只做映射与清洗，不生成任何内容
   - prominence 分层供 UI 决定"谁上时间轴"，不丢数据
 
 用法:
-    python3 etl/build_from_cbdb.py [--db ...] [--out etl/build]
+    python3 etl/build_from_cbdb.py [--db ...] [--out data/build]
 """
 import argparse
 import glob
@@ -84,7 +84,7 @@ DY2DYNASTY = {
 def find_db(explicit):
     if explicit:
         return explicit
-    cands = sorted(glob.glob(os.path.join(ROOT, "etl", "data", "*.sqlite3")))
+    cands = sorted(glob.glob(os.path.join(ROOT, "data", "db", "cbdb", "*.sqlite3")))
     if not cands:
         sys.exit("找不到 CBDB sqlite，先跑 bash etl/fetch.sh")
     return cands[-1]
@@ -93,7 +93,7 @@ def find_db(explicit):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--db")
-    ap.add_argument("--out", default=os.path.join(ROOT, "etl", "build"))
+    ap.add_argument("--out", default=os.path.join(ROOT, "data", "build"))
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
 

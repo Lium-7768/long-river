@@ -4,7 +4,7 @@
 443 种亲属称谓 → 归一化类别（直系长辈/直系晚辈/同辈/姻亲/其他）。
 """
 import sqlite3, os, re
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 RULES = [
     ('直系长辈', ['父', '母', '祖', '考', '妣', '曾祖', '高祖', '太公']),

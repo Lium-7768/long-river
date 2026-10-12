@@ -8,7 +8,7 @@ import sqlite3, os, re
 from opencc import OpenCC
 from collections import Counter
 t2s = OpenCC("t2s")
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 STOP = {'君子', '不可', '此所', '此之', '于是', '是以', '是故', '鮑本', '鮑本補', '鮑本彪',
         '鮑本正', '索隱', '正義', '大事記', '公曰', '王曰', '對曰', '夫子', '寡人', '先生',

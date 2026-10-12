@@ -14,7 +14,7 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD = os.path.join(ROOT, "etl", "build")
+BUILD = os.path.join(ROOT, "data", "build")
 sys.path.insert(0, os.path.join(ROOT, "etl"))
 from load_d1 import d1_query, insert_batch  # noqa: E402
 

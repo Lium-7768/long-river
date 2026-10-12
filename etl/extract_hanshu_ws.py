@@ -12,7 +12,7 @@ from opencc import OpenCC
 t2s = OpenCC('t2s')
 
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "data", "lr-song.sqlite3")
+                  "data", "db", "lr-song.sqlite3")
 
 # 传首模式（在文本开头或 == 标题 后）
 TITLE = re.compile(r"==\s*([^=\n]{1,12})\s*==")

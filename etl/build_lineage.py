@@ -6,7 +6,7 @@
 产出 lineage(teacher, student, rel, direction, source) —— teacher 授业 → student 受业。
 """
 import sqlite3, os
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 # 关系码 → (语义)。key=code；若「X为Y的学生」则 X=student, Y=teacher
 TEACH_CODES = {

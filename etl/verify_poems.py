@@ -3,7 +3,7 @@
 """
 verify_poems.py — 长河项目 · 诗词数据横向交叉核验
 
-只读核验 data/lr-song.sqlite3 的 poems 表（344,106 首），产出：
+只读核验 data/db/lr-song.sqlite3 的 poems 表（344,106 首），产出：
   data/诗词核验报告.md        统计表 + 矛盾清单 + 名篇比对结论
   data/_verify_poems.json     结构化结果（供后续复用）
 
@@ -29,7 +29,7 @@ from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-DB = os.path.join(ROOT, "data", "lr-song.sqlite3")
+DB = os.path.join(ROOT, "data", "db", "lr-song.sqlite3")
 REPORT = os.path.join(ROOT, "data", "诗词核验报告.md")
 JSON_OUT = os.path.join(ROOT, "data", "_verify_poems.json")
 
@@ -628,7 +628,7 @@ def build_report(ident, scan, famous, famsum, cross) -> str:
     L = []
     A = L.append
     A("# 长河 · 诗词数据横向核验报告\n")
-    A(f"> 数据源：`data/lr-song.sqlite3` · poems 表 **{scan['total_poems']:,}** 首  ")
+    A(f"> 数据源：`data/db/lr-song.sqlite3` · poems 表 **{scan['total_poems']:,}** 首  ")
     A(f"> 生成时间：{time.strftime('%Y-%m-%d %H:%M:%S')}  ")
     A("> 方式：只读 SELECT 核验，未修改任何 poems 行。\n")
 

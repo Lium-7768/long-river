@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """给 persons 加 top_office 字段：从 offices 里提取「最高代表官职」。"""
 import sqlite3, sys, time
-DB = sys.argv[1] if len(sys.argv) > 1 else 'data/lr-song.sqlite3'
+DB = sys.argv[1] if len(sys.argv) > 1 else 'data/db/lr-song.sqlite3'
 db = sqlite3.connect(DB)
 
 cols = [r[1] for r in db.execute("PRAGMA table_info(persons)")]

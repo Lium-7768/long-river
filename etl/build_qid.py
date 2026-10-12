@@ -6,7 +6,7 @@
 为避免 SPARQL 超时，分批（VALUES）查询。
 """
 import sqlite3, os, json, urllib.request, urllib.parse, time, sys
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 EP = "https://query.wikidata.org/sparql"
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 OP = urllib.request.build_opener(urllib.request.ProxyHandler())

@@ -5,7 +5,7 @@
 import json, sqlite3, sys
 
 def main():
-    src, db = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "data/lr-song.sqlite3"
+    src, db = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "data/db/lr-song.sqlite3"
     rows = [json.loads(l) for l in open(src, encoding="utf-8")]
     con = sqlite3.connect(db)
     con.row_factory = sqlite3.Row

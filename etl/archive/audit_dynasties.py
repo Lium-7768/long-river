@@ -41,7 +41,7 @@ ZI_BAD = set("之而不於以者为也其乃则且夫唯乎哉焉欲使令与从
 
 
 def main():
-    db = sys.argv[1] if len(sys.argv) > 1 else "data/lr-song.sqlite3"
+    db = sys.argv[1] if len(sys.argv) > 1 else "data/db/lr-song.sqlite3"
     con = sqlite3.connect(db)
     con.row_factory = sqlite3.Row
     issues = defaultdict(lambda: defaultdict(int))

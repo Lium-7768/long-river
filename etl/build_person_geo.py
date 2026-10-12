@@ -4,7 +4,7 @@
 用 addr_geo/addr_geo_more 的地名→坐标，为 persons.addr 中每处籍贯补经纬度。
 """
 import sqlite3, os, json
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 
 
 def main():

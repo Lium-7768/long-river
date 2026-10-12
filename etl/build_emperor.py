@@ -7,7 +7,7 @@ CBDB 不收录帝王，导致 profiles 中「康熙帝/宋仁宗/汉文帝」等
 """
 import sqlite3, os, json, re, urllib.request, urllib.parse, time
 _OP = urllib.request.build_opener(urllib.request.ProxyHandler())
-DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "lr-song.sqlite3")
+DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "db", "lr-song.sqlite3")
 UA = "long-river-research/1.0 (contact: dev@example.com)"
 
 QUERY = """

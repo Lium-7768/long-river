@@ -6,7 +6,7 @@ merged_persons.jsonl（含宋代原型散文、id、from/to）。本脚本直接
 persons.jsonl 派生 id 与 from/to，适用于"多朝代全量"场景。
 
 用法:
-    python3 etl/build_sqlite_full.py --build /tmp/build-all -o data/lr-song.sqlite3
+    python3 etl/build_sqlite_full.py --build /tmp/build-all -o data/db/lr-song.sqlite3
 """
 import argparse, json, os, re, sqlite3
 
