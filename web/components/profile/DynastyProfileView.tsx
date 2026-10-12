@@ -10,6 +10,7 @@ import { useDynastyPoems } from '@/components/persons/use-poems';
 import { getCoverage } from '@/content/territory/coverage';
 import { itemSlug } from '@/content/profiles/slug';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
+import { EmperorPanel } from '@/components/profile/EmperorPanel';
 import type { PersonBrief } from '@/lib/api';
 import type { Dynasty } from '@/content/dynasties';
 
@@ -69,6 +70,11 @@ export function DynastyProfileView({
             ))}
           </div>
         </header>
+
+        {/* 帝王世系 */}
+        <Block title="帝王世系" sub="按即位年排序 · 来自 Wikidata + 正史本名">
+          <EmperorPanel dynastyId={dynasty.id} />
+        </Block>
 
         {/* ① 代表人物 */}
         <Block

@@ -349,9 +349,22 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM person_texts) AS person_texts,
          (SELECT COUNT(*) FROM ref_dict) AS ref_terms,
          (SELECT COUNT(*) FROM evidence_sources) AS ev_sources,
-         (SELECT COUNT(*) FROM region_stats) AS regions`
+         (SELECT COUNT(*) FROM region_stats) AS regions,
+         (SELECT COUNT(*) FROM emperor) AS emperors,
+         (SELECT COUNT(*) FROM persons WHERE source='维基百科(CC BY-SA)') AS wiki_persons`
     ).get();
-    return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + CHGIS + 维基文库', backend: 'local-sqlite' });
+    return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: 'local-sqlite' });
+  }
+
+  if (p === '/api/emperors') {
+    const dynasty = searchParams.get('dynasty');
+    const w = dynasty ? 'WHERE dynasty_id = ?' : '';
+    const b = dynasty ? [dynasty] : [];
+    const rows = db.prepare(
+      `SELECT qid, title, native, dynasty_id, reign_start, reign_end
+       FROM emperor ${w} ORDER BY COALESCE(reign_start, 9999) ASC`
+    ).all(...b);
+    return ok(rows, { dynasty: dynasty || 'all', n: rows.length });
   }
 
   return err('not found', 404);

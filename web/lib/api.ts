@@ -191,4 +191,16 @@ export const api = {
       '/api/region-stats',
       q ? { q } : {},
     ),
+  emperors: (dynasty?: string) =>
+    get<{
+      ok: true;
+      data: {
+        qid: string;
+        title: string;
+        native: string;
+        dynasty_id: string;
+        reign_start: number | null;
+        reign_end: number | null;
+      }[];
+    }>('/api/emperors', dynasty ? { dynasty } : {}),
 };
