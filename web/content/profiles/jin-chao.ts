@@ -154,7 +154,7 @@ export const JIN_CHAO: DynastyProfile = {
       desc: '金院本、诸宫调为戏曲发展重要环节，董解元《西厢记诸宫调》为代表。',
       background: '金代城市经济与市民娱乐需求，推动说唱与戏曲艺术。',
       impact: '为元杂剧的兴盛直接铺路，是中国戏曲史上的关键过渡。',
-      figures: [{ name: '董解元' }],
+      figures: [{ name: '董解元', personId: 'dongmou-691323' }],
       works: ['《西厢记诸宫调》'],
     },
     {

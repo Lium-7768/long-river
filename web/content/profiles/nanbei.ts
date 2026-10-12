@@ -101,7 +101,7 @@ export const NANBEI: DynastyProfile = {
       background: '北周行府兵、整吏治，国势日强；北齐君主昏暴、政治腐败。',
       outcome: '577年北周武帝宇文邕攻灭北齐，北方复归一统。',
       impact: '北方统一、国力鼎盛，为隋代周并统一南北铺路。',
-      figures: [{ name: '北周武帝' }, { name: '高纬' }],
+      figures: [{ name: '北周武帝', personId: 'cbdb-31773' }, { name: '高纬' }],
     },
     {
       year: 589,

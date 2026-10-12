@@ -21,7 +21,15 @@ def main():
         by_alias.setdefault(al, pid)
 
     def resolve(nm):
-        return by_name.get(nm) or by_alias.get(nm)
+        r = by_name.get(nm) or by_alias.get(nm)
+        if r:
+            return r
+        # 二次：库内形如 "名(别名)" / "别名(名)"，如 李世民(唐太宗)、武曌(武则天)
+        row = con.execute(
+            "SELECT id FROM persons WHERE name LIKE ? OR name LIKE ? LIMIT 1",
+            (f'{nm}(%', f'%({nm})%'),
+        ).fetchone()
+        return row[0] if row else None
 
     total_added = 0
     for f in sorted(os.listdir(DIR)):

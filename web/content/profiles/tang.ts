@@ -23,7 +23,7 @@ export const TANG: DynastyProfile = {
       impact:
         '既分工制衡又协同运转，是中国古代中央官制最成熟的范式之一，为后世（乃至日本、朝鲜）所仿行；中书门下的运作亦使皇权受到一定程序约束。',
       figures: [
-        { name: '李世民' },
+        { name: '李世民', personId: 'lishi-13060' },
         { name: '房玄龄', personId: 'fangxuan-17130' },
         { name: '杜如晦', personId: 'duru-30864' },
       ],
@@ -39,7 +39,10 @@ export const TANG: DynastyProfile = {
         '隋创科举以破魏晋以来门阀垄断之九品中正；唐承之并大加发展，太宗、武后、玄宗朝均扩大取士，进士科渐成士人入仕正途（「三十老明经，五十少进士」）。',
       impact:
         '打破门第垄断，扩大统治基础，士人「学而优则仕」之路大开；然唐科举规模尚小，门荫、荐举仍重，至宋始臻于严密。',
-      figures: [{ name: '唐太宗' }, { name: '武则天' }],
+      figures: [
+        { name: '唐太宗', personId: 'lishi-13060' },
+        { name: '武则天', personId: 'wuzhao-93663' },
+      ],
     },
     {
       name: '均田制',
@@ -52,7 +55,7 @@ export const TANG: DynastyProfile = {
         '承北魏、隋之均田制，唐初地广人稀，国家将官田按丁男授之，以「均田」为赋税基础，稳定自耕小农。',
       impact:
         '唐前期恢复生产、保证赋税，为盛世奠基；然人口日增、土地兼并加剧，可授之田渐尽，均田制至中叶名存实亡，遂有两税法之变。',
-      figures: [{ name: '唐高祖' }],
+      figures: [{ name: '唐高祖', personId: 'liyuan-13059' }],
     },
     {
       name: '租庸调制',
@@ -76,7 +79,7 @@ export const TANG: DynastyProfile = {
         '承西魏、北周之府兵，唐初设折冲府六百余，集兵权于中央，兵将平日不相统属，防将帅拥兵。',
       impact:
         '唐前期军事强盛、中央控兵牢固；然均田瓦解、戍役繁重，府兵逃亡，玄宗时改为募兵（彍骑、节度使募兵），兵权下移，遂生藩镇之祸。',
-      figures: [{ name: '唐太宗' }],
+      figures: [{ name: '唐太宗', personId: 'lishi-13060' }],
     },
     {
       name: '两税法',
@@ -105,7 +108,10 @@ export const TANG: DynastyProfile = {
         '为防边疆，睿宗、玄宗于缘边置节度使（安西、范阳、平卢等十镇），授以军、政、财权；募兵既行，节度使遂握重兵。',
       impact:
         '直接酿成安史之乱；乱后藩镇林立，河朔三镇形同割据，中央号令不出关中，为唐灭亡之远因。',
-      figures: [{ name: '安禄山', personId: 'anlu-379873' }, { name: '唐玄宗' }],
+      figures: [
+        { name: '安禄山', personId: 'anlu-379873' },
+        { name: '唐玄宗', personId: 'lilong-19244' },
+      ],
     },
     {
       name: '律令格式',
@@ -130,7 +136,10 @@ export const TANG: DynastyProfile = {
       background: '隋炀帝滥用民力、三征高丽致天下大乱，李渊时任太原留守，乘乱起兵。',
       outcome: '617年李渊入长安立杨侑为帝，618年炀帝被杀于江都，李渊废恭帝称帝，国号唐。',
       impact: '开启三百年大唐基业；此后太宗、高宗陆续平群雄、灭诸国，再造统一。',
-      figures: [{ name: '唐高祖' }, { name: '李世民' }],
+      figures: [
+        { name: '唐高祖', personId: 'liyuan-13059' },
+        { name: '李世民', personId: 'lishi-13060' },
+      ],
     },
     {
       year: 626,
@@ -143,7 +152,7 @@ export const TANG: DynastyProfile = {
       outcome: '626年六月四日，世民伏兵玄武门，杀建成、元吉；高祖立世民为太子，旋禅位。',
       impact: '世民即位为唐太宗，开创「贞观之治」；然开唐代皇位血腥争夺之例，宫门喋血影响深远。',
       figures: [
-        { name: '李世民' },
+        { name: '李世民', personId: 'lishi-13060' },
         { name: '李建成', personId: 'lijian-187311' },
         { name: '尉迟敬德', personId: 'yuchi-463519' },
       ],
@@ -160,7 +169,7 @@ export const TANG: DynastyProfile = {
         '任房玄龄、杜如晦、魏徵等贤臣，开言路、省刑罚，至贞观四年「米斗三四钱」、岁断死刑仅二十九人。',
       impact: '为开元盛世奠定基础，「贞观之治」与「文景之治」并称，成为后世君臣治国的理想。',
       figures: [
-        { name: '唐太宗' },
+        { name: '唐太宗', personId: 'lishi-13060' },
         { name: '魏徵' },
         { name: '房玄龄', personId: 'fangxuan-17130' },
       ],
@@ -190,7 +199,10 @@ export const TANG: DynastyProfile = {
         '690年武后称帝，改国号周（武周），定都洛阳；在位期间破格用人、发展科举，然晚年酷政、男宠乱政。',
       impact:
         '中国史上唯一女皇，承贞观、启开元；武周虽短暂，然科举取士（殿试、武举）之创为其功，政治遗产深远。',
-      figures: [{ name: '武则天' }, { name: '狄仁杰', personId: 'diren-3840' }],
+      figures: [
+        { name: '武则天', personId: 'wuzhao-93663' },
+        { name: '狄仁杰', personId: 'diren-3840' },
+      ],
     },
     {
       year: 713,
@@ -204,7 +216,7 @@ export const TANG: DynastyProfile = {
       impact:
         '唐乃至中国封建社会的巅峰之一，「忆昔开元全盛日」为后世追慕；然玄宗晚怠，盛世之尾即乱之始。',
       figures: [
-        { name: '唐玄宗' },
+        { name: '唐玄宗', personId: 'lilong-19244' },
         { name: '姚崇', personId: 'yaochong-26935' },
         { name: '宋璟', personId: 'songjing-31275' },
       ],
@@ -223,7 +235,7 @@ export const TANG: DynastyProfile = {
       figures: [
         { name: '安禄山', personId: 'anlu-379873' },
         { name: '郭子仪', personId: 'guozi-94373' },
-        { name: '唐玄宗' },
+        { name: '唐玄宗', personId: 'lilong-19244' },
       ],
     },
     {
