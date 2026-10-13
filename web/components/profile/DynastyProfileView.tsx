@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Search } from 'lucide-react';
 import type { DynastyProfileData, PersonBrief } from '@/lib/api';
 import { fmtRange, fmtYear } from '@/components/river/year';
@@ -10,6 +11,7 @@ import { useDynastyPoems } from '@/components/persons/use-poems';
 import { useCoverage } from '@/lib/territory-coverage';
 import { itemSlug } from '@/lib/slug';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
+import { PersonCard } from '@/components/persons/PersonCard';
 import { EmperorPanel } from '@/components/profile/EmperorPanel';
 import { NianhaoPanel } from '@/components/profile/NianhaoPanel';
 import type { Dynasty } from '@/lib/dynasty-data';
@@ -26,7 +28,7 @@ export function DynastyProfileView({
   profile: DynastyProfileData;
 }) {
   const router = useRouter();
-  const { persons } = useDynastyPersons(dynasty.id, 24);
+  const { persons, total: personTotal } = useDynastyPersons(dynasty.id, 24);
   const { results, run, q } = usePersonSearch();
   const poems = useDynastyPoems(dynasty.id);
   const cov = useCoverage(dynasty.id);
@@ -84,16 +86,32 @@ export function DynastyProfileView({
         {/* ① 代表人物 */}
         <Block
           title="代表人物"
-          sub={searching ? `${people.length} 个结果` : '按生年排序 · 点击进入'}
+          sub={
+            searching
+              ? `${people.length} 个结果`
+              : personTotal > 0
+                ? `共 ${personTotal.toLocaleString('en-US')} 人 · 显示声望最高 ${people.length} 人`
+                : '按生年排序 · 点击进入'
+          }
           action={
-            <div className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5">
-              <Search className="h-3.5 w-3.5 text-white/40" />
-              <input
-                value={q}
-                onChange={(e) => run(e.target.value)}
-                placeholder="搜索人物…"
-                className="w-40 bg-transparent text-base text-white placeholder:text-white/30 focus:outline-none"
-              />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5">
+                <Search className="h-3.5 w-3.5 text-white/40" />
+                <input
+                  value={q}
+                  onChange={(e) => run(e.target.value)}
+                  placeholder="搜索人物…"
+                  className="w-40 bg-transparent text-base text-white placeholder:text-white/30 focus:outline-none"
+                />
+              </div>
+              {personTotal > 24 && (
+                <Link
+                  href={`/dynasty/${dynasty.id}/persons`}
+                  className="shrink-0 rounded-lg border border-sky-400/30 bg-sky-400/10 px-3 py-1.5 text-base text-sky-200 transition hover:bg-sky-400/20"
+                >
+                  查看全部 →
+                </Link>
+              )}
             </div>
           }
         >
@@ -307,55 +325,6 @@ function Card({
       </div>
       {/* 第二行：一句话（单行截断） */}
       <p className="mt-1 truncate text-base text-white/50">{desc}</p>
-    </button>
-  );
-}
-
-function PersonCard({ person, onClick }: { person: PersonBrief; onClick: () => void }) {
-  // 完整格式（始终带「公元前/公元」前缀）
-  const lifeShort =
-    person.birth && person.death
-      ? fmtRange(person.birth, person.death)
-      : person.birth
-        ? fmtYear(person.birth)
-        : '';
-  const lifeFull =
-    person.birth && person.death
-      ? fmtRange(person.birth, person.death)
-      : person.birth
-        ? fmtYear(person.birth)
-        : '';
-  return (
-    <button
-      onClick={onClick}
-      className="w-full cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
-    >
-      <div className="flex items-baseline justify-between gap-2">
-        <span
-          className="min-w-0 flex-1 truncate text-base font-medium text-white/90"
-          title={person.name}
-        >
-          {person.name}
-        </span>
-        {person.top_office && (
-          <span
-            className="max-w-[104px] shrink-0 truncate text-base text-sky-300/70"
-            title={person.top_office}
-          >
-            {person.top_office}
-          </span>
-        )}
-      </div>
-      <div className="mt-1 flex items-baseline justify-between gap-2">
-        <span className="truncate text-base text-white/40">
-          {person.zi ? `字${person.zi}` : ''}
-        </span>
-        {lifeShort && (
-          <span className="shrink-0 text-base tabular-nums text-white/35" title={lifeFull}>
-            {lifeShort}
-          </span>
-        )}
-      </div>
     </button>
   );
 }

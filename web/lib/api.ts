@@ -157,6 +157,7 @@ export const api = {
       min_prom?: number;
       limit?: number;
       offset?: number;
+      sort?: 'fame' | 'birth' | 'birth_desc' | 'name';
     } = {},
   ) => get<Paged<PersonBrief>>('/api/persons', p),
   person: (id: string) =>

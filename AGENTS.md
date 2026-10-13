@@ -37,7 +37,7 @@
   - `<main>`：`relative z-10 min-h-screen bg-[#05070d] px-6 py-10 text-white`，
     网格用 CSS `background-image: linear-gradient(...)` 画在 main 上。
   - 内容卡片：`mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[#0d121e]/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8`
-  - 卡片宽度：第二层/人物页 `max-w-4xl`；条目详情 `max-w-3xl`；疆域页 `max-w-5xl`。
+  - 卡片宽度：第二层/人物详情页 `max-w-4xl`；条目详情 `max-w-3xl`；疆域页/全量列表页 `max-w-5xl`。
 - 网格只在**边距**可见（卡片不透明，挡住卡片内的网格）。
 
 ### 字号（最小 16px）
@@ -57,6 +57,7 @@
   ```
   /                                  L1 时间长河
   /dynasty/[id]                      L2 朝代档案（分块）
+  /dynasty/[id]/persons              朝代人物·全量列表（分页/排序/搜索）
   /dynasty/[id]/person/[pid]         L3 人物
   /dynasty/[id]/event/[slug]         L3 事件
   /dynasty/[id]/system/[slug]        L3 制度

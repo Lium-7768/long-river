@@ -58,12 +58,21 @@ function handle(pathname, searchParams) {
     if (minProm >= 0) { where.push('prominence >= ?'); binds.push(minProm); }
     const wsql = where.length ? ' WHERE ' + where.join(' AND ') : '';
 
+    // 排序（白名单，避免注入）
+    const ORDERS = {
+      fame: 'COALESCE(fame_score,0) DESC, prominence DESC, birth ASC',
+      birth: 'birth IS NULL, birth ASC, COALESCE(fame_score,0) DESC',
+      birth_desc: 'birth IS NULL, birth DESC, COALESCE(fame_score,0) DESC',
+      name: 'name ASC',
+    };
+    const orderSql = ORDERS[searchParams.get('sort') || 'fame'] || ORDERS.fame;
+
     const cnt = db.prepare(`SELECT COUNT(*) n FROM persons${wsql}`).get(...binds);
     const rows = db.prepare(
       `SELECT id,name,surname,birth,death,polity,dynasty_id,zi,role,prominence,fame_score,top_office,
               substr(summary,1,120) AS summary
        FROM persons${wsql}
-       ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC
+       ORDER BY ${orderSql}
        LIMIT ? OFFSET ?`
     ).all(...binds, limit, offset);
 

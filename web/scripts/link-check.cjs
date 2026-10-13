@@ -68,6 +68,13 @@ async function api(path) {
       fail++;
       problems.push(`[territory] ${id}`);
     }
+
+    // 全量人物列表页
+    if ((await get(`${BASE}/dynasty/${id}/persons`)).status === 200) pass++;
+    else {
+      fail++;
+      problems.push(`[persons] ${id}`);
+    }
     console.log(`  ${id}: ${items.length} 条目`);
   }
 
