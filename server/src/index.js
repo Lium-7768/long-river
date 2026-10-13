@@ -79,6 +79,30 @@ function handle(pathname, searchParams) {
     return ok(rows, { total: cnt.n, limit, offset });
   }
 
+  if (p === '/api/person-assocs') {
+    // 社会关系（分页）：?person=<id>&offset=0&limit=100&rel=<关系名>
+    const pid = searchParams.get('person');
+    if (!pid) return err('需要 person 参数');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500);
+    const offset = parseInt(searchParams.get('offset') || '0', 10);
+    const rel = searchParams.get('rel');
+    const w = rel ? ' AND a.rel_name = ?' : '';
+    const b = rel ? [pid, rel] : [pid];
+    const cnt = db.prepare(`SELECT COUNT(*) n FROM assocs a WHERE a.person_id = ?${w}`).get(...b).n;
+    const rows = db.prepare(
+      `SELECT a.rel_name, a.assoc_id AS id, p.name
+       FROM assocs a JOIN persons p ON p.id = a.assoc_id
+       WHERE a.person_id = ?${w}
+       ORDER BY a.rel_name, p.name
+       LIMIT ? OFFSET ?`
+    ).all(...b, limit, offset);
+    // 关系类型分布
+    const rels = db.prepare(
+      `SELECT rel_name, COUNT(*) n FROM assocs WHERE person_id = ? GROUP BY rel_name ORDER BY n DESC`
+    ).all(pid);
+    return ok(rows, { total: cnt, limit, offset, rels });
+  }
+
   const mDetail = p.match(/^\/api\/persons\/(.+)$/);
   if (mDetail) {
     const id = decodeURIComponent(mDetail[1]);
@@ -103,6 +127,7 @@ function handle(pathname, searchParams) {
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ? LIMIT 200`
     ).all(id);
+    const assocCount = db.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id).n;
     // 师徒传承：作为老师(门人) / 作为学生(师承)
     const masters = db.prepare(
       `SELECT l.rel, l.teacher AS id, p.name
@@ -165,7 +190,7 @@ function handle(pathname, searchParams) {
       shi: parseJsonArr(person.shi),
       addr: parseJsonArr(person.addr),
       sources: parseJsonArr(person.sources),
-      kinships, offices, entries, works, texts, assocs,
+      kinships, offices, entries, works, texts, assocs, assocCount,
       masters, disciples, merges,
       officeAddrs: officeAddrs.map((r) => r.addr),
       evid,

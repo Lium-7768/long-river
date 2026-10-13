@@ -6,6 +6,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useCoverage } from '@/lib/territory-coverage';
 import { useThemeColor } from '@/lib/use-theme-color';
+import { useWebGLAvailable } from '@/lib/webgl';
 
 /**
  * 主权疆域「示意地图」（Three.js）。
@@ -139,6 +140,7 @@ function CameraLook() {
 export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; height?: number }) {
   const [features, setFeatures] = useState<GeoFeature[] | null>(null);
   const cov = useCoverage(dynastyId);
+  const webgl = useWebGLAvailable();
 
   useEffect(() => {
     fetch('/geo/china.json')
@@ -153,6 +155,28 @@ export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; h
     return (
       <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-base text-white/40">
         该朝代暂无疆域示意数据
+      </div>
+    );
+  }
+
+  // 无 WebGL → 省份列表回退
+  if (webgl === false) {
+    return (
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+        <div className="border-b border-white/10 px-5 py-3 text-base text-white/50">
+          疆域覆盖 {cov.provinces.length} 省（当前环境不支持 3D，列表展示）
+        </div>
+        <div className="flex flex-wrap gap-2 p-5">
+          {cov.provinces.map((p) => (
+            <span
+              key={p}
+              className="rounded-lg border border-sky-400/25 bg-sky-400/[0.08] px-3 py-1 text-base text-sky-100/80"
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+        {cov.note && <p className="px-5 pb-4 text-base text-white/45">※ {cov.note}</p>}
       </div>
     );
   }

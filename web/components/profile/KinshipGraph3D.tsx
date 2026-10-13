@@ -6,6 +6,7 @@ import { OrbitControls, Text } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import type { Kinship } from '@/lib/api';
+import { useWebGLAvailable } from '@/lib/webgl';
 
 /**
  * 3D 亲属关系星群（Three.js）。
@@ -232,6 +233,7 @@ export function KinshipGraph3D({
 }) {
   const [, setHovered] = useState<string | null>(null);
   const nodes = useMemo(() => buildNodes(kinships), [kinships]);
+  const webgl = useWebGLAvailable();
 
   // 图例
   const cats = useMemo(() => {
@@ -242,6 +244,40 @@ export function KinshipGraph3D({
     }
     return [...m.entries()];
   }, [kinships]);
+
+  // 无 WebGL → 2D 回退（仍可点开每个人）
+  if (webgl === false) {
+    return (
+      <div>
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-base">
+          {cats.map(([cat, count]) => (
+            <span key={cat} className="flex items-center gap-1.5">
+              <span
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ background: CAT_META[cat].color }}
+              />
+              <span className="text-white/50">
+                {cat} {count}
+              </span>
+            </span>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {kinships.map((k, i) => (
+            <button
+              key={`${k.id}-${i}`}
+              onClick={() => onPick?.(k.id, k.name)}
+              className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-base text-white/80 transition hover:border-sky-400/40 hover:bg-sky-400/[0.08]"
+            >
+              <span className="text-white/40">{k.rel}·</span>
+              {k.name}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-base text-white/30">当前环境不支持 3D，已用列表展示。</p>
+      </div>
+    );
+  }
 
   return (
     <div>

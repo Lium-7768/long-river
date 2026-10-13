@@ -7,6 +7,7 @@ import { useDynastyName } from '@/lib/dynasty-data';
 import { fmtRange, fmtYear } from '@/components/river/year';
 import { KinshipGraph3D } from '@/components/profile/KinshipGraph3D';
 import { PersonDrawer } from '@/components/profile/PersonDrawer';
+import { AssocBlock } from '@/components/persons/AssocBlock';
 import { Breadcrumb } from '@/components/profile/Breadcrumb';
 
 export default function PersonPage({ params }: { params: Promise<{ id: string; pid: string }> }) {
@@ -355,22 +356,15 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
             )}
 
             {p.assocs?.length ? (
-              <Section title={`社会关系（${p.assocs.length}）`}>
-                <div className="flex flex-wrap gap-2">
-                  {p.assocs.map((a, i) => (
-                    <button
-                      key={`${a.id}-${i}`}
-                      onClick={() => setDrawer({ id: a.id, name: a.name })}
-                      className="cursor-pointer rounded-lg border border-violet-400/20 bg-violet-400/[0.06] px-3 py-1 text-base text-violet-100/80 transition hover:border-violet-400/50 hover:bg-violet-400/[0.12]"
-                      title={a.rel_name || undefined}
-                    >
-                      {a.rel_name ? (
-                        <span className="text-violet-300/60">{a.rel_name}·</span>
-                      ) : null}
-                      {a.name}
-                    </button>
-                  ))}
-                </div>
+              <Section
+                title={`社会关系（${(p.assocCount ?? p.assocs.length).toLocaleString('en-US')}）`}
+              >
+                <AssocBlock
+                  personId={pid}
+                  initialAssocs={p.assocs}
+                  totalCount={p.assocCount ?? p.assocs.length}
+                  onPick={(id2, name) => setDrawer({ id: id2, name })}
+                />
               </Section>
             ) : null}
 

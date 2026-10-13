@@ -132,6 +132,7 @@ export interface PersonDetail extends PersonBrief {
   statuses?: { status: string; fy: number; ly: number }[];
   network?: { n_out: number; n_in: number; n_types: number } | null;
   assocs?: { rel_name: string; id: string; name: string }[];
+  assocCount?: number;
   masters?: { rel: string; id: string; name: string }[];
   disciples?: { rel: string; id: string; name: string }[];
   merges?: { merged_from: number; note: string; source: string }[];
@@ -162,6 +163,12 @@ export const api = {
   ) => get<Paged<PersonBrief>>('/api/persons', p),
   person: (id: string) =>
     get<{ ok: true; data: PersonDetail }>(`/api/persons/${encodeURIComponent(id)}`),
+  personAssocs: (p: { person: string; offset?: number; limit?: number; rel?: string }) =>
+    get<
+      Paged<{ rel_name?: string | null; id: string; name: string }> & {
+        rels: { rel_name: string; n: number }[];
+      }
+    >('/api/person-assocs', p),
   search: (q: string) => get<{ ok: true; data: PersonBrief[] }>('/api/search', { q }),
   poems: (
     p: {

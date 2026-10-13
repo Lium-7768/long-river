@@ -8,6 +8,7 @@ import { Scene } from './Scene';
 import type { CameraMode } from './cameraModes';
 import { fmtRange } from './year';
 import { useDynasties, type Dynasty } from '@/lib/dynasty-data';
+import { useWebGLAvailable } from '@/lib/webgl';
 
 /**
  * 滚动驱动的时间长河。
@@ -23,6 +24,7 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
   const [picked, setPicked] = useState<Dynasty | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [mode, setMode] = useState<CameraMode>('fly');
+  const webgl = useWebGLAvailable();
   const hasData = (id: string) => dynasties.some((d) => d.id === id);
 
   // 滚轮 → 目标进度
@@ -73,6 +75,40 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-[#03060f] text-white/40">
         载入时间长河…
+      </div>
+    );
+  }
+
+  // 无 WebGL → 2D 朝代列表回退（不崩页，每个朝代仍可进）
+  if (webgl === false) {
+    return (
+      <div className="min-h-screen w-screen bg-[#03060f] px-6 py-16 text-white">
+        <div className="mx-auto max-w-3xl space-y-6">
+          <header>
+            <div className="text-base tracking-[0.4em] text-sky-300/70">长河</div>
+            <h1 className="mt-3 text-5xl font-semibold tracking-tight">中国历史 · 朝代</h1>
+            <p className="mt-3 text-base leading-relaxed text-white/50">
+              当前环境不支持 3D，已用列表呈现。点击朝代进入档案。
+            </p>
+          </header>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {dynasties.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => {
+                  if (onEnterDynasty) onEnterDynasty(d);
+                  else setPicked(d);
+                }}
+                className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-sky-400/40 hover:bg-sky-400/[0.07]"
+              >
+                <div className="text-base font-medium text-white/90">{d.name}</div>
+                <div className="mt-1 text-base tabular-nums text-white/40">
+                  {fmtRange(d.start, d.end)}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
