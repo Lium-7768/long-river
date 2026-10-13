@@ -15,7 +15,7 @@
 > **二进制不进 git**（见 `.gitignore`）。备份请走对象存储，或用 `etl/backup_db.sh`。
 > 文档（报告/设计）统一在 [`../docs/`](../docs/)。
 
-## 主库内容（127 表）
+## 主库内容（136 表 = 自有 58 + CBDB 原始 78）
 
 ### 加工表（8）— 前端/后端直接用
 | 表 | 行数 | 说明 |
@@ -31,6 +31,20 @@
 | `event_persons` | 427 | 人物-事件参与 |
 | `evid` | **336 万** | **逐条数据证据**（每条数据 → 史料书名 + 页码/卷号）|
 | `texts` | 3933 卷 | 公版史书全文（**24 部正史**）|
+
+### 朝代档案表（8）— 编辑层内容（前端 L2/L3 由 API 直取）
+| 表 | 行数 | 说明 |
+|---|---|---|
+| `dynasty_meta` | 22 | 朝代轴（名/起止/色）|
+| `dynasty_profile` | 22 | 朝代概述 + 关键词 + 出处 |
+| `dynasty_institution` | 111 | 政治制度（含背景/影响/史料）|
+| `dynasty_event` | 127 | 重大事件（含起因/结果/影响）|
+| `dynasty_culture` | 116 | 文化成就（含代表作 `works`）|
+| `dynasty_figure` | 603 | 条目 ↔ 人物关联（personId 指向 `persons`）|
+| `dynasty_territory` | 22 | 疆域地理（都城/四至/区划/邻国）|
+| `territory_coverage` | 5 | 疆域示意省份 |
+
+> 源数据归档于 `etl/source/*.json`，由 `etl/build_archive.py` 导入。
 
 ### 证据与可信度（核心）
 

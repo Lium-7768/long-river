@@ -21,7 +21,7 @@ import sys
 
 DB = sys.argv[1] if len(sys.argv) > 1 else 'data/db/lr-song.sqlite3'
 
-# 朝代边界（与 web/content/dynasties.ts 一致）
+# 朝代边界（与 dynasty_meta 表一致）
 RANGES = [
     ('song-w', '北宋', 960, 1127),
     ('song-e', '南宋', 1127, 1279),
