@@ -299,7 +299,17 @@ export default function PersonPage({ params }: { params: Promise<{ id: string; p
                   ))}
                 </div>
                 {p.nPoems > 20 && (
-                  <p className="mt-3 text-base text-white/40">仅显示前 20 首，共 {p.nPoems} 首。</p>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <span className="text-base text-white/40">
+                      仅显示前 20 首，共 {p.nPoems} 首
+                    </span>
+                    <Link
+                      href={`/dynasty/${id}/person/${pid}/poems`}
+                      className="shrink-0 rounded-lg border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-base text-emerald-200 transition hover:bg-emerald-400/20"
+                    >
+                      查看全部 {p.nPoems} 首 →
+                    </Link>
+                  </div>
                 )}
               </Section>
             ) : null}

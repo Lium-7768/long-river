@@ -75,6 +75,21 @@ async function api(path) {
       fail++;
       problems.push(`[persons] ${id}`);
     }
+
+    // 抽查一位该朝人物的全部诗词页（取档案人物关联里的第一个 personId）
+    const fig = (p.figures || []).find((f) => f.personId);
+    if (fig) {
+      // 需要先确认该 personId 确实属于本朝（避免抽查到跨朝人物）
+      const pr = await api(`/api/persons/${encodeURIComponent(fig.personId)}`);
+      if (pr && pr.dynasty_id === id) {
+        if ((await get(`${BASE}/dynasty/${id}/person/${fig.personId}/poems`)).status === 200)
+          pass++;
+        else {
+          fail++;
+          problems.push(`[person-poems] ${id}/${fig.personId}`);
+        }
+      }
+    }
     console.log(`  ${id}: ${items.length} 条目`);
   }
 

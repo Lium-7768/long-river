@@ -57,3 +57,12 @@ export async function fetchTerritoryCoverage(): Promise<
     )) ?? {}
   );
 }
+
+/** 服务端/构建期：取人物简要（校验存在 + 用于诗词作者名）*/
+export async function fetchPersonBrief(
+  id: string,
+): Promise<{ id: string; name: string; nPoems?: number } | null> {
+  return getJson<{ id: string; name: string; nPoems?: number }>(
+    `/api/persons/${encodeURIComponent(id)}`,
+  );
+}
