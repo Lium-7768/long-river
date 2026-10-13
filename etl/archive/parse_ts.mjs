@@ -1,5 +1,5 @@
 // 解析 web/content 下的 .ts 数据文件（纯数据）→ JSON
-// 用法: node etl/build_archive/parse_ts.mjs <ts文件> <导出名>
+// 用法: node etl/archive/parse_ts.mjs <ts文件> <导出名>
 import { readFileSync } from 'fs';
 
 const [,, file, exportName] = process.argv;

@@ -22,11 +22,6 @@ export async function loadCoverage(): Promise<Record<string, Coverage>> {
   return _inflight;
 }
 
-/** 同步读取（需先 loadCoverage 或 useCoverage 预热） */
-export function getCoverage(id: string): Coverage | undefined {
-  return _cache?.[id];
-}
-
 export function useCoverage(id: string): Coverage | undefined {
   const [cov, setCov] = useState<Coverage | undefined>(_cache?.[id]);
   useEffect(() => {

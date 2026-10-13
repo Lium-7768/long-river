@@ -1,33 +1,26 @@
 #!/usr/bin/env python3
 """朝代档案（编辑层内容）→ SQLite。
 
-把 web/content/ 的硬编码 .ts 数据导入自有表，使前端全走 API。
-  web/content/dynasties.ts           → dynasty_meta      (朝代轴)
-  web/content/profiles/*.ts          → dynasty_profile   (概述+关键词)
-                                     → dynasty_institution
-                                     → dynasty_event
-                                     → dynasty_culture
-                                     → dynasty_figure     (条目↔人物)
-                                     → dynasty_territory  (疆域)
-  web/content/territory/coverage.ts  → territory_coverage (示意省份)
+数据源：etl/source/*.json（由早期 web/content/*.ts 转换而来，作为 ETL 输入归档）。
+  etl/source/dynasties.json  → dynasty_meta      (朝代轴)
+  etl/source/profiles.json   → dynasty_profile / dynasty_institution /
+                               dynasty_event / dynasty_culture /
+                               dynasty_figure / dynasty_territory
+  etl/source/coverage.json   → territory_coverage (示意省份)
 
 来源：历史常识整理（模型初稿 + 人工审校）。字段 source 保留史料出处。
 """
-import json, os, subprocess, sqlite3, sys
+import json, os, sqlite3
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DB = os.path.join(ROOT, "data", "db", "lr-song.sqlite3")
-PARSER = os.path.join(HERE, "build_archive", "parse_ts.mjs")
-CONTENT = os.path.join(ROOT, "web", "content")
+SRC = os.path.join(HERE, "source")
 
 
-def parse(rel_path, export_name):
-    out = subprocess.check_output(
-        ["node", PARSER, os.path.join(ROOT, rel_path), export_name],
-        cwd=ROOT,
-    )
-    return json.loads(out)
+def load(name):
+    with open(os.path.join(SRC, name), encoding="utf-8") as f:
+        return json.load(f)
 
 
 def j(v):
@@ -35,6 +28,10 @@ def j(v):
 
 
 def main():
+    dyn = load("dynasties.json")
+    profiles = load("profiles.json")
+    cov = load("coverage.json")
+
     db = sqlite3.connect(DB)
     db.executescript("""
     DROP TABLE IF EXISTS dynasty_meta;
@@ -52,9 +49,7 @@ def main():
     );
     CREATE TABLE dynasty_profile (
       dynasty_id TEXT PRIMARY KEY, overview TEXT,
-      keywords TEXT,            -- JSON array
-      sources TEXT,             -- JSON array
-      completeness TEXT
+      keywords TEXT, sources TEXT, completeness TEXT
     );
     CREATE TABLE dynasty_institution (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,18 +71,15 @@ def main():
     );
     CREATE TABLE dynasty_figure (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      dynasty_id TEXT, kind TEXT,       -- institution/event/culture
-      item_name TEXT, name TEXT, person_id TEXT
+      dynasty_id TEXT, kind TEXT, item_name TEXT, name TEXT, person_id TEXT
     );
     CREATE TABLE dynasty_territory (
       dynasty_id TEXT PRIMARY KEY, capital TEXT, extent TEXT, note TEXT,
-      bounds TEXT,        -- JSON
-      divisions TEXT,     -- JSON array
-      neighbors TEXT,     -- JSON array
+      bounds TEXT, divisions TEXT, neighbors TEXT,
       area TEXT, population TEXT, source TEXT
     );
     CREATE TABLE territory_coverage (
-      dynasty_id TEXT PRIMARY KEY, provinces TEXT, note TEXT  -- JSON array
+      dynasty_id TEXT PRIMARY KEY, provinces TEXT, note TEXT
     );
     CREATE INDEX idx_dinst_dyn ON dynasty_institution(dynasty_id);
     CREATE INDEX idx_devent_dyn ON dynasty_event(dynasty_id);
@@ -95,22 +87,13 @@ def main():
     CREATE INDEX idx_dfig_dyn ON dynasty_figure(dynasty_id);
     """)
 
-    # 1. 朝代轴
-    dyn = parse("web/content/dynasties.ts", "DYNASTIES")
     for i, d in enumerate(dyn):
         db.execute("INSERT INTO dynasty_meta VALUES(?,?,?,?,?,?,?)",
                    (d["id"], d["name"], d["start"], d["end"],
                     d.get("note"), d.get("colorVar"), i))
 
-    # 2. 各朝档案
-    prof_dir = os.path.join(CONTENT, "profiles")
     n_inst = n_evt = n_cul = n_fig = n_terr = 0
-    for fn in sorted(os.listdir(prof_dir)):
-        if not fn.endswith(".ts") or fn in ("index.ts", "types.ts", "slug.ts", "famous-poems.ts"):
-            continue
-        exp = fn[:-3].upper().replace("-", "_")
-        p = parse(f"web/content/profiles/{fn}", exp)
-        did = p["id"]
+    for did, p in profiles.items():
         db.execute("INSERT INTO dynasty_profile VALUES(?,?,?,?,?)",
                    (did, p.get("overview"), j(p.get("keywords")),
                     j(p.get("sources")), p.get("completeness")))
@@ -161,15 +144,13 @@ def main():
                         t.get("source")))
             n_terr += 1
 
-    # 3. 疆域覆盖（示意省份）
-    cov = parse("web/content/territory/coverage.ts", "DYNASTY_COVERAGE")
     for did, c in cov.items():
         db.execute("INSERT INTO territory_coverage VALUES(?,?,?)",
                    (did, j(c.get("provinces")), c.get("note")))
 
     db.commit()
     print(f"✓ 朝代档案已入库：{DB}")
-    print(f"  朝代轴 {len(dyn)} · 档案 {len(dyn)}")
+    print(f"  朝代轴 {len(dyn)} · 档案 {len(profiles)}")
     print(f"  制度 {n_inst} · 事件 {n_evt} · 文化 {n_cul} · 人物关联 {n_fig} · 疆域 {n_terr}")
     print(f"  疆域覆盖 {len(cov)}")
     db.close()

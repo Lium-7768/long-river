@@ -49,15 +49,6 @@ export async function loadDynasties(): Promise<Dynasty[]> {
   return _inflight;
 }
 
-/** 有档案数据的朝代 id 集合 */
-let _withData: Set<string> | null = null;
-export async function loadDynastiesWithData(): Promise<Set<string>> {
-  if (_withData) return _withData;
-  const list = await loadDynasties();
-  _withData = new Set(list.map((d) => d.id));
-  return _withData;
-}
-
 /** React hook：加载朝代轴 */
 export function useDynasties() {
   const [dynasties, setDynasties] = useState<Dynasty[]>(_cache || []);
@@ -75,43 +66,6 @@ export function useDynasties() {
   }, []);
 
   return { dynasties, loading, error };
-}
-
-/** React hook：加载单个朝代档案 */
-const _profileCache = new Map<string, DynastyProfileData>();
-
-export function useDynastyProfile(id: string | undefined) {
-  const [profile, setProfile] = useState<DynastyProfileData | undefined>(
-    id ? _profileCache.get(id) : undefined,
-  );
-  const [loading, setLoading] = useState(!!id && !_profileCache.get(id));
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-    let alive = true;
-    setLoading(true);
-    api
-      .dynastyProfile(id)
-      .then((r) => {
-        _profileCache.set(id, r.data);
-        if (alive) {
-          setProfile(r.data);
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        if (alive) {
-          setError(String(e));
-          setLoading(false);
-        }
-      });
-    return () => {
-      alive = false;
-    };
-  }, [id]);
-
-  return { profile, loading, error };
 }
 
 /** React hook：取单个朝代名（用于面包屑）*/
