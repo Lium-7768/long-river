@@ -17,7 +17,7 @@ long-river/
 │   └── build/      ETL 中间产物
 ├── docs/           全部文档
 │   ├── design/     架构 / 数据模型 / 需求 / CBDB / 视觉
-│   ├── reports/    数据报告（可信度 / 史料互证 / 诗词核验 …）
+│   ├── reports/    数据报告（可信度 / 史料互证 / 诗词核验 / 全量展示专项 …）
 │   └── archive/    归档（调研稿 + 原型数据）
 ├── README.md       本文件
 └── AGENTS.md       协作规则（改代码前必读）
@@ -37,6 +37,8 @@ cd web && pnpm install && pnpm dev
 
 - **本地 SQLite 是唯一数据源**（`data/db/lr-song.sqlite3`，已弃用 Cloudflare D1）。
 - 数据全部落入**自有表**；`cbdb_` 原始表仅作原料，不直连前端。
+- **数据必须全展示**：有数据就要能看到（分页/换 UI），不隐藏、不因复杂度丢弃。
+- **3D 是增强而非唯一路径**：3D 组件须处理 WebGL 不可用（`web/lib/webgl.ts`），回退 2D 列表，不崩页。
 - **二进制/备份不含 git**（见 `data/.gitignore`）。数据与文档分离：`data/` 放数据，`docs/` 放文档。
 - 年份展示一律带纪年前缀（`公元前221` / `公元960`），走 `web/components/river/year.ts`。
 - 每条数据可回溯至具体史料出处。

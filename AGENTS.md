@@ -59,10 +59,13 @@
   /dynasty/[id]                      L2 朝代档案（分块）
   /dynasty/[id]/persons              朝代人物·全量列表（分页/排序/搜索）
   /dynasty/[id]/person/[pid]         L3 人物
+  /dynasty/[id]/person/[pid]/poems   L3 人物·全部诗词（分页/搜索/筛选）
+  /dynasty/[id]/poem/[pid]           L3 单首诗词
   /dynasty/[id]/event/[slug]         L3 事件
   /dynasty/[id]/system/[slug]        L3 制度
   /dynasty/[id]/culture/[slug]       L3 文化
   /dynasty/[id]/territory            L3 疆域
+  /sources                           史料来源
   ```
 
 ### 分层下钻（强制）
