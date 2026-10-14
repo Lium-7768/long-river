@@ -1,0 +1,4 @@
+# 迁移中间产物（由脚本按需生成，不入库）
+sqlite_schema.sql
+sqlite_indexes.sql
+*.tmp

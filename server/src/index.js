@@ -1,25 +1,32 @@
 /**
- * 长河 · 本地后端（Node + better-sqlite3）
+ * 长河 · 本地后端（Node + better-sqlite3 / PostgreSQL）
  * ------------------------------------------------------------
- * 唯一后端。数据源为本地 SQLite (data/db/lr-song.sqlite3)。
+ * 唯一后端。数据源默认本地 SQLite，设 DATABASE_URL 则用 PostgreSQL。
  *
  * 目的：D1 免费层有「每日写入行数」限额，无法承载全史导入。
  *      本地 SQLite 不受限，作为唯一数据源（已弃用 Cloudflare D1）。
  *
  * 环境变量：
- *   LR_DB    SQLite 路径（默认 ../data/db/lr-song.sqlite3）
- *   PORT     端口（默认 8787）
+ *   DATABASE_URL  设置则使用 PostgreSQL（否则用 SQLite）
+ *   LR_DB         SQLite 路径（默认 ../data/db/lr-song.sqlite3）
+ *   PORT          端口（默认 8787）
  */
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import Database from 'better-sqlite3';
+import { createPgCompat } from './pg-compat.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(process.env.LR_DB || join(__dirname, '..', '..', 'data', 'db', 'lr-song.sqlite3'));
 const PORT = parseInt(process.env.PORT || '8787', 10);
+const DATABASE_URL = process.env.DATABASE_URL || '';
 
-const db = new Database(DB_PATH, { readonly: true });
+// 数据源：DATABASE_URL 存在 → PostgreSQL；否则 SQLite（可随时回滚）
+const USE_PG = !!DATABASE_URL;
+const db = USE_PG ? createPgCompat(DATABASE_URL) : new Database(DB_PATH, { readonly: true });
+const SOURCE_LABEL = USE_PG ? 'PostgreSQL' : 'SQLite';
+const SOURCE_DESC = USE_PG ? DATABASE_URL.replace(/:[^:@/]+@/, ':***@') : DB_PATH;
 
 const ok = (data, extra = {}) => ({ ok: true, data, ...extra });
 const err = (message, status = 400) => ({ ok: false, error: message, _status: status });
@@ -33,11 +40,11 @@ const parseJsonArr = (v) => {
   }
 };
 
-function handle(pathname, searchParams) {
+async function handle(pathname, searchParams) {
   const p = pathname;
 
   if (p === '/' || p === '') {
-    return ok({ name: '长河 API (local)', source: 'SQLite', db: DB_PATH });
+    return ok({ name: '长河 API (local)', source: SOURCE_LABEL, db: SOURCE_DESC });
   }
 
   if (p === '/api/persons') {
@@ -59,22 +66,24 @@ function handle(pathname, searchParams) {
     const wsql = where.length ? ' WHERE ' + where.join(' AND ') : '';
 
     // 排序（白名单，避免注入）
+    // 排序（白名单，避免注入）；**必须含 id 作为平局裁决**，
+    // 否则 SQLite 与 PG 对并列行返回顺序不同，前端分页会错乱。
     const ORDERS = {
-      fame: 'COALESCE(fame_score,0) DESC, prominence DESC, birth ASC',
-      birth: 'birth IS NULL, birth ASC, COALESCE(fame_score,0) DESC',
-      birth_desc: 'birth IS NULL, birth DESC, COALESCE(fame_score,0) DESC',
-      name: 'name ASC',
+      fame: 'COALESCE(fame_score,0) DESC, prominence DESC, birth ASC NULLS LAST, id ASC',
+      birth: 'birth ASC NULLS LAST, COALESCE(fame_score,0) DESC, prominence DESC, id ASC',
+      birth_desc: 'birth DESC NULLS FIRST, COALESCE(fame_score,0) DESC, prominence DESC, id ASC',
+      name: 'name ASC, id ASC',
     };
     const orderSql = ORDERS[searchParams.get('sort') || 'fame'] || ORDERS.fame;
 
-    const cnt = db.prepare(`SELECT COUNT(*) n FROM persons${wsql}`).get(...binds);
-    const rows = db.prepare(
+    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM persons${wsql}`).get(...binds));
+    const rows = (await db.prepare(
       `SELECT id,name,surname,birth,death,polity,dynasty_id,zi,role,prominence,fame_score,top_office,
               substr(summary,1,120) AS summary
        FROM persons${wsql}
        ORDER BY ${orderSql}
        LIMIT ? OFFSET ?`
-    ).all(...binds, limit, offset);
+    ).all(...binds, limit, offset));
 
     return ok(rows, { total: cnt.n, limit, offset });
   }
@@ -88,101 +97,101 @@ function handle(pathname, searchParams) {
     const rel = searchParams.get('rel');
     const w = rel ? ' AND a.rel_name = ?' : '';
     const b = rel ? [pid, rel] : [pid];
-    const cnt = db.prepare(`SELECT COUNT(*) n FROM assocs a WHERE a.person_id = ?${w}`).get(...b).n;
-    const rows = db.prepare(
+    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM assocs a WHERE a.person_id = ?${w}`).get(...b)).n;
+    const rows = (await db.prepare(
       `SELECT a.rel_name, a.assoc_id AS id, p.name
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ?${w}
-       ORDER BY a.rel_name, p.name
+       ORDER BY a.rel_name, p.name, a.assoc_id ASC
        LIMIT ? OFFSET ?`
-    ).all(...b, limit, offset);
+    ).all(...b, limit, offset));
     // 关系类型分布
-    const rels = db.prepare(
-      `SELECT rel_name, COUNT(*) n FROM assocs WHERE person_id = ? GROUP BY rel_name ORDER BY n DESC`
-    ).all(pid);
+    const rels = (await db.prepare(
+      `SELECT rel_name, COUNT(*) n FROM assocs WHERE person_id = ? GROUP BY rel_name ORDER BY n DESC, rel_name ASC`
+    ).all(pid));
     return ok(rows, { total: cnt, limit, offset, rels });
   }
 
   const mDetail = p.match(/^\/api\/persons\/(.+)$/);
   if (mDetail) {
     const id = decodeURIComponent(mDetail[1]);
-    const person = db.prepare('SELECT * FROM persons WHERE id = ?').get(id);
+    const person = (await db.prepare('SELECT * FROM persons WHERE id = ?').get(id));
     if (!person) return err('person not found', 404);
 
-    const kinships = db.prepare(
+    const kinships = (await db.prepare(
       `SELECT k.rel, k.b AS id, p.name FROM kinships k
        JOIN persons p ON p.id = k.b WHERE k.a = ? LIMIT 200`
-    ).all(id);
-    const offices = db.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year').all(id);
-    const entries = db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year').all(id);
-    const works = db.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id);
-    const texts = db.prepare(
+    ).all(id));
+    const offices = (await db.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year NULLS FIRST, office ASC').all(id));
+    const entries = (await db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year NULLS FIRST, entry ASC').all(id));
+    const works = (await db.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id));
+    const texts = (await db.prepare(
       'SELECT title, role, year FROM person_texts WHERE cbdb_id = ? LIMIT 100'
-    ).all(person.cbdb_id != null ? person.cbdb_id : -1);
-    const notes = db.prepare('SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20').all(id);
-    const possessions = db.prepare('SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20').all(id);
-    const insts = db.prepare('SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20').all(id);
-    const assocs = db.prepare(
+    ).all(person.cbdb_id != null ? person.cbdb_id : -1));
+    const notes = (await db.prepare('SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20').all(id));
+    const possessions = (await db.prepare('SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20').all(id));
+    const insts = (await db.prepare('SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20').all(id));
+    const assocs = (await db.prepare(
       `SELECT a.rel_name, a.assoc_id AS id, p.name
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ? LIMIT 200`
-    ).all(id);
-    const assocCount = db.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id).n;
+    ).all(id));
+    const assocCount = (await db.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id)).n;
     // 师徒传承：作为老师(门人) / 作为学生(师承)
-    const masters = db.prepare(
+    const masters = (await db.prepare(
       `SELECT l.rel, l.teacher AS id, p.name
        FROM lineage l JOIN persons p ON p.id = l.teacher
        WHERE l.student = ? LIMIT 100`
-    ).all(id);
-    const disciples = db.prepare(
+    ).all(id));
+    const disciples = (await db.prepare(
       `SELECT l.rel, l.student AS id, p.name
        FROM lineage l JOIN persons p ON p.id = l.student
        WHERE l.teacher = ? LIMIT 200`
-    ).all(id);
+    ).all(id));
     // 人物合并依据（消歧）：person_merge 以 cbdb_id 关联
     const merges = person.cbdb_id != null
-      ? db.prepare(
+      ? (await db.prepare(
           `SELECT merged_from, substr(note,1,200) AS note, source
            FROM person_merge WHERE person_id = ? LIMIT 50`
-        ).all(String(person.cbdb_id))
+        ).all(String(person.cbdb_id)))
       : [];
-    const officeAddrs = db.prepare(
-      `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? LIMIT 100`
-    ).all(id);
-    const evid = db.prepare(
+    const officeAddrs = (await db.prepare(
+      `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? ORDER BY addr ASC LIMIT 100`
+    ).all(id));
+    const evid = (await db.prepare(
       `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
-    ).all(id);
+    ).all(id));
     // 优先用消歧后的 poem_persons；回退 author 名匹配
-    const poems = db.prepare(
+    const poems = (await db.prepare(
       `SELECT p.id, p.title, p.genre, substr(p.content,1,120) AS excerpt, p.n_lines
        FROM poem_persons pp JOIN poems p ON p.id = pp.poem_id
-       WHERE pp.person_id = ? ORDER BY p.n_lines DESC LIMIT 200`
-    ).all(id);
-    const nPoems = db.prepare(
+       WHERE pp.person_id = ? ORDER BY p.n_lines DESC, p.id ASC LIMIT 200`
+    ).all(id));
+    const nPoems = (await db.prepare(
       `SELECT COUNT(*) n FROM poem_persons WHERE person_id = ?`
-    ).get(id).n;
-    const poemsByName = db.prepare(
+    ).get(id)).n;
+    const poemsByName = (await db.prepare(
       `SELECT id, title, genre, substr(content,1,120) AS excerpt, n_lines
-       FROM poems WHERE author = ? ORDER BY n_lines DESC LIMIT 200`
-    ).all(person.name);
-    const aliases = db.prepare(
+       FROM poems WHERE author = ? ORDER BY n_lines DESC, id ASC LIMIT 200`
+    ).all(person.name));
+    const aliases = (await db.prepare(
       `SELECT alias, type_desc FROM aliases WHERE person_id = ? LIMIT 50`
-    ).all(id);
-    const occupations = db.prepare(
+    ).all(id));
+    const occupations = (await db.prepare(
       `SELECT occupation FROM person_occupations WHERE person_id = ? LIMIT 20`
-    ).all(id).map((r) => r.occupation);
-    const birthplaces = db.prepare(
+    ).all(id)).map((r) => r.occupation);
+    const birthplaces = (await db.prepare(
       `SELECT place FROM person_birthplace WHERE person_id = ? LIMIT 10`
-    ).all(id).map((r) => r.place);
-    const statuses = db.prepare(
+    ).all(id)).map((r) => r.place);
+    const statuses = (await db.prepare(
       `SELECT status, fy, ly FROM person_status WHERE person_id = ? LIMIT 20`
-    ).all(person.cbdb_id != null ? String(person.cbdb_id) : id);
-    const network = db.prepare(
+    ).all(person.cbdb_id != null ? String(person.cbdb_id) : id));
+    const network = (await db.prepare(
       `SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?`
-    ).get(id) || null;
-    const excerpts = db.prepare(
+    ).get(id)) || null;
+    const excerpts = (await db.prepare(
       `SELECT book, volume, excerpt FROM bio_excerpt WHERE person_id = ? LIMIT 5`
-    ).all(id);
+    ).all(id));
 
     return ok({
       ...person,
@@ -217,7 +226,7 @@ function handle(pathname, searchParams) {
       'SELECT p.id, p.name FROM aliases a JOIN persons p ON p.id = a.person_id WHERE a.alias = ? LIMIT 1'
     );
     for (const nm of names) {
-      const r = byName.get(nm) || byAlias.get(nm);
+      const r = (await byName.get(nm)) || (await byAlias.get(nm));
       if (r) out[nm] = { id: r.id, name: r.name };
     }
     return ok(out);
@@ -226,13 +235,13 @@ function handle(pathname, searchParams) {
   if (p === '/api/search') {
     const q = searchParams.get('q');
     if (!q) return err('需要 q 参数');
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT id,name,birth,death,polity,role,prominence,zi,
               substr(summary,1,80) AS zh
        FROM persons
        WHERE name LIKE ? OR zi LIKE ? OR summary LIKE ?
-       ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC LIMIT 100`
-    ).all(`%${q}%`, `%${q}%`, `%${q}%`);
+       ORDER BY COALESCE(fame_score,0) DESC, prominence DESC, birth ASC NULLS LAST, id ASC LIMIT 100`
+    ).all(`%${q}%`, `%${q}%`, `%${q}%`));
     return ok(rows, { q });
   }
 
@@ -250,57 +259,57 @@ function handle(pathname, searchParams) {
     if (genre) { w.push('genre = ?'); b.push(genre); }
     if (q) { w.push('(title LIKE ? OR content LIKE ?)'); b.push(`%${q}%`, `%${q}%`); }
     const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
-    const cnt = db.prepare(`SELECT COUNT(*) n FROM poems ${wsql}`).get(...b).n;
-    const rows = db.prepare(
+    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM poems ${wsql}`).get(...b)).n;
+    const rows = (await db.prepare(
       `SELECT id,title,author,dynasty,genre,n_lines,substr(content,1,200) AS excerpt
        FROM poems ${wsql} ORDER BY id LIMIT ? OFFSET ?`
-    ).all(...b, limit, offset);
+    ).all(...b, limit, offset));
     return ok(rows, { total: cnt, limit, offset });
   }
 
   const mPoem = p.match(/^\/api\/poems\/(\d+)$/);
   if (mPoem) {
-    const poem = db.prepare('SELECT * FROM poems WHERE id = ?').get(parseInt(mPoem[1], 10));
+    const poem = (await db.prepare('SELECT * FROM poems WHERE id = ?').get(parseInt(mPoem[1], 10)));
     if (!poem) return err('poem not found', 404);
     // 同作者其他作品
-    const siblings = db.prepare(
+    const siblings = (await db.prepare(
       `SELECT id,title,genre,n_lines FROM poems
-       WHERE author = ? AND id <> ? ORDER BY n_lines ASC LIMIT 20`
-    ).all(poem.author, poem.id);
+       WHERE author = ? AND id <> ? ORDER BY n_lines ASC, id ASC LIMIT 20`
+    ).all(poem.author, poem.id));
     // 作者在人物库的 id（用于跳转人物页）
-    const person = db.prepare(
-      `SELECT id, dynasty_id FROM persons WHERE name = ? ORDER BY prominence DESC LIMIT 1`
-    ).get(poem.author);
+    const person = (await db.prepare(
+      `SELECT id, dynasty_id FROM persons WHERE name = ? ORDER BY prominence DESC, id ASC LIMIT 1`
+    ).get(poem.author));
     return ok({ ...poem, siblings, person });
   }
 
   if (p === '/api/dynasty-poems') {
     const dynasty = searchParams.get('dynasty');
     if (!dynasty) return err('需要 dynasty 参数');
-    const genres = db.prepare(
-      `SELECT genre, COUNT(*) n FROM poems WHERE poem_dynasty = ? GROUP BY genre ORDER BY n DESC`
-    ).all(dynasty);
-    const authors = db.prepare(
+    const genres = (await db.prepare(
+      `SELECT genre, COUNT(*) n FROM poems WHERE poem_dynasty = ? GROUP BY genre ORDER BY n DESC, genre ASC`
+    ).all(dynasty));
+    const authors = (await db.prepare(
       `SELECT author AS name, COUNT(*) n FROM poems
        WHERE poem_dynasty = ? AND author IS NOT NULL AND author <> ''
-       GROUP BY author ORDER BY n DESC LIMIT 12`
-    ).all(dynasty);
+       GROUP BY author ORDER BY n DESC, author ASC LIMIT 12`
+    ).all(dynasty));
     // 代表作：优先人工核验的名篇（famous=1），不足再补流行短篇
-    let featured = db.prepare(
+    let featured = (await db.prepare(
       `SELECT id, title, author, genre, n_lines, substr(content,1,120) AS excerpt
        FROM poems WHERE poem_dynasty = ? AND famous = 1 AND genre IN ('诗','词','曲')
-       ORDER BY n_lines DESC LIMIT 12`
-    ).all(dynasty);
+       ORDER BY n_lines DESC, id ASC LIMIT 12`
+    ).all(dynasty));
     if (featured.length < 12) {
-      const more = db.prepare(
+      const more = (await db.prepare(
         `SELECT p.id, p.title, p.author, p.genre, p.n_lines, substr(p.content,1,120) AS excerpt
          FROM poems p
          WHERE p.poem_dynasty = ? AND p.famous = 0 AND p.genre IN ('诗','词','曲')
            AND p.n_lines BETWEEN 2 AND 8
            AND p.title NOT LIKE '%乐章%' AND p.title NOT LIKE '%歌辞%'
            AND p.title NOT LIKE '%郊庙%' AND p.title NOT LIKE '%鼓吹%'
-         ORDER BY length(p.content) ASC LIMIT ?`
-      ).all(dynasty, 12 - featured.length);
+         ORDER BY length(p.content) ASC, p.id ASC LIMIT ?`
+      ).all(dynasty, 12 - featured.length));
       featured = featured.concat(more);
     }
     return ok({ genres, authors, featured });
@@ -308,18 +317,18 @@ function handle(pathname, searchParams) {
 
   if (p === '/api/poem-authors') {
     const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500);
-    const rows = db.prepare(
-      `SELECT name, dynasty, n_poems FROM poem_authors ORDER BY n_poems DESC LIMIT ?`
-    ).all(limit);
+    const rows = (await db.prepare(
+      `SELECT name, dynasty, n_poems FROM poem_authors ORDER BY n_poems DESC, name ASC LIMIT ?`
+    ).all(limit));
     return ok(rows);
   }
 
   if (p === '/api/polities') {
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT polity, COUNT(*) n, MIN(birth) min_birth, MAX(death) max_death
        FROM persons WHERE polity IS NOT NULL
-       GROUP BY polity ORDER BY n DESC`
-    ).all();
+       GROUP BY polity ORDER BY n DESC, polity ASC`
+    ).all());
     return ok(rows);
   }
 
@@ -328,10 +337,10 @@ function handle(pathname, searchParams) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10), 200);
     const w = q ? 'WHERE title LIKE ?' : '';
     const b = q ? [`%${q}%`] : [];
-    const cnt = db.prepare(`SELECT COUNT(*) n FROM bibliography ${w}`).get(...b).n;
-    const rows = db.prepare(
-      `SELECT text_id, title, text_year FROM bibliography ${w} ORDER BY text_year LIMIT ?`
-    ).all(...b, limit);
+    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM bibliography ${w}`).get(...b)).n;
+    const rows = (await db.prepare(
+      `SELECT text_id, title, text_year FROM bibliography ${w} ORDER BY text_year NULLS FIRST, text_id ASC LIMIT ?`
+    ).all(...b, limit));
     return ok(rows, { total: cnt, q });
   }
 
@@ -344,14 +353,14 @@ function handle(pathname, searchParams) {
     if (category) { w.push('category = ?'); b.push(category); }
     if (q) { w.push('book LIKE ?'); b.push(`%${q}%`); }
     const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
-    const cnt = db.prepare(`SELECT COUNT(*) n FROM evidence_sources ${wsql}`).get(...b).n;
-    const rows = db.prepare(
+    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM evidence_sources ${wsql}`).get(...b)).n;
+    const rows = (await db.prepare(
       `SELECT book, category, n_claims, n_persons, claim_types, in_texts
-       FROM evidence_sources ${wsql} ORDER BY n_claims DESC LIMIT ?`
-    ).all(...b, limit);
-    const cats = db.prepare(
-      `SELECT category, COUNT(*) n, SUM(n_claims) claims FROM evidence_sources GROUP BY category ORDER BY n DESC`
-    ).all();
+       FROM evidence_sources ${wsql} ORDER BY n_claims DESC, book ASC LIMIT ?`
+    ).all(...b, limit));
+    const cats = (await db.prepare(
+      `SELECT category, COUNT(*) n, SUM(n_claims) claims FROM evidence_sources GROUP BY category ORDER BY n DESC, category ASC`
+    ).all());
     return ok(rows, { total: cnt, categories: cats, category: category || 'all', q: q || '' });
   }
 
@@ -362,10 +371,10 @@ function handle(pathname, searchParams) {
       const list = titles.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 100);
       if (!list.length) return ok({});
       const ph = list.map(() => '?').join(',');
-      const rows = db.prepare(
+      const rows = (await db.prepare(
         `SELECT title, edition, pub_year, pub_loc, imprint, extant
          FROM book_editions WHERE title IN (${ph})`
-      ).all(...list);
+      ).all(...list));
       const out = {};
       for (const r of rows) {
         (out[r.title] = out[r.title] || []).push(r);
@@ -373,10 +382,10 @@ function handle(pathname, searchParams) {
       return ok(out, { n: list.length });
     }
     if (!title) return err('需要 title 参数');
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT title, edition, pub_year, pub_loc, imprint, extant
        FROM book_editions WHERE title = ? LIMIT 20`
-    ).all(title);
+    ).all(title));
     return ok(rows, { title, n: rows.length });
   }
 
@@ -385,15 +394,17 @@ function handle(pathname, searchParams) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '300', 10), 1000);
     // 按朝代聚合籍贯坐标（地名去重，计数）
     const rows = dynasty
-      ? db.prepare(
+      ? (await db.prepare(
           `SELECT g.addr AS name, g.lon, g.lat, COUNT(DISTINCT g.person_id) n
            FROM person_geo g JOIN persons p ON p.id = g.person_id
-           WHERE p.dynasty_id = ? GROUP BY g.addr ORDER BY n DESC LIMIT ?`
-        ).all(dynasty, limit)
-      : db.prepare(
+           WHERE p.dynasty_id = ? GROUP BY g.addr, g.lon, g.lat
+           ORDER BY n DESC, g.addr ASC LIMIT ?`
+        ).all(dynasty, limit))
+      : (await db.prepare(
           `SELECT addr AS name, lon, lat, COUNT(DISTINCT person_id) n
-           FROM person_geo GROUP BY addr ORDER BY n DESC LIMIT ?`
-        ).all(limit);
+           FROM person_geo GROUP BY addr, lon, lat
+           ORDER BY n DESC, addr ASC LIMIT ?`
+        ).all(limit));
     return ok(rows, { dynasty });
   }
 
@@ -405,27 +416,27 @@ function handle(pathname, searchParams) {
     if (category) { conds.push('category = ?'); args.push(category); }
     if (q) { conds.push('(name LIKE ? OR name_en LIKE ?)'); args.push(`%${q}%`, `%${q}%`); }
     const where = conds.length ? 'WHERE ' + conds.join(' AND ') : '';
-    const rows = db.prepare(
-      `SELECT category, name, name_en, note FROM ref_dict ${where} ORDER BY category, name LIMIT 500`
-    ).all(...args);
+    const rows = (await db.prepare(
+      `SELECT category, name, name_en, note FROM ref_dict ${where} ORDER BY category, name, name_en, note, code LIMIT 500`
+    ).all(...args));
     return ok(rows);
   }
 
   if (p === '/api/region-stats') {
     const q = searchParams.get('q');
     const rows = q
-      ? db.prepare(
+      ? (await db.prepare(
           `SELECT region, kaiyuan_hu, yuanhe_hu FROM region_stats
-           WHERE region LIKE ? ORDER BY kaiyuan_hu DESC LIMIT 200`
-        ).all(`%${q}%`)
-      : db.prepare(
-          `SELECT region, kaiyuan_hu, yuanhe_hu FROM region_stats ORDER BY kaiyuan_hu DESC LIMIT 200`
-        ).all();
+           WHERE region LIKE ? ORDER BY kaiyuan_hu DESC, region ASC LIMIT 200`
+        ).all(`%${q}%`))
+      : (await db.prepare(
+          `SELECT region, kaiyuan_hu, yuanhe_hu FROM region_stats ORDER BY kaiyuan_hu DESC, region ASC LIMIT 200`
+        ).all());
     return ok(rows);
   }
 
   if (p === '/api/stats') {
-    const s = db.prepare(
+    const s = (await db.prepare(
       `SELECT
          (SELECT COUNT(*) FROM persons) AS persons,
          (SELECT COUNT(*) FROM kinships) AS kinships,
@@ -450,7 +461,7 @@ function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM emperor) AS emperors,
          (SELECT COUNT(*) FROM book_editions) AS book_editions,
          (SELECT COUNT(*) FROM persons WHERE source='维基百科(CC BY-SA)') AS wiki_persons`
-    ).get();
+    ).get());
     return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: 'local-sqlite' });
   }
 
@@ -458,10 +469,10 @@ function handle(pathname, searchParams) {
     const dynasty = searchParams.get('dynasty');
     const w = dynasty ? 'WHERE dynasty_id = ?' : '';
     const b = dynasty ? [dynasty] : [];
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT qid, title, native, dynasty_id, reign_start, reign_end
-       FROM emperor ${w} ORDER BY COALESCE(reign_start, 9999) ASC`
-    ).all(...b);
+       FROM emperor ${w} ORDER BY COALESCE(reign_start, 9999) ASC, qid ASC`
+    ).all(...b));
     return ok(rows, { dynasty: dynasty || 'all', n: rows.length });
   }
 
@@ -473,10 +484,10 @@ function handle(pathname, searchParams) {
     if (dynasty) { w.push('dynasty_id = ?'); b.push(dynasty); }
     if (q) { w.push('name LIKE ?'); b.push(`%${q}%`); }
     const wsql = w.length ? 'WHERE ' + w.join(' AND ') : '';
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT id, dynasty, dynasty_id, name, start, end
-       FROM nianhao ${wsql} ORDER BY COALESCE(start, 9999) ASC`
-    ).all(...b);
+       FROM nianhao ${wsql} ORDER BY COALESCE(start, 9999) ASC, id ASC`
+    ).all(...b));
     return ok(rows, { dynasty: dynasty || 'all', q: q || '', n: rows.length });
   }
 
@@ -488,10 +499,10 @@ function handle(pathname, searchParams) {
     const dynasty = searchParams.get('dynasty');
     const w = dynasty ? 'AND dynasty_id = ?' : '';
     const b = dynasty ? [name, dynasty] : [name];
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT id, dynasty, dynasty_id, name, start, end
-       FROM nianhao WHERE name = ? ${w} ORDER BY COALESCE(start, 9999) ASC LIMIT 5`
-    ).all(...b);
+       FROM nianhao WHERE name = ? ${w} ORDER BY COALESCE(start, 9999) ASC, id ASC LIMIT 5`
+    ).all(...b));
     if (!rows.length) return ok({ found: false, name, year });
     const r = rows[0];
     const ad = r.start != null ? r.start + (year - 1) : null;
@@ -500,52 +511,52 @@ function handle(pathname, searchParams) {
 
   // ── 朝代档案（编辑层内容，原前端硬编码 .ts，现统一走 API）──
   if (p === '/api/dynasties') {
-    const rows = db.prepare(
+    const rows = (await db.prepare(
       `SELECT id, name, start, "end" AS end, note, color_var, ord
        FROM dynasty_meta ORDER BY ord`
-    ).all();
+    ).all());
     return ok(rows);
   }
 
   if (p === '/api/dynasty-profile') {
     const id = searchParams.get('dynasty');
     if (!id) return err('需要 dynasty 参数');
-    const meta = db.prepare(
+    const meta = (await db.prepare(
       `SELECT id, name, start, "end" AS end, note, color_var FROM dynasty_meta WHERE id = ?`
-    ).get(id);
+    ).get(id));
     if (!meta) return err('dynasty not found', 404);
 
-    const prof = db.prepare(
+    const prof = (await db.prepare(
       `SELECT overview, keywords, sources, completeness FROM dynasty_profile WHERE dynasty_id = ?`
-    ).get(id) || {};
+    ).get(id)) || {};
 
-    const figures = db.prepare(
+    const figures = (await db.prepare(
       `SELECT kind, item_name, name, person_id FROM dynasty_figure WHERE dynasty_id = ?`
-    ).all(id);
+    ).all(id));
     const figOf = (kind, item) =>
       figures.filter((f) => f.kind === kind && f.item_name === item)
              .map((f) => ({ name: f.name, ...(f.person_id ? { personId: f.person_id } : {}) }));
 
-    const institutions = db.prepare(
-      `SELECT name, category, year, end_year AS endYear, desc, background, impact, source
+    const institutions = (await db.prepare(
+      `SELECT name, category, year, end_year AS "endYear", desc, background, impact, source
        FROM dynasty_institution WHERE dynasty_id = ? ORDER BY ord`
-    ).all(id).map((x) => ({ ...x, figures: figOf('institution', x.name) }));
+    ).all(id)).map((x) => ({ ...x, figures: figOf('institution', x.name) }));
 
-    const events = db.prepare(
+    const events = (await db.prepare(
       `SELECT name, category, year, desc, background, outcome, impact, source
        FROM dynasty_event WHERE dynasty_id = ? ORDER BY ord`
-    ).all(id).map((x) => ({ ...x, figures: figOf('event', x.name) }));
+    ).all(id)).map((x) => ({ ...x, figures: figOf('event', x.name) }));
 
-    const culture = db.prepare(
+    const culture = (await db.prepare(
       `SELECT name, category, year, desc, background, impact, works, source
        FROM dynasty_culture WHERE dynasty_id = ? ORDER BY ord`
-    ).all(id).map((x) => ({
+    ).all(id)).map((x) => ({
       ...x,
       works: x.works ? JSON.parse(x.works) : undefined,
       figures: figOf('culture', x.name),
     }));
 
-    const t = db.prepare(`SELECT * FROM dynasty_territory WHERE dynasty_id = ?`).get(id);
+    const t = (await db.prepare(`SELECT * FROM dynasty_territory WHERE dynasty_id = ?`).get(id));
     const territory = t ? {
       capital: t.capital, extent: t.extent, note: t.note,
       bounds: t.bounds ? JSON.parse(t.bounds) : undefined,
@@ -566,9 +577,9 @@ function handle(pathname, searchParams) {
   }
 
   if (p === '/api/territory-coverage') {
-    const rows = db.prepare(
-      `SELECT dynasty_id AS dynastyId, provinces, note FROM territory_coverage`
-    ).all().map((r) => ({ ...r, provinces: JSON.parse(r.provinces || '[]') }));
+    const rows = (await db.prepare(
+      `SELECT dynasty_id AS "dynastyId", provinces, note FROM territory_coverage`
+    ).all()).map((r) => ({ ...r, provinces: JSON.parse(r.provinces || '[]') }));
     const obj = {};
     for (const r of rows) obj[r.dynastyId] = { provinces: r.provinces, note: r.note };
     return ok(obj);
@@ -583,7 +594,7 @@ const CORS = {
   'access-control-allow-headers': 'content-type',
 };
 
-const server = createServer((req, res) => {
+const server = createServer(async (req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, CORS);
     return res.end();
@@ -591,7 +602,7 @@ const server = createServer((req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   let result;
   try {
-    result = handle(url.pathname, url.searchParams);
+    result = await handle(url.pathname, url.searchParams);
   } catch (e) {
     result = err(String(e && e.message ? e.message : e), 500);
   }
@@ -603,5 +614,5 @@ const server = createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`长河本地后端  http://localhost:${PORT}`);
-  console.log(`数据源        ${DB_PATH}`);
+  console.log(`数据源        ${SOURCE_LABEL} · ${SOURCE_DESC}`);
 });
