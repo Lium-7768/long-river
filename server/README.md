@@ -13,8 +13,11 @@ node src/index.js        # http://localhost:8787
 ```
 
 环境变量：
-- `LR_DB`  SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
-- `PORT`  端口（默认 8787）
+- `DATABASE_URL`  设置则用 PostgreSQL（**不设则用 SQLite，可随时回滚**）
+- `LR_DB`         SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
+- `PORT`          端口（默认 8787）
+
+> SQLite → PG 迁移见 [`../etl/migrate_pg/README.md`](../etl/migrate_pg/README.md)。
 
 ## 端点
 

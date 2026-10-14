@@ -9,6 +9,7 @@
 |---|---|
 | `etl/*.py` | **现行流水线脚本**（构建/抓取/校验）|
 | `etl/archive/` | **一次性/历史脚本**（已执行完，保留供追溯）|
+| `etl/migrate_pg/` | **SQLite → PostgreSQL 迁移**（schema/导入/校验/一键脚本）|
 | `etl/backup_db.sh` | 备份分卷（输出到 `data/db/`，**不入 git**）|
 | `data/db/` | 主库 + CBDB 原料库（`data/db/cbdb/`）|
 | `data/build/` | ETL 中间产物（JSONL/JSON，不入库，可重生成）|
