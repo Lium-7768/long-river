@@ -80,5 +80,6 @@
   但**内容页固定深色**，不跟随主题。
 - 3D：WebGL 无法读 CSS 变量，用 `web/lib/theme.ts` 的 `cssRgb()` 运行时读取。
 - DLC：数据经后端 API 获取，前端不直连 DB。
-- 数据源：默认 SQLite；设 `DATABASE_URL` 则 PostgreSQL（`etl/migrate_pg/`），不设即回滚。
+- 数据源优先级：`DATABASE_URLS`（按朝代 4 分片，Neon Free）> `DATABASE_URL`（单库 PG）
+  > SQLite（默认，不设前两者即回滚）。迁移与分片规则见 `etl/migrate_pg/`。
 - Git：commit 走 Conventional Commits；新克隆执行 `git config core.hooksPath web/.husky`。

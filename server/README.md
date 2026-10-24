@@ -17,7 +17,10 @@ node src/index.js        # http://localhost:8787
 - `LR_DB`         SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
 - `PORT`          端口（默认 8787）
 
-> SQLite → PG 迁移见 [`../etl/migrate_pg/README.md`](../etl/migrate_pg/README.md)。
+- `DATABASE_URLS`  4 分片 JSON（Neon Free 用），优先级最高
+
+> SQLite → PG（单库 / 4 分片）迁移见 [`../etl/migrate_pg/README.md`](../etl/migrate_pg/README.md)。
+> 优先级：`DATABASE_URLS` > `DATABASE_URL` > SQLite。
 
 ## 端点
 

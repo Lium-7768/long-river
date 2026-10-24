@@ -16,17 +16,33 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import Database from 'better-sqlite3';
 import { createPgCompat } from './pg-compat.js';
+import { createShardRouter, maskDsn, parseShardDsns, SHARD_ORDER } from './pg-shard.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(process.env.LR_DB || join(__dirname, '..', '..', 'data', 'db', 'lr-song.sqlite3'));
 const PORT = parseInt(process.env.PORT || '8787', 10);
 const DATABASE_URL = process.env.DATABASE_URL || '';
+const DATABASE_URLS = process.env.DATABASE_URLS || '';
 
-// 数据源：DATABASE_URL 存在 → PostgreSQL；否则 SQLite（可随时回滚）
-const USE_PG = !!DATABASE_URL;
-const db = USE_PG ? createPgCompat(DATABASE_URL) : new Database(DB_PATH, { readonly: true });
-const SOURCE_LABEL = USE_PG ? 'PostgreSQL' : 'SQLite';
-const SOURCE_DESC = USE_PG ? DATABASE_URL.replace(/:[^:@/]+@/, ':***@') : DB_PATH;
+// 数据源优先级：DATABASE_URLS（按朝代 4 分片）> DATABASE_URL（单库 PG）> SQLite
+const USE_SHARD = !!DATABASE_URLS;
+const USE_PG = !USE_SHARD && !!DATABASE_URL;
+const shardDsn = USE_SHARD ? parseShardDsns(DATABASE_URLS) : null;
+const router = USE_SHARD ? createShardRouter(shardDsn) : null;
+const db = USE_SHARD ? router.primary
+  : USE_PG ? createPgCompat(DATABASE_URL)
+    : new Database(DB_PATH, { readonly: true });
+const SOURCE_LABEL = USE_SHARD ? 'PostgreSQL×4' : USE_PG ? 'PostgreSQL' : 'SQLite';
+const SOURCE_DESC = USE_SHARD
+  ? SHARD_ORDER.map((s) => `${s}=${maskDsn(shardDsn[s])}`).join(' ')
+  : USE_PG ? maskDsn(DATABASE_URL) : DB_PATH;
+
+/**
+ * 分片表查询入口：按当事人朝代路由。
+ * 复制表（persons/poems/aliases/...）在所有分片一致，直接用 `db`。
+ * SQLite / 单库 PG 模式下 dbFor 恒返回同一个 db。
+ */
+const dbFor = (dynastyId) => (USE_SHARD ? router.forDynasty(dynastyId) : db);
 
 const ok = (data, extra = {}) => ({ ok: true, data, ...extra });
 const err = (message, status = 400) => ({ ok: false, error: message, _status: status });
@@ -92,13 +108,16 @@ async function handle(pathname, searchParams) {
     // 社会关系（分页）：?person=<id>&offset=0&limit=100&rel=<关系名>
     const pid = searchParams.get('person');
     if (!pid) return err('需要 person 参数');
+    // 分片：assocs 按当事人朝代切分，先查朝代再路由
+    const pRow = (await db.prepare('SELECT dynasty_id FROM persons WHERE id = ?').get(pid)) || {};
+    const adb = dbFor(pRow.dynasty_id);
     const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
     const rel = searchParams.get('rel');
     const w = rel ? ' AND a.rel_name = ?' : '';
     const b = rel ? [pid, rel] : [pid];
-    const cnt = (await db.prepare(`SELECT COUNT(*) n FROM assocs a WHERE a.person_id = ?${w}`).get(...b)).n;
-    const rows = (await db.prepare(
+    const cnt = (await adb.prepare(`SELECT COUNT(*) n FROM assocs a WHERE a.person_id = ?${w}`).get(...b)).n;
+    const rows = (await adb.prepare(
       `SELECT a.rel_name, a.assoc_id AS id, p.name
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ?${w}
@@ -106,7 +125,7 @@ async function handle(pathname, searchParams) {
        LIMIT ? OFFSET ?`
     ).all(...b, limit, offset));
     // 关系类型分布
-    const rels = (await db.prepare(
+    const rels = (await adb.prepare(
       `SELECT rel_name, COUNT(*) n FROM assocs WHERE person_id = ? GROUP BY rel_name ORDER BY n DESC, rel_name ASC`
     ).all(pid));
     return ok(rows, { total: cnt, limit, offset, rels });
@@ -117,26 +136,29 @@ async function handle(pathname, searchParams) {
     const id = decodeURIComponent(mDetail[1]);
     const person = (await db.prepare('SELECT * FROM persons WHERE id = ?').get(id));
     if (!person) return err('person not found', 404);
+    // 分片：evid/kinships/offices/entries/works/assocs/office_addrs/poem_persons
+    // 按当事人朝代切分；persons/poems/aliases 等复制表仍走 db
+    const pdb = dbFor(person.dynasty_id);
 
-    const kinships = (await db.prepare(
+    const kinships = (await pdb.prepare(
       `SELECT k.rel, k.b AS id, p.name FROM kinships k
        JOIN persons p ON p.id = k.b WHERE k.a = ? LIMIT 200`
     ).all(id));
-    const offices = (await db.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year NULLS FIRST, office ASC').all(id));
-    const entries = (await db.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year NULLS FIRST, entry ASC').all(id));
-    const works = (await db.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id));
+    const offices = (await pdb.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year NULLS FIRST, office ASC').all(id));
+    const entries = (await pdb.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year NULLS FIRST, entry ASC').all(id));
+    const works = (await pdb.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id));
     const texts = (await db.prepare(
       'SELECT title, role, year FROM person_texts WHERE cbdb_id = ? LIMIT 100'
     ).all(person.cbdb_id != null ? person.cbdb_id : -1));
     const notes = (await db.prepare('SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20').all(id));
     const possessions = (await db.prepare('SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20').all(id));
     const insts = (await db.prepare('SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20').all(id));
-    const assocs = (await db.prepare(
+    const assocs = (await pdb.prepare(
       `SELECT a.rel_name, a.assoc_id AS id, p.name
        FROM assocs a JOIN persons p ON p.id = a.assoc_id
        WHERE a.person_id = ? LIMIT 200`
     ).all(id));
-    const assocCount = (await db.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id)).n;
+    const assocCount = (await pdb.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id)).n;
     // 师徒传承：作为老师(门人) / 作为学生(师承)
     const masters = (await db.prepare(
       `SELECT l.rel, l.teacher AS id, p.name
@@ -155,19 +177,19 @@ async function handle(pathname, searchParams) {
            FROM person_merge WHERE person_id = ? LIMIT 50`
         ).all(String(person.cbdb_id)))
       : [];
-    const officeAddrs = (await db.prepare(
+    const officeAddrs = (await pdb.prepare(
       `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? ORDER BY addr ASC LIMIT 100`
     ).all(id));
-    const evid = (await db.prepare(
+    const evid = (await pdb.prepare(
       `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
     ).all(id));
     // 优先用消歧后的 poem_persons；回退 author 名匹配
-    const poems = (await db.prepare(
+    const poems = (await pdb.prepare(
       `SELECT p.id, p.title, p.genre, substr(p.content,1,120) AS excerpt, p.n_lines
        FROM poem_persons pp JOIN poems p ON p.id = pp.poem_id
        WHERE pp.person_id = ? ORDER BY p.n_lines DESC, p.id ASC LIMIT 200`
     ).all(id));
-    const nPoems = (await db.prepare(
+    const nPoems = (await pdb.prepare(
       `SELECT COUNT(*) n FROM poem_persons WHERE person_id = ?`
     ).get(id)).n;
     const poemsByName = (await db.prepare(
@@ -462,6 +484,19 @@ async function handle(pathname, searchParams) {
          (SELECT COUNT(*) FROM book_editions) AS book_editions,
          (SELECT COUNT(*) FROM persons WHERE source='维基百科(CC BY-SA)') AS wiki_persons`
     ).get());
+    // 分片：kinships/offices/entries/works 是分片表，需跨片求和。
+    // 只覆盖已有键，不改变对象键顺序（否则 JSON 字节输出变化）。
+    if (USE_SHARD) {
+      const parts = await Promise.all(router.all.map((c) => c.prepare(
+        `SELECT (SELECT COUNT(*) FROM kinships) AS kinships,
+                (SELECT COUNT(*) FROM offices) AS offices,
+                (SELECT COUNT(*) FROM entries) AS entries,
+                (SELECT COUNT(*) FROM works) AS works`
+      ).get()));
+      for (const k of ['kinships', 'offices', 'entries', 'works']) {
+        s[k] = parts.reduce((a, r) => a + Number(r[k] || 0), 0);
+      }
+    }
     return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: 'local-sqlite' });
   }
 

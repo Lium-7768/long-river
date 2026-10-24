@@ -21,3 +21,7 @@ out/
 # Python
 __pycache__/
 *.pyc
+
+# agent 技能安装产物（npx neon skills 生成）
+.claude/
+skills-lock.json

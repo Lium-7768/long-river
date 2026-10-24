@@ -123,3 +123,82 @@ DATABASE_URL 已设置  →  pg-compat.js 薄兼容层
 - [ ] 在线 PG 上正式迁移（用 `migrate.sh`）
 - [ ] 定期备份策略（`pg_dump`）
 - [ ] `/api/stats` 两个后端都 ~0.7s，可加物化视图或缓存优化
+
+---
+
+# 按朝代 4 分片（Neon Free 用这个）
+
+单库 1.25 GB 超过 Neon Free 每项目 1 GB 上限。按朝代拆 4 片后每片都装得下。
+
+```bash
+export DATABASE_URLS='{"qing":"postgresql://...","ming":"...","tangsong":"...","rest":"..."}'
+bash etl/migrate_pg/migrate_shards.sh
+DATABASE_URLS="$DATABASE_URLS" node server/src/index.js   # 用分片启动
+```
+
+## 分片结果（本地实测）
+
+| 分片 | 朝代 | 体积 | 余量 |
+|---|---|---|---|
+| qing | 清 | 700 MB | 324 MB |
+| ming | 明 | 696 MB | 328 MB |
+| tangsong | 唐 + 宋（北宋/南宋/泛宋） | 671 MB | 353 MB |
+| **rest** | 其余 18 朝 + 无朝代 | 624 MB | 400 MB |
+
+## 分类规则（`shards.py`）
+
+| 类型 | 表 | 说明 |
+|---|---|---|
+| **复制**（每片一份） | persons、poems、aliases、person_geo、全部小表 | 任一分片数据完整 |
+| **分片**（按人物朝代） | evid、kinships、offices、office_addrs、entries、assocs、works、poem_persons | 只按 person_id 查询 |
+| **分片**（按 dynasty_id 列） | person_canonical | — |
+| **单分片** | texts（93 MB 古籍全文） | API 从不查询，只放 rest 留档 |
+
+## 为什么这样分
+
+1. **persons 复制到所有分片** —— 这是关键设计。代码里 8 处 `JOIN persons p ON p.id = X`
+   （社会关系、亲属、师徒都要显示对方姓名）因此全部变成本地查询，
+   跨分片人名解析问题直接消失，不需要 person_index 表。
+2. **poems 也复制** —— 135 MB。这样 `poem_persons ⋈ poems` 同样是本地 JOIN，
+   诗词端点（`/api/poems`、`/api/poems/[id]`、`/api/dynasty-poems`）零 fan-out。
+3. **只有 11 张表真正分片** —— 全是按 `person_id` 查的大表。
+4. **aliases / person_geo 也复制** —— 它们的端点（别名查找、籍贯地图聚合）需要全局视角，
+   fan-out 合并容易出错，各 11/15 MB 复制更稳。
+
+## 路由（`server/src/pg-shard.js`）
+
+只有 2 个端点需要路由 + 1 个端点跨片求和：
+
+| 端点 | 做法 |
+|---|---|
+| `/api/person-assocs?person=X` | 先查 `persons.dynasty_id`（复制表，本地）→ 路由到分片 |
+| `/api/persons/[id]` | 同上：人物行本地取，evid/kinships/offices/... 路由 |
+| `/api/stats` | kinships/offices/entries/works 四个计数跨 4 片求和 |
+| 其余 19 个端点 | 复制表，本地查询，**无需改动** |
+
+## 验证（本地实测）
+
+| 项 | 结果 |
+|---|---|
+| 分片表 4 片行数之和 | 9/9 张表 == 源库 |
+| 复制表各片行数 | 全部一致 |
+| 内容抽样 | 11/11 一致 |
+| 路由抽查（4 分片各一人） | 4/4 正确 |
+| **API 端点对比 SQLite** | **57/57 字节级一致** |
+| 前端 link-check | 420 通过 · 0 失败 |
+| 性能 | 分片后比 SQLite **快 3–7 倍** |
+
+## 分片环境变量格式
+
+`DATABASE_URLS` 支持两种写法：
+
+```bash
+# 推荐：JSON（键名固定）
+DATABASE_URLS='{"qing":"...","ming":"...","tangsong":"...","rest":"..."}'
+
+# 或：逗号分隔 4 个 URL（顺序 qing,ming,tangsong,rest）
+DATABASE_URLS='postgresql://.../lr_qing,postgresql://.../lr_ming,postgresql://.../lr_tangsong,postgresql://.../lr_rest'
+```
+
+优先级：`DATABASE_URLS`（4 分片）> `DATABASE_URL`（单库 PG）> SQLite。
+三种模式随时切换，改环境变量即可回滚。
