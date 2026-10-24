@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import type { DynastyProfileData, PersonBrief } from '@/lib/api';
 import { fmtRange, fmtYear } from '@/components/river/year';
@@ -46,32 +47,47 @@ export function DynastyProfileView({
 
   return (
     <main className="relative z-10 min-h-screen bg-[#05070d] px-6 py-10 text-white [background-image:linear-gradient(rgba(40,52,78,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(40,52,78,0.5)_1px,transparent_1px)] [background-size:44px_44px]">
-      <div className="mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[#0d121e]/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-        <Breadcrumb items={[{ label: '长河', href: '/' }, { label: dynasty.name }]} />
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.08, delayChildren: 0.06 } },
+        }}
+        className="mx-auto max-w-4xl space-y-6 rounded-2xl border border-white/10 bg-[#0d121e]/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8"
+      >
+        <motion.div variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}>
+          <Breadcrumb items={[{ label: '长河', href: '/' }, { label: dynasty.name }]} />
+        </motion.div>
 
-        {/* 页头 */}
-        <header>
-          <div className="text-base tracking-[0.3em] text-sky-300/70">朝代档案</div>
-          <div className="mt-2 flex items-baseline gap-4">
-            <h1 className="text-6xl font-semibold tracking-tight">{dynasty.name}</h1>
-            <div className="text-lg tabular-nums text-white/45">
-              {fmtRange(dynasty.start, dynasty.end)}
+        {/* 页头 — 水墨：墨晕底 + 朱砂/洒金双色极光 + 印章 */}
+        <motion.header variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }} className="relative overflow-hidden rounded-xl">
+          <div className="dynasty-aurora dynasty-aurora--ink mb-0" aria-hidden />
+          <div className="relative bg-gradient-to-b from-white/[0.04] to-transparent px-1 py-3">
+            <div className="pointer-events-none absolute inset-0 opacity-[0.18] ink-wash" aria-hidden />
+            <div className="relative">
+              <div className="flex items-center gap-3">
+                <span className="seal-mark rounded-[4px]" aria-hidden>
+                  {dynasty.name.slice(0, 1)}
+                </span>
+                <div className="text-base tracking-[0.3em] text-white/55">朝代档案</div>
+              </div>
+              <div className="mt-2 flex items-baseline gap-4">
+                <h1 className="text-6xl font-semibold tracking-tight">{dynasty.name}</h1>
+                <div className="text-lg tabular-nums text-white/45">{fmtRange(dynasty.start, dynasty.end)}</div>
+              </div>
+              <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/65">{profile.overview}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {profile.keywords.map((k) => (
+                  <span key={k} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-base text-white/70">
+                    {k}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
-            {profile.overview}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {profile.keywords.map((k) => (
-              <span
-                key={k}
-                className="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-base text-sky-200"
-              >
-                {k}
-              </span>
-            ))}
-          </div>
-        </header>
+        </motion.header>
+        <div className="brush-divider" aria-hidden />
 
         {/* 帝王世系 */}
         <Block title="帝王世系" sub="按即位年排序 · 来自 Wikidata + 正史本名">
@@ -173,7 +189,7 @@ export function DynastyProfileView({
           </CardGrid>
         </Block>
 
-        {/* ④b 文学作品（诗词）—— 数据来自 chinese-poetry，名篇点进独立页 */}
+        {/* ④b 文学作品（诗词）—— 数据来自 chinese-poetry，名篇点进独立页（水墨：竖排书脊感 + 洒金） */}
         {poems.featured.length > 0 && (
           <Block
             title="文学作品"
@@ -183,43 +199,43 @@ export function DynastyProfileView({
           >
             <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
               {poems.featured.map((po) => (
-                <button
+                <motion.button
                   key={po.id}
                   onClick={() => router.push(`/dynasty/${dynasty.id}/poem/${po.id}`)}
-                  className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-emerald-400/40 hover:bg-emerald-400/[0.07]"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.985 }}
+                  className="group relative cursor-pointer overflow-hidden rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-white/15"
                 >
-                  <div className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="ink-sprinkle" aria-hidden />
+                  <div className="relative flex flex-wrap items-baseline gap-x-2">
                     <span className="text-base font-medium text-white/90">{po.title}</span>
-                    <span className="text-base text-emerald-300/70">{po.author}</span>
+                    <span className="text-base text-white/45">{po.author}</span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
-                    {po.excerpt}
-                  </p>
-                </button>
+                  <p className="relative mt-1 line-clamp-2 text-base leading-relaxed text-white/50">{po.excerpt}</p>
+                </motion.button>
               ))}
             </div>
           </Block>
         )}
 
-        {/* ⑤ 疆域地理 —— 与上面一样只是个格子，点进独立页 */}
+        {/* ⑤ 疆域地理 —— 与上面一样只是个格子，点进独立页（水墨：纸纹） */}
         <Block title="疆域地理">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
-            <button
+            <motion.button
               onClick={() => router.push(`/dynasty/${dynasty.id}/territory`)}
-              className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-cyan-400/40 hover:bg-cyan-400/[0.07]"
+              whileHover={{ y: -3 }}
+              whileTap={{ scale: 0.985 }}
+              className="group relative cursor-pointer overflow-hidden rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition hover:border-white/15"
             >
-              <div className="flex items-baseline gap-2">
+              <span className="ink-sprinkle" aria-hidden />
+              <div className="relative flex items-baseline gap-2">
                 <span className="text-base font-medium text-white/90">{dynasty.name}疆域</span>
-                {cov && (
-                  <span className="text-base text-cyan-300/70">
-                    {cov.provinces.length} 省（示意）
-                  </span>
-                )}
+                {cov && <span className="text-base text-white/45">{cov.provinces.length} 省（示意）</span>}
               </div>
-              <p className="mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
+              <p className="relative mt-1 line-clamp-2 text-base leading-relaxed text-white/50">
                 都城 {profile.territory?.capital ?? '—'}
               </p>
-            </button>
+            </motion.button>
           </div>
         </Block>
 
@@ -235,7 +251,7 @@ export function DynastyProfileView({
             </ul>
           </Block>
         )}
-      </div>
+      </motion.div>
     </main>
   );
 }
@@ -270,7 +286,7 @@ function Block({
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <motion.section variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
         <div className="flex items-baseline gap-2">
           <h2 className="text-2xl font-semibold tracking-wide text-white/90">{title}</h2>
@@ -279,7 +295,7 @@ function Block({
         {action}
       </div>
       {children}
-    </section>
+    </motion.section>
   );
 }
 
@@ -309,13 +325,17 @@ function Card({
   const c = COLOR[color];
   const yr = year != null ? (endYear != null ? fmtRange(year, endYear) : fmtYear(year)) : '';
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className={`cursor-pointer rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-left transition ${c.hover}`}
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+      className={`glass-subtle group relative cursor-pointer overflow-hidden rounded-lg px-4 py-3 text-left ${c.hover}`}
       title={desc}
     >
+      <span className="ink-sprinkle" aria-hidden />
       {/* 第一行：年 + 名称 | 分类 */}
-      <div className="flex items-baseline justify-between gap-2">
+      <div className="relative flex items-baseline justify-between gap-2">
         <span className="flex min-w-0 items-baseline gap-2">
           <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} />
           {yr && <span className="shrink-0 text-base tabular-nums text-white/45">{yr}</span>}
@@ -324,7 +344,7 @@ function Card({
         {tag && <span className={`shrink-0 text-base ${c.tag}`}>{tag}</span>}
       </div>
       {/* 第二行：一句话（单行截断） */}
-      <p className="mt-1 truncate text-base text-white/50">{desc}</p>
-    </button>
+      <p className="relative mt-1 truncate text-base text-white/50">{desc}</p>
+    </motion.button>
   );
 }

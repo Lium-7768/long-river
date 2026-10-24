@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import { riverCurve, pointAt, dynastyT } from './curve';
 import { fmtYear } from './year';
 import { computeCamera, type CameraMode } from './cameraModes';
-import { getStarTexture, getStarTextureTight } from './starTexture';
+import { getStarTexture } from './starTexture';
 import { useThemeColor } from '@/lib/use-theme-color';
 import type { Dynasty } from '@/lib/dynasty-data';
 
@@ -18,57 +18,166 @@ import type { Dynasty } from '@/lib/dynasty-data';
  * 朝代轴由 props 传入（来自 /api/dynasties）。
  */
 
-/* ---------- 河道：沿曲线的一串光带 + 粒子 ---------- */
+/* ---------- 河道：发光长河 Luxury — 双层光管 + 流动粒子 ---------- */
 function RiverRibbon() {
   const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
+  // 水墨河：浓墨 + 洒金（原 accent 作冷调点缀）
+  const gold = useMemo(() => new THREE.Color(184 / 255, 149 / 255, 90 / 255), []);
+  const goldEmissive = useMemo(() => new THREE.Color(0.52, 0.38, 0.16), []);
+  const inkColor = useMemo(() => new THREE.Color(0.08, 0.1, 0.14), []);
 
-  const { lineGeom, particleGeom } = useMemo(() => {
-    const N = 240;
-    const pts: THREE.Vector3[] = [];
-    for (let i = 0; i <= N; i++) pts.push(riverCurve.getPointAt(i / N));
-    const lineGeom = new THREE.BufferGeometry().setFromPoints(pts);
-
-    // 河道两侧的浮尘
-    const count = 2400;
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const t = Math.random();
-      const p = riverCurve.getPointAt(t);
-      const spread = 3.5;
-      arr[i * 3] = p.x + (Math.random() - 0.5) * spread;
-      arr[i * 3 + 1] = p.y + (Math.random() - 0.5) * 1.2;
-      arr[i * 3 + 2] = p.z + (Math.random() - 0.5) * spread;
-    }
-    const particleGeom = new THREE.BufferGeometry();
-    particleGeom.setAttribute('position', new THREE.BufferAttribute(arr, 3));
-    return { lineGeom, particleGeom };
+  // 双层 Tube：外晕(粗、极透) + 内核(细、亮)
+  const { tubeOuter, tubeInner } = useMemo(() => {
+    return {
+      tubeOuter: new THREE.TubeGeometry(riverCurve, 320, 0.34, 14, false),
+      tubeInner: new THREE.TubeGeometry(riverCurve, 320, 0.11, 12, false),
+    };
   }, []);
 
-  const lineObj = useMemo(() => {
-    const mat = new THREE.LineBasicMaterial({
-      color: new THREE.Color(accent[0], accent[1], accent[2]),
-      transparent: true,
-      opacity: 0.4,
-      toneMapped: false,
-    });
-    return new THREE.Line(lineGeom, mat);
-  }, [lineGeom, accent]);
+  const outerMat = useRef<THREE.MeshStandardMaterial>(null);
+  const innerMat = useRef<THREE.ShaderMaterial>(null);
+
+  // 流动粒子：沿河道切线流动
+  const particleCount = 520;
+  const particleData = useMemo(() => {
+    const ts = new Float32Array(particleCount);
+    const speeds = new Float32Array(particleCount);
+    const sizes = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) {
+      ts[i] = Math.random();
+      speeds[i] = 0.00055 + Math.random() * 0.0011;
+      sizes[i] = 0.18 + Math.random() * 0.22;
+    }
+    return { ts, speeds, sizes };
+  }, []);
+  const particleGeom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    const pos = new Float32Array(particleCount * 3);
+    const col = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      const p = riverCurve.getPointAt(particleData.ts[i]);
+      pos[i * 3] = p.x + (Math.random() - 0.5) * 0.35;
+      pos[i * 3 + 1] = p.y + (Math.random() - 0.5) * 0.18;
+      pos[i * 3 + 2] = p.z + (Math.random() - 0.5) * 0.35;
+      const c = i % 3 === 0 ? gold : new THREE.Color(accent[0], accent[1], accent[2]);
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+    }
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    g.setAttribute('size', new THREE.BufferAttribute(particleData.sizes, 1));
+    return g;
+  }, [accent, gold, particleData.sizes, particleData.ts]);
+
+  const particleRef = useRef<THREE.Points>(null);
+
+  // 流动 shader：水墨脉冲（墨底 + 洒金光）
+  const shaderUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uGold: { value: gold.clone() },
+      uInk: { value: inkColor.clone() },
+      uAccent: { value: new THREE.Color(accent[0], accent[1], accent[2]) },
+    }),
+    [accent, gold, inkColor],
+  );
+
+  useEffect(() => {
+    shaderUniforms.uAccent.value.set(accent[0], accent[1], accent[2]);
+  }, [accent, shaderUniforms]);
 
   useFrame(({ clock }) => {
-    const m = lineObj.material as THREE.LineBasicMaterial;
-    m.opacity = 0.35 + Math.sin(clock.elapsedTime * 1.5) * 0.12;
+    const t = clock.elapsedTime;
+    // 外晕呼吸
+    if (outerMat.current) {
+      outerMat.current.emissiveIntensity = 0.55 + Math.sin(t * 0.9) * 0.18;
+      outerMat.current.opacity = 0.22 + Math.sin(t * 0.7) * 0.06;
+    }
+    // 内核流动
+    if (innerMat.current) innerMat.current.uniforms.uTime.value = t;
+
+    // 粒子沿河推进
+    if (particleRef.current) {
+      const pos = particleRef.current.geometry.getAttribute('position') as THREE.BufferAttribute;
+      for (let i = 0; i < particleCount; i++) {
+        particleData.ts[i] += particleData.speeds[i];
+        if (particleData.ts[i] > 1) particleData.ts[i] -= 1;
+        const p = riverCurve.getPointAt(particleData.ts[i]);
+        // 轻微横向摆动
+        const sway = Math.sin(t * 0.8 + i * 0.37) * 0.12;
+        pos.setXYZ(i, p.x + sway, p.y + Math.sin(t * 0.6 + i) * 0.05, p.z + Math.cos(t * 0.5 + i) * 0.08);
+      }
+      pos.needsUpdate = true;
+      const mat = particleRef.current.material as THREE.PointsMaterial;
+      mat.opacity = 0.65 + Math.sin(t * 1.1) * 0.12;
+    }
   });
 
   return (
     <group>
-      <primitive object={lineObj} />
-      <points geometry={particleGeom}>
-        <pointsMaterial
-          size={0.16}
-          map={getStarTexture()}
-          color={new THREE.Color(accent[0], accent[1], accent[2])}
+      {/* 外晕：大半径、极透、加法混合 */}
+      <mesh geometry={tubeOuter}>
+        <meshStandardMaterial
+          ref={outerMat}
+          color={gold}
+          emissive={goldEmissive}
+          emissiveIntensity={0.55}
           transparent
-          opacity={0.7}
+          opacity={0.22}
+          roughness={0.85}
+          metalness={0.0}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+      {/* 内核：流动 shader */}
+      <mesh geometry={tubeInner}>
+        <shaderMaterial
+          ref={innerMat}
+          uniforms={shaderUniforms}
+          transparent
+          depthWrite={false}
+          toneMapped={false}
+          blending={THREE.AdditiveBlending}
+          vertexShader={`
+            varying vec2 vUv;
+            void main(){
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+            }
+          `}
+          fragmentShader={`
+            uniform float uTime;
+            uniform vec3 uGold;
+            uniform vec3 uInk;
+            uniform vec3 uAccent;
+            varying vec2 vUv;
+            void main(){
+              float flow = sin(vUv.x * 28.0 - uTime * 1.9) * 0.5 + 0.5;
+              float flow2 = sin(vUv.x * 52.0 - uTime * 2.7) * 0.5 + 0.5;
+              float pulse = pow(flow, 3.0) * 0.42 + pow(flow2, 6.0) * 0.28;
+              // 水墨基调：墨底 + 洒金光，accent 仅作冷调点缀
+              vec3 base = mix(uInk * 1.35, uGold * 0.9, 0.42);
+              base = mix(base, uAccent * 0.35, 0.12);
+              vec3 col = base + pulse * vec3(0.42,0.36,0.22);
+              float alpha = 0.32 + pulse * 0.44;
+              float edge = smoothstep(0.0, 0.18, vUv.y) * smoothstep(1.0, 0.82, vUv.y);
+              alpha *= edge;
+              gl_FragColor = vec4(col, alpha);
+            }
+          `}
+        />
+      </mesh>
+      {/* 流动金粉 */}
+      <points ref={particleRef} geometry={particleGeom}>
+        <pointsMaterial
+          size={0.22}
+          map={getStarTexture()}
+          vertexColors
+          transparent
+          opacity={0.72}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           sizeAttenuation
@@ -213,7 +322,7 @@ function Starfield() {
   );
 }
 
-/* ---------- 单个朝代节点：光点 + 光晕（极简） ---------- */
+/* ---------- 单个朝代节点：能量晶体（fa269f5 经典版，适配当前 props） ---------- */
 function DynastyNode({
   d,
   t,
@@ -227,77 +336,90 @@ function DynastyNode({
   onPick: (i: number) => void;
   index: number;
 }) {
-  const accent = useThemeColor('--lr-accent', [0.15, 0.7, 1]);
-  const accent2 = useThemeColor('--lr-accent-2', [0.5, 0.35, 1]);
   const [hover, setHover] = useState(false);
 
   const coreRef = useRef<THREE.Mesh>(null);
-  const haloRef = useRef<THREE.Mesh>(null);
-  const halo2Ref = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Sprite>(null);
+  const shellRef = useRef<THREE.Mesh>(null);
+  const ringARef = useRef<THREE.Mesh>(null);
+  const ringBRef = useRef<THREE.Mesh>(null);
+  const beamRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<THREE.Group>(null);
-  const dustRef = useRef<THREE.Points>(null);
+  const sparkRef = useRef<THREE.Points>(null);
 
   const base = useMemo(() => pointAt(t), [t]);
-  const col = usable ? accent : [0.4, 0.46, 0.58];
+  // 水墨晶体：朱砂印章 + 洒金，弱化冷青
+  const cinnabar: [number, number, number] = [178 / 255, 36 / 255, 30 / 255];
+  const gold: [number, number, number] = [184 / 255, 149 / 255, 90 / 255];
+  const col: [number, number, number] = usable ? cinnabar : [0.35, 0.42, 0.55];
+  const col2: [number, number, number] = usable ? gold : [0.42, 0.38, 0.32];
   const color = new THREE.Color(col[0], col[1], col[2]);
-  const color2 = new THREE.Color(accent2[0], accent2[1], accent2[2]);
-  const y = usable ? 1.1 : 0.6;
-  const R = usable ? 0.16 : 0.1;
+  const color2 = new THREE.Color(col2[0], col2[1], col2[2]);
+  const yNode = usable ? 1.0 : 0.5;
+  const R = usable ? 0.52 : 0.28;
 
-  // 周围漂浮的尘埃微粒
-  const dustGeom = useMemo(() => {
-    const count = usable ? 60 : 14;
+  const sparkGeom = useMemo(() => {
+    const count = usable ? 90 : 20;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const a = Math.random() * Math.PI * 2;
       const b = Math.acos(Math.random() * 2 - 1);
-      const r = (usable ? 0.7 : 0.4) + Math.random() * (usable ? 1.2 : 0.5);
+      const r = R * (1.6 + Math.random() * 1.8);
       pos[i * 3] = Math.sin(b) * Math.cos(a) * r;
-      pos[i * 3 + 1] = Math.cos(b) * r + y;
+      pos[i * 3 + 1] = Math.cos(b) * r;
       pos[i * 3 + 2] = Math.sin(b) * Math.sin(a) * r;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     return g;
-  }, [usable, y]);
+  }, [R, usable]);
 
   useFrame(({ clock, camera }) => {
     const t0 = clock.elapsedTime;
-    // 核心光球：轻微脉冲
+    const pulse = usable ? 1 + Math.sin(t0 * 2 + index) * 0.12 : 1;
     if (coreRef.current) {
-      const sc = 1 + Math.sin(t0 * 2 + index) * 0.15 + (hover ? 0.6 : 0);
-      coreRef.current.scale.setScalar(sc);
+      coreRef.current.rotation.y = t0 * (usable ? 0.5 : 0.1) + index;
+      coreRef.current.rotation.x = Math.sin(t0 * 0.4 + index) * 0.3;
+      coreRef.current.scale.setScalar(pulse);
     }
-    // 光晕缓慢扩张淡出（呼吸）
-    if (haloRef.current) {
-      const k = (t0 * 0.35 + index * 0.5) % 1; // 0..1 循环
-      const sc = 1 + k * (usable ? 2.6 : 1.5);
-      haloRef.current.scale.setScalar(sc);
-      const m = haloRef.current.material as THREE.MeshBasicMaterial;
-      m.opacity = (1 - k) * (usable ? 0.45 : 0.12);
+    if (shellRef.current) {
+      shellRef.current.rotation.y = -t0 * (usable ? 0.3 : 0.08) - index;
+      shellRef.current.rotation.z = t0 * 0.2;
     }
-    if (halo2Ref.current) {
-      const k = (((t0 * 0.35 + index * 0.5) % 1) + 0.5) % 1;
-      const sc = 1 + k * (usable ? 2.6 : 1.5);
-      halo2Ref.current.scale.setScalar(sc);
-      const m = halo2Ref.current.material as THREE.MeshBasicMaterial;
-      m.opacity = (1 - k) * (usable ? 0.45 : 0.12);
+    if (ringARef.current) {
+      ringARef.current.rotation.z = t0 * (usable ? 0.7 : 0.15);
+      ringARef.current.rotation.x = Math.PI / 2.4;
     }
-    // 外围柔光 Sprite 面向相机
-    if (glowRef.current) {
-      const m = glowRef.current.material as THREE.SpriteMaterial;
-      m.opacity = usable ? (hover ? 0.95 : 0.7) : 0.15;
-      m.rotation = t0 * 0.1;
+    if (ringBRef.current) {
+      ringBRef.current.rotation.z = -t0 * (usable ? 0.5 : 0.1);
+      ringBRef.current.rotation.x = Math.PI / 1.6;
+      ringBRef.current.rotation.y = t0 * 0.3;
     }
-    if (dustRef.current) dustRef.current.rotation.y = t0 * 0.2 + index;
+    if (beamRef.current) {
+      const m = beamRef.current.material as THREE.MeshBasicMaterial;
+      m.opacity = (usable ? 0.28 : 0.08) * (0.7 + Math.sin(t0 * 2.2 + index) * 0.3);
+    }
+    if (sparkRef.current) sparkRef.current.rotation.y = t0 * 0.25 + index;
     if (textRef.current) textRef.current.quaternion.copy(camera.quaternion);
   });
 
   return (
     <group position={base}>
+      {/* 向下光柱：连到河面 */}
+      <mesh ref={beamRef} position={[0, yNode / 2, 0]}>
+        <cylinderGeometry args={[R * 0.28, R * 0.9, yNode, 16, 1, true]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={usable ? 0.28 : 0.08}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+
       <group
-        position={[0, y, 0]}
+        position={[0, yNode, 0]}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
           e.stopPropagation();
           setHover(true);
@@ -312,60 +434,45 @@ function DynastyNode({
           if (usable) onPick(index);
         }}
       >
-        {/* 核心光球 */}
+        {/* 内发光核心：八面体 */}
         <mesh ref={coreRef}>
-          <sphereGeometry args={[R, 24, 24]} />
-          <meshBasicMaterial color={color} toneMapped={false} />
-        </mesh>
-
-        {/* 外围柔光（用星空贴图做 Sprite，始终面向相机） */}
-        <sprite ref={glowRef} scale={[usable ? 2.4 : 1.2, usable ? 2.4 : 1.2, 1]}>
-          <spriteMaterial
-            map={getStarTexture()}
+          <octahedronGeometry args={[R, 0]} />
+          <meshStandardMaterial
             color={color}
-            transparent
-            opacity={usable ? 0.7 : 0.15}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-            toneMapped={false}
-          />
-        </sprite>
-
-        {/* 扩散光晕环 1 */}
-        <mesh ref={haloRef} rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[R * 1.5, R * 1.75, 48]} />
-          <meshBasicMaterial
-            color={color}
-            transparent
-            opacity={0.4}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
+            emissive={color}
+            emissiveIntensity={usable ? (hover ? 2.2 : 1.1) : 0.15}
+            roughness={0.1}
+            metalness={0.9}
             toneMapped={false}
           />
         </mesh>
-        {/* 扩散光晕环 2（错相位） */}
-        <mesh ref={halo2Ref} rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[R * 1.5, R * 1.75, 48]} />
+        {/* 外层线框壳：反向自转 */}
+        <mesh ref={shellRef}>
+          <octahedronGeometry args={[R * 1.5, 0]} />
           <meshBasicMaterial
             color={color2}
+            wireframe
             transparent
-            opacity={0.4}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
+            opacity={usable ? 0.5 : 0.12}
             toneMapped={false}
           />
         </mesh>
-
-        {/* 尘埃微粒 */}
-        <points ref={dustRef} geometry={dustGeom}>
+        {/* 双能量环 */}
+        <mesh ref={ringARef}>
+          <torusGeometry args={[R * 1.9, 0.018, 8, 64]} />
+          <meshBasicMaterial color={color} transparent opacity={usable ? 0.85 : 0.2} toneMapped={false} />
+        </mesh>
+        <mesh ref={ringBRef}>
+          <torusGeometry args={[R * 2.35, 0.012, 8, 64]} />
+          <meshBasicMaterial color={color2} transparent opacity={usable ? 0.6 : 0.15} toneMapped={false} />
+        </mesh>
+        {/* 环绕微粒 90 点 */}
+        <points ref={sparkRef} geometry={sparkGeom}>
           <pointsMaterial
-            size={0.09}
-            map={getStarTextureTight()}
+            size={0.05}
             color={color}
             transparent
-            opacity={usable ? 0.85 : 0.25}
+            opacity={usable ? 0.9 : 0.3}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             sizeAttenuation
@@ -377,8 +484,8 @@ function DynastyNode({
       {/* 名字（billboard） */}
       <group ref={textRef}>
         <Text
-          position={[0, y + R + (usable ? 0.95 : 0.6), 0]}
-          fontSize={usable ? 0.5 : 0.34}
+          position={[0, yNode + R + 0.85, 0]}
+          fontSize={usable ? 0.46 : 0.32}
           color={usable ? '#eaf6ff' : '#5e6f88'}
           anchorX="center"
           anchorY="bottom"
@@ -388,7 +495,7 @@ function DynastyNode({
           {d.name}
         </Text>
         <Text
-          position={[0, y - R - (usable ? 0.7 : 0.45), 0]}
+          position={[0, yNode - R - 0.55, 0]}
           fontSize={0.22}
           color="#8fa6c4"
           anchorX="center"

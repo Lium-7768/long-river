@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from '@/components/theme-provider';
+import { LenisProvider } from '@/components/lenis-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN" className="theme-deep" data-theme="deep" suppressHydrationWarning>
       <body>
+        <LenisProvider />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

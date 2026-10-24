@@ -27,11 +27,20 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
   const webgl = useWebGLAvailable();
   const hasData = (id: string) => dynasties.some((d) => d.id === id);
 
-  // 滚轮 → 目标进度
+  // 滚轮 → 目标进度（横向拖拽 + 滚轮 + 键盘，带惯性）
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartTarget = useRef(0);
+  const velocity = useRef(0);
+  const lastDragX = useRef(0);
+  const lastDragT = useRef(0);
+
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      // 横向滚轮或纵向滚轮都转为沿河推进，保留原有手感但加横向
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       e.preventDefault();
-      target.current += Math.sign(e.deltaY) * 0.012 * Math.min(Math.abs(e.deltaY) / 100, 1.5);
+      target.current += Math.sign(delta) * 0.012 * Math.min(Math.abs(delta) / 100, 1.5);
       target.current = Math.max(0, Math.min(1, target.current));
     };
     let touchY = 0;
@@ -44,13 +53,53 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
       target.current += Math.sign(dy) * 0.01 * Math.min(Math.abs(dy) / 30, 1.5);
       target.current = Math.max(0, Math.min(1, target.current));
     };
+    const onPointerDown = (e: PointerEvent) => {
+      // 只在横向拖拽时接管，避免与点击冲突
+      isDragging.current = true;
+      dragStartX.current = e.clientX;
+      dragStartTarget.current = target.current;
+      lastDragX.current = e.clientX;
+      lastDragT.current = performance.now();
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging.current) return;
+      const dx = e.clientX - dragStartX.current;
+      const delta = -dx / Math.max(400, window.innerWidth * 0.6);
+      target.current = Math.max(0, Math.min(1, dragStartTarget.current + delta));
+      const now = performance.now();
+      velocity.current = (e.clientX - lastDragX.current) / (now - lastDragT.current || 1);
+      lastDragX.current = e.clientX;
+      lastDragT.current = now;
+    };
+    const onPointerUp = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      target.current = Math.max(0, Math.min(1, target.current + velocity.current * 0.12));
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        target.current = Math.min(1, target.current + 0.06);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        target.current = Math.max(0, target.current - 0.06);
+      } else if (e.key === 'Home') target.current = 0;
+      else if (e.key === 'End') target.current = 1;
+    };
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('touchstart', onTouchStart);
     window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
