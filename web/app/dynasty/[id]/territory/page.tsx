@@ -30,32 +30,33 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
           <h1 className="mt-2 text-5xl font-semibold tracking-tight">{d.name} · 疆域</h1>
         </header>
 
-        {cov ? (
+        {/* 疆域文字档案：22 朝代全有，不依赖省份高亮数据 */}
+        {d.territory ? (
           <>
-            {d.territory && (
-              <div className="grid gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-base sm:grid-cols-3">
-                <div>
-                  <div className="text-base text-white/40">都城</div>
-                  <div className="mt-1 text-white/80">{d.territory.capital}</div>
-                </div>
-                <div>
-                  <div className="text-base text-white/40">疆域范围</div>
-                  <div className="mt-1 text-white/70">{d.territory.extent}</div>
-                </div>
-                <div>
-                  <div className="text-base text-white/40">覆盖省份</div>
-                  <div className="mt-1 text-white/70">{cov.provinces.length} 个（示意）</div>
-                </div>
-                {d.territory.note && (
-                  <div className="sm:col-span-3">
-                    <div className="text-base text-white/40">备注</div>
-                    <div className="mt-1 text-white/70">{d.territory.note}</div>
-                  </div>
-                )}
+            <div className="grid gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-base sm:grid-cols-3">
+              <div>
+                <div className="text-base text-white/40">都城</div>
+                <div className="mt-1 text-white/80">{d.territory.capital}</div>
               </div>
-            )}
+              <div>
+                <div className="text-base text-white/40">疆域范围</div>
+                <div className="mt-1 text-white/70">{d.territory.extent}</div>
+              </div>
+              <div>
+                <div className="text-base text-white/40">覆盖省份</div>
+                <div className="mt-1 text-white/70">
+                  {cov ? `${cov.provinces.length} 个（示意）` : '—'}
+                </div>
+              </div>
+              {d.territory.note && (
+                <div className="sm:col-span-3">
+                  <div className="text-base text-white/40">备注</div>
+                  <div className="mt-1 text-white/70">{d.territory.note}</div>
+                </div>
+              )}
+            </div>
 
-            {d.territory?.bounds && (
+            {d.territory.bounds && (
               <div>
                 <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
                   四至
@@ -83,15 +84,15 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
               </div>
             )}
 
-            {(d.territory?.area || d.territory?.population) && (
+            {(d.territory.area || d.territory.population) && (
               <div className="grid gap-4 sm:grid-cols-2">
-                {d.territory?.area && (
+                {d.territory.area && (
                   <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
                     <div className="text-base text-white/40">大致面积</div>
                     <div className="mt-1 text-white/70">{d.territory.area}</div>
                   </div>
                 )}
-                {d.territory?.population && (
+                {d.territory.population && (
                   <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
                     <div className="text-base text-white/40">大致人口</div>
                     <div className="mt-1 text-white/70">{d.territory.population}</div>
@@ -100,7 +101,7 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
               </div>
             )}
 
-            {d.territory?.divisions && d.territory.divisions.length > 0 && (
+            {d.territory.divisions && d.territory.divisions.length > 0 && (
               <div>
                 <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
                   行政区划
@@ -111,7 +112,7 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
               </div>
             )}
 
-            {d.territory?.neighbors && d.territory.neighbors.length > 0 && (
+            {d.territory.neighbors && d.territory.neighbors.length > 0 && (
               <div>
                 <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
                   邻国 / 周边关系
@@ -126,32 +127,42 @@ export default async function TerritoryPage({ params }: { params: Promise<{ id: 
                 </div>
               </div>
             )}
+          </>
+        ) : (
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-10 text-center text-white/40">
+            该朝代的疆域档案还在整理中。
+          </div>
+        )}
 
-            <PersonOriginPanel dynastyId={id} />
-            <RegionStatsPanel dynastyId={id} />
+        <PersonOriginPanel dynastyId={id} />
+        <RegionStatsPanel dynastyId={id} />
+
+        {/* 3D 省份示意：仅 5 朝代有省份数据，其余显示说明而非整页遮挡 */}
+        {cov ? (
+          <>
             <TerritoryMap dynastyId={id} height={520} />
-
             <p className="text-base leading-relaxed text-white/30">
               关于本图：以现代省份轮廓近似古代疆域范围，仅作示意，非精确历史地理边界。
               真实历史边界需 CHGIS 等专业数据源。
             </p>
-
-            {d.sources && d.sources.length > 0 && (
-              <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
-                <div className="mb-2 text-base tracking-[0.2em] text-sky-300/70">史料来源</div>
-                <ul className="space-y-1">
-                  {d.sources.map((s) => (
-                    <li key={s} className="text-base leading-relaxed text-white/60">
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </>
         ) : (
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-10 text-center text-white/40">
-            该朝代的疆域图还在整理中。
+          <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
+            <p className="text-base text-white/40">该朝代的省份示意图还在整理中（疆域文字档案见上）。</p>
+            <p className="mt-2 text-base text-white/25">已覆盖：宋（南/北）、辽、金、西夏；其余朝代仅文字档案可阅。</p>
+          </div>
+        )}
+
+        {d.sources && d.sources.length > 0 && (
+          <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+            <div className="mb-2 text-base tracking-[0.2em] text-sky-300/70">史料来源</div>
+            <ul className="space-y-1">
+              {d.sources.map((s) => (
+                <li key={s} className="text-base leading-relaxed text-white/60">
+                  {s}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
