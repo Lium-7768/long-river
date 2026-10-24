@@ -27,7 +27,8 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
   const webgl = useWebGLAvailable();
   const hasData = (id: string) => dynasties.some((d) => d.id === id);
 
-  // 滚轮 → 目标进度（横向拖拽 + 滚轮 + 键盘，带惯性）
+  // 滚轮/拖动仅在 L1 全屏容器上拦截，避免在 /dynasty/* 上全局 preventDefault 导致无法滚动
+  const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartTarget = useRef(0);
@@ -36,10 +37,11 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
   const lastDragT = useRef(0);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
     const onWheel = (e: WheelEvent) => {
-      // 横向滚轮或纵向滚轮都转为沿河推进，保留原有手感但加横向
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       e.preventDefault();
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       target.current += Math.sign(delta) * 0.012 * Math.min(Math.abs(delta) / 100, 1.5);
       target.current = Math.max(0, Math.min(1, target.current));
     };
@@ -50,11 +52,11 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
     const onTouchMove = (e: TouchEvent) => {
       const dy = touchY - e.touches[0].clientY;
       touchY = e.touches[0].clientY;
+      e.preventDefault();
       target.current += Math.sign(dy) * 0.01 * Math.min(Math.abs(dy) / 30, 1.5);
       target.current = Math.max(0, Math.min(1, target.current));
     };
     const onPointerDown = (e: PointerEvent) => {
-      // 只在横向拖拽时接管，避免与点击冲突
       isDragging.current = true;
       dragStartX.current = e.clientX;
       dragStartTarget.current = target.current;
@@ -78,27 +80,35 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
       target.current = Math.max(0, Math.min(1, target.current + velocity.current * 0.12));
     };
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
         target.current = Math.min(1, target.current + 0.06);
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
         target.current = Math.max(0, target.current - 0.06);
-      } else if (e.key === 'Home') target.current = 0;
-      else if (e.key === 'End') target.current = 1;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        target.current = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        target.current = 1;
+      }
     };
-    window.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('touchstart', onTouchStart);
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
     window.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('keydown', onKeyDown);
     };
   }, []);
@@ -163,7 +173,7 @@ export function RiverExperience({ onEnterDynasty }: { onEnterDynasty?: (d: Dynas
   }
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#03060f]">
+    <div ref={containerRef} className="relative h-screen w-screen overflow-hidden bg-[#03060f]">
       <Canvas
         camera={{ position: [0, 1.6, 3.2], fov: 55, near: 0.1, far: 200 }}
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
