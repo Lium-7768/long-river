@@ -121,7 +121,24 @@ function normalizeRows(result) {
 }
 
 export function createPgCompat(dsn) {
-  const pool = new Pool({ connectionString: dsn, max: 10 });
+  // Neon 等 serverless PG 会自动挂起（5 分钟空闲），届时空闲连接被对端掐断。
+  // 若不设置 idleTimeoutMillis，池里会留下死连接，下一次查询直接报
+  // "Connection terminated unexpectedly"。因此：
+  //   idleTimeoutMillis  —— 在对方挂起前主动回收空闲连接
+  //   connectionTimeoutMillis —— 允许 scale-to-zero 冷启动（实测 3–20s）
+  //   keepAlive          —— 探测半开连接
+  // 同时必须有 pool.on('error')，否则空闲连接的错误会变成未捕获事件。
+  const pool = new Pool({
+    connectionString: dsn,
+    max: 10,
+    idleTimeoutMillis: 20_000,
+    connectionTimeoutMillis: 45_000,
+    keepAlive: true,
+    application_name: 'long-river',
+  });
+  pool.on('error', (e) => {
+    console.warn('[pg] 空闲连接被回收:', e.message);
+  });
 
   const prepare = (sql) => {
     const { sql: pgSql, count } = convertPlaceholders(sql);

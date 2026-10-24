@@ -202,3 +202,38 @@ DATABASE_URLS='postgresql://.../lr_qing,postgresql://.../lr_ming,postgresql://..
 
 优先级：`DATABASE_URLS`（4 分片）> `DATABASE_URL`（单库 PG）> SQLite。
 三种模式随时切换，改环境变量即可回滚。
+
+## Neon 实测结果（2026-10-24）
+
+在 org `org-aged-dream-78530307`、区域 **aws-ap-southeast-1** 建了 4 个 Free 项目：
+
+| 分片 | 项目名 | 项目 ID | 导入耗时 | 体积 |
+|---|---|---|---|---|
+| qing | lr-qing | `royal-field-92097946` | 361s | 700 MB |
+| ming | lr-ming | `shiny-river-52349718` | 270s | 697 MB |
+| tangsong | lr-tangsong | `lively-bar-04871780` | 276s | 671 MB |
+| rest | lr-rest | `red-sunset-42947950` | 292s | 625 MB |
+
+全量导入 **1213s（约 20 分钟）**，服务端 PostgreSQL **18.6**（本地验证用的是 16.14，
+DDL 103 条语句在 18.6 上全部成功）。
+
+### 验证结果
+
+- 分片校验 `verify_shards.py`：**全部通过**（分片和、复制表、内容抽样、路由抽查、体积）
+- API 57 端点对比 SQLite：**57/57 字节级一致**
+- 前端 link-check：**420 通过 · 0 失败**
+
+### Neon 特有的两个坑
+
+1. **自动挂起**：Free 项目空闲 5 分钟挂起，空闲连接被对端掐断。
+   连接池必须设 `idleTimeoutMillis`（本项目取 20s，小于 5 分钟）+ `keepAlive` +
+   `pool.on('error')`，否则下一次查询报 `Connection terminated unexpectedly`。
+   见 `server/src/pg-compat.js`。
+2. **冷启动**：挂起后首个请求要 5–20s（实测单分片详情 9–16s）。
+   因为 `/api/persons/[id]` 只唤醒 1 个分片，而 `/api/stats` 要唤醒全部 4 个。
+   如果觉得慢，可以定时 ping 保活（会消耗 CU-hours），或用 Neon 的付费档关掉挂起。
+
+### 连接串注意
+
+Neon 给的连接串带 `?sslmode=require`，`pg` 会打印一条 SECURITY WARNING，
+说明当前版本把 `require` 当作 `verify-full`、未来 v9 会改语义。功能上无影响。
