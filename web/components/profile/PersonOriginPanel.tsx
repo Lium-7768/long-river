@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { EmptyState, LoadingSkeleton } from './EmptyState';
 
 export interface OriginRow {
   name: string;
@@ -33,7 +34,17 @@ export function PersonOriginPanel({ dynastyId }: { dynastyId: string }) {
     };
   }, [dynastyId]);
 
-  if (state === 'empty') return null;
+  if (state === 'empty')
+    return <EmptyState title="暂无籍贯分布" desc="该朝代人物籍贯数据还在整理中。" icon="籍" />;
+  if (state === 'loading')
+    return (
+      <div>
+        <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
+          人物籍贯分布
+        </h2>
+        <LoadingSkeleton lines={3} />
+      </div>
+    );
 
   const max = rows[0]?.n ?? 1;
 
@@ -42,31 +53,20 @@ export function PersonOriginPanel({ dynastyId }: { dynastyId: string }) {
       <h2 className="mb-3 border-b border-white/10 pb-2 text-base font-medium tracking-wider text-white/50">
         人物籍贯分布
       </h2>
-      {state === 'loading' ? (
-        <p className="text-base text-white/40">加载中…</p>
-      ) : (
-        <>
-          <p className="mb-4 text-base leading-relaxed text-white/45">
-            本朝人物籍贯前 {rows.length} 地（据 CBDB 籍贯 + CHGIS 坐标）。
-          </p>
-          <div className="space-y-2">
-            {rows.map((r) => (
-              <div key={r.name} className="flex items-center gap-3 text-base">
-                <span className="w-24 shrink-0 text-white/80">{r.name}</span>
-                <div className="h-3 flex-1 overflow-hidden rounded-full bg-white/[0.05]">
-                  <div
-                    className="h-full rounded-full bg-sky-400/40"
-                    style={{ width: `${Math.max(4, (r.n / max) * 100)}%` }}
-                  />
-                </div>
-                <span className="w-16 shrink-0 text-right tabular-nums text-white/50">
-                  {r.n} 人
-                </span>
-              </div>
-            ))}
+      <p className="mb-4 text-base leading-relaxed text-white/45">
+        本朝人物籍贯前 {rows.length} 地（据 CBDB 籍贯 + CHGIS 坐标）。
+      </p>
+      <div className="space-y-2">
+        {rows.map((r) => (
+          <div key={r.name} className="flex items-center gap-3 text-base">
+            <span className="w-24 shrink-0 text-white/80">{r.name}</span>
+            <div className="h-3 flex-1 overflow-hidden rounded-full bg-white/[0.05]">
+              <div className="h-full rounded-full bg-sky-400/40" style={{ width: `${Math.max(4, (r.n / max) * 100)}%` }} />
+            </div>
+            <span className="w-16 shrink-0 text-right tabular-nums text-white/50">{r.n} 人</span>
           </div>
-        </>
-      )}
+        ))}
+      </div>
     </div>
   );
 }

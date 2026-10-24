@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { fmtYear, fmtRange } from '@/components/river/year';
+import { EmptyState, LoadingSkeleton } from './EmptyState';
 
 type Emperor = {
   qid: string;
@@ -34,9 +35,11 @@ export function EmperorPanel({ dynastyId }: { dynastyId: string }) {
     };
   }, [dynastyId]);
 
-  if (state === 'err') return null;
-  if (state === 'loading') return null;
-  if (!rows.length) return null;
+  if (state === 'loading') return <LoadingSkeleton lines={2} />;
+  if (state === 'err')
+    return <EmptyState title="帝王世系暂不可用" desc="数据源暂时不可达，稍后重试。" icon="玺" />;
+  if (!rows.length)
+    return <EmptyState title="暂无帝王世系" desc="该朝代的帝王数据还在整理中。" icon="玺" />;
 
   return (
     <div className="flex flex-wrap gap-2">

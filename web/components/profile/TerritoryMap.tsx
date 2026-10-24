@@ -153,8 +153,17 @@ export function TerritoryMap({ dynastyId, height = 420 }: { dynastyId: string; h
 
   if (!cov) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-base text-white/40">
-        该朝代暂无疆域示意数据
+      <div className="ink-paper group relative overflow-hidden rounded-xl border border-dashed border-white/10 bg-white/[0.02] px-6 py-8 text-center">
+        <span className="ink-sprinkle" aria-hidden />
+        <div className="relative flex flex-col items-center">
+          <span className="seal-mark rounded-[4px] text-[11px]" aria-hidden>
+            疆
+          </span>
+          <div className="mt-3 text-base font-medium text-white/60">省份示意图整理中</div>
+          <div className="mt-1 max-w-md text-base leading-relaxed text-white/35">
+            该朝代的文字疆域档案见上方；省份示意仅覆盖宋（南/北）、辽、金、西夏。
+          </div>
+        </div>
       </div>
     );
   }

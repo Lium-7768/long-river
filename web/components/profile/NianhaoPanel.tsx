@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '@/lib/api';
 import { fmtYear } from '@/components/river/year';
+import { EmptyState, LoadingSkeleton } from './EmptyState';
 
 type Nianhao = {
   id: number;
@@ -37,8 +38,10 @@ export function NianhaoPanel({ dynastyId }: { dynastyId: string }) {
 
   const shown = useMemo(() => (q ? rows.filter((n) => n.name.includes(q)) : rows), [rows, q]);
 
-  if (state === 'err' || (state === 'ok' && !rows.length)) return null;
-  if (state === 'loading') return <div className="text-base text-white/40">加载中…</div>;
+  if (state === 'loading') return <LoadingSkeleton lines={2} />;
+  if (state === 'err')
+    return <EmptyState title="年号暂不可用" desc="数据源暂时不可达，稍后重试。" icon="年" />;
+  if (!rows.length) return <EmptyState title="暂无年号" desc="该朝代的年号数据还在整理中。" icon="年" />;
 
   return (
     <div>
