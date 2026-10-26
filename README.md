@@ -36,8 +36,11 @@ cd web && pnpm install && pnpm dev
 ## 核心约定
 
 - **本地 SQLite 是默认数据源**（`data/db/lr-song.sqlite3`，已弃用 Cloudflare D1）。
-- **支持 PostgreSQL**：设 `DATABASE_URL`（单库）或 `DATABASE_URLS`（按朝代 4 分片，
-  适配 Neon Free 每项目 1 GB）即切换；迁移见 `etl/migrate_pg/`；都不设则走 SQLite，可随时回滚。
+- **Turso（推荐）**：设 `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` 即切到云端单库
+  （SQLite 兼容、Free 5 GB，**不需要分片**）。全量 1.5 GB / 136 表已验证，22 端点响应与 SQLite 逐字节一致。
+  远端单次往返约 335 ms，故服务端带 TTL 缓存 + 启动预热。配置见 `.env.example`。
+- **也支持 PostgreSQL**：设 `DATABASE_URL`（单库）或 `DATABASE_URLS`（按朝代 4 分片，
+  适配 Neon Free 每项目 1 GB）即切换；迁移见 `etl/migrate_pg/`；什么都不设则走 SQLite，可随时回滚。
 - 数据全部落入**自有表**；`cbdb_` 原始表仅作原料，不直连前端。
 - **数据必须全展示**：有数据就要能看到（分页/换 UI），不隐藏、不因复杂度丢弃。
 - **3D 是增强而非唯一路径**：3D 组件须处理 WebGL 不可用（`web/lib/webgl.ts`），回退 2D 列表，不崩页。

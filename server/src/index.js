@@ -1,15 +1,22 @@
 /**
- * 长河 · 本地后端（Node + better-sqlite3 / PostgreSQL）
+ * 长河 · 本地后端（Node + SQLite / Turso / PostgreSQL）
  * ------------------------------------------------------------
- * 唯一后端。数据源默认本地 SQLite，设 DATABASE_URL 则用 PostgreSQL。
+ * 唯一后端。数据源优先级：
+ *   TURSO_DATABASE_URL > DATABASE_URLS(4 分片 PG) > DATABASE_URL(单库 PG) > 本地 SQLite
  *
- * 目的：D1 免费层有「每日写入行数」限额，无法承载全史导入。
- *      本地 SQLite 不受限，作为唯一数据源（已弃用 Cloudflare D1）。
+ * 为什么 Turso 排在 PG 之前：本项目 schema 本就是 SQLite 方言，
+ * 走 Postgres 需要 pg-compat 做占位符/保留字/类型三处兼容，还需 4 分片规避
+ * Neon Free 1GB/project 限制；Turso 是 SQLite 兼容引擎、Free 5GB 单库，
+ * 分片与兼容层都不需要了。PG 路径保留，随时可回滚。
  *
  * 环境变量：
- *   DATABASE_URL  设置则使用 PostgreSQL（否则用 SQLite）
- *   LR_DB         SQLite 路径（默认 ../data/db/lr-song.sqlite3）
- *   PORT          端口（默认 8787）
+ *   TURSO_DATABASE_URL   libsql://xxx.turso.io（设置则用 Turso）
+ *   TURSO_AUTH_TOKEN     数据库 token
+ *   TURSO_REPLICA        可选，本地副本路径（如 file:../data/db/turso-replica.db）
+ *                        设置后走「嵌入式副本」：读本地、启动时同步一次
+ *   DATABASE_URL[ S ]    PostgreSQL（分片 / 单库），Turso 未设时生效
+ *   LR_DB                SQLite 路径（默认 ../data/db/lr-song.sqlite3）
+ *   PORT                 端口（默认 8787）
  */
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
@@ -17,25 +24,64 @@ import { dirname, join, resolve } from 'node:path';
 import Database from 'better-sqlite3';
 import { createPgCompat } from './pg-compat.js';
 import { createShardRouter, maskDsn, parseShardDsns, SHARD_ORDER } from './pg-shard.js';
+import { createTursoCompat, maskTursoUrl } from './turso-compat.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(process.env.LR_DB || join(__dirname, '..', '..', 'data', 'db', 'lr-song.sqlite3'));
 const PORT = parseInt(process.env.PORT || '8787', 10);
 const DATABASE_URL = process.env.DATABASE_URL || '';
 const DATABASE_URLS = process.env.DATABASE_URLS || '';
+const TURSO_DATABASE_URL = process.env.TURSO_DATABASE_URL || '';
+const TURSO_AUTH_TOKEN = process.env.TURSO_AUTH_TOKEN || '';
+const TURSO_REPLICA = process.env.TURSO_REPLICA || '';
 
-// 数据源优先级：DATABASE_URLS（按朝代 4 分片）> DATABASE_URL（单库 PG）> SQLite
-const USE_SHARD = !!DATABASE_URLS;
-const USE_PG = !USE_SHARD && !!DATABASE_URL;
+// 数据源优先级：Turso > DATABASE_URLS（4 分片 PG）> DATABASE_URL（单库 PG）> SQLite
+const USE_TURSO = !!TURSO_DATABASE_URL;
+const USE_SHARD = !USE_TURSO && !!DATABASE_URLS;
+const USE_PG = !USE_TURSO && !USE_SHARD && !!DATABASE_URL;
 const shardDsn = USE_SHARD ? parseShardDsns(DATABASE_URLS) : null;
 const router = USE_SHARD ? createShardRouter(shardDsn) : null;
-const db = USE_SHARD ? router.primary
-  : USE_PG ? createPgCompat(DATABASE_URL)
-    : new Database(DB_PATH, { readonly: true });
-const SOURCE_LABEL = USE_SHARD ? 'PostgreSQL×4' : USE_PG ? 'PostgreSQL' : 'SQLite';
-const SOURCE_DESC = USE_SHARD
-  ? SHARD_ORDER.map((s) => `${s}=${maskDsn(shardDsn[s])}`).join(' ')
-  : USE_PG ? maskDsn(DATABASE_URL) : DB_PATH;
+
+const turso = USE_TURSO
+  ? createTursoCompat({
+      // 有 TURSO_REPLICA 时：url=本地文件，syncUrl=远端 → 嵌入式副本模式
+      url: TURSO_REPLICA || TURSO_DATABASE_URL,
+      authToken: TURSO_AUTH_TOKEN,
+      syncUrl: TURSO_REPLICA ? TURSO_DATABASE_URL : undefined,
+      syncInterval: 0,
+    })
+  : null;
+
+const db = USE_TURSO
+  ? turso
+  : USE_SHARD
+    ? router.primary
+    : USE_PG
+      ? createPgCompat(DATABASE_URL)
+      : new Database(DB_PATH, { readonly: true });
+const SOURCE_LABEL = USE_TURSO
+  ? TURSO_REPLICA
+    ? 'Turso·副本'
+    : 'Turso'
+  : USE_SHARD
+    ? 'PostgreSQL×4'
+    : USE_PG
+      ? 'PostgreSQL'
+      : 'SQLite';
+const SOURCE_DESC = USE_TURSO
+  ? `${maskTursoUrl(TURSO_DATABASE_URL)}${TURSO_REPLICA ? ` (replica ${TURSO_REPLICA})` : ''}`
+  : USE_SHARD
+    ? SHARD_ORDER.map((s) => `${s}=${maskDsn(shardDsn[s])}`).join(' ')
+    : USE_PG
+      ? maskDsn(DATABASE_URL)
+      : DB_PATH;
+
+// 嵌入式副本：服务开始接收请求前先同步一次（首次会拉全量，之后仅增量）
+if (USE_TURSO && TURSO_REPLICA) {
+  const t0 = Date.now();
+  await turso.sync();
+  console.log(`[turso] 副本已同步 ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+}
 
 /**
  * 分片表查询入口：按当事人朝代路由。
@@ -55,6 +101,45 @@ const parseJsonArr = (v) => {
     return [];
   }
 };
+
+/**
+ * 响应缓存（仅 Turso 远端模式启用）。
+ * ------------------------------------------------------------
+ * 实测：Turso 网关每次往返固定 ~335ms（与 SQL 复杂度无关），
+ * 一个端点常含 1–6 条查询 → 2.4s 级延迟。而本项目数据集是**静态史料**，
+ * 同一 URL 的响应不随时间变化，因此按 URL 缓存是最划算的优化：
+ * 首次慢，之后 0ms。
+ *
+ * 本地 SQLite 模式下不启用（本来就是 ms 级，缓存无收益且会拖慢迭代）。
+ */
+const CACHE_TTL_MS = parseInt(process.env.LR_CACHE_TTL_MS || '3600000', 10); // 默认 1h
+const cache = new Map(); // key -> { at, payload }
+
+function cacheKey(pathname, searchParams) {
+  const sp = new URLSearchParams(searchParams);
+  sp.sort();
+  return `${pathname}?${sp.toString()}`;
+}
+
+async function handleCached(pathname, searchParams) {
+  if (!USE_TURSO) return handle(pathname, searchParams);
+  const key = cacheKey(pathname, searchParams);
+  const hit = cache.get(key);
+  const now = Date.now();
+  if (hit && now - hit.at < CACHE_TTL_MS) return hit.payload;
+  const payload = await handle(pathname, searchParams);
+  // 只缓存成功响应（error 不缓存，避免把瞬时故障固化）
+  if (payload && payload.ok) cache.set(key, { at: now, payload });
+  return payload;
+}
+
+/** 启动预热：把首页/朝代页首次必打的端点先算好，避免用户首屏吃 300ms×N */
+const PREWARM = [
+  '/api/stats',
+  '/api/dynasties',
+  '/api/territory-coverage',
+  '/api/region-stats',
+];
 
 async function handle(pathname, searchParams) {
   const p = pathname;
@@ -497,7 +582,7 @@ async function handle(pathname, searchParams) {
         s[k] = parts.reduce((a, r) => a + Number(r[k] || 0), 0);
       }
     }
-    return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: 'local-sqlite' });
+    return ok({ ...s, source: 'CBDB cbdb_20261003 + Wikidata + 维基百科 + CHGIS + 维基文库', backend: SOURCE_LABEL });
   }
 
   if (p === '/api/emperors') {
@@ -637,7 +722,7 @@ const server = createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   let result;
   try {
-    result = await handle(url.pathname, url.searchParams);
+    result = await handleCached(url.pathname, url.searchParams);
   } catch (e) {
     result = err(String(e && e.message ? e.message : e), 500);
   }
@@ -647,7 +732,19 @@ const server = createServer(async (req, res) => {
   res.end(JSON.stringify(result));
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`长河本地后端  http://localhost:${PORT}`);
   console.log(`数据源        ${SOURCE_LABEL} · ${SOURCE_DESC}`);
+  if (USE_TURSO) {
+    console.log(`缓存          ${CACHE_TTL_MS / 1000}s TTL · 预热 ${PREWARM.length} 个端点`);
+    const t0 = Date.now();
+    for (const ep of PREWARM) {
+      try {
+        await handleCached(ep, new URLSearchParams());
+      } catch (e) {
+        console.warn(`[预热失败] ${ep}: ${e && e.message}`);
+      }
+    }
+    console.log(`预热完成      ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  }
 });

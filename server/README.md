@@ -12,15 +12,20 @@ cd server && pnpm install
 node src/index.js        # http://localhost:8787
 ```
 
-环境变量：
-- `DATABASE_URL`  设置则用 PostgreSQL（**不设则用 SQLite，可随时回滚**）
-- `LR_DB`         SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
-- `PORT`          端口（默认 8787）
+环境变量（优先级从高到低）：
+- `TURSO_DATABASE_URL` Turso 库地址（`libsql://...`），设置则用 Turso
+- `TURSO_AUTH_TOKEN`   配套 token（`turso db tokens create <db>`）
+- `TURSO_REPLICA`      可选，本地副本路径；设了走嵌入式副本（本地读）
+- `DATABASE_URLS`      4 分片 JSON（Neon Free 用）
+- `DATABASE_URL`       单库 PostgreSQL
+- `LR_DB`              SQLite 路径（默认 `../data/db/lr-song.sqlite3`）
+- `LR_CACHE_TTL_MS`    响应缓存 TTL（仅 Turso 模式生效，默认 3600000 = 1h）
+- `PORT`               端口（默认 8787）
 
-- `DATABASE_URLS`  4 分片 JSON（Neon Free 用），优先级最高
-
+> 全不设 → 本地 SQLite，可随时回滚。
+> Turso 迁移实测：1.5 GB 全量导入约 1h9m（`turso db import`），22 端点与 SQLite 逐字节一致。
+> Turso 网关单次往返固定 ~335 ms，故 GET 响应带 TTL 缓存 + 启动预热（4 个热点端点）。
 > SQLite → PG（单库 / 4 分片）迁移见 [`../etl/migrate_pg/README.md`](../etl/migrate_pg/README.md)。
-> 优先级：`DATABASE_URLS` > `DATABASE_URL` > SQLite。
 
 ## 端点
 

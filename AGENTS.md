@@ -80,6 +80,9 @@
   但**内容页固定深色**，不跟随主题。
 - 3D：WebGL 无法读 CSS 变量，用 `web/lib/theme.ts` 的 `cssRgb()` 运行时读取。
 - DLC：数据经后端 API 获取，前端不直连 DB。
-- 数据源优先级：`DATABASE_URLS`（按朝代 4 分片，Neon Free）> `DATABASE_URL`（单库 PG）
-  > SQLite（默认，不设前两者即回滚）。迁移与分片规则见 `etl/migrate_pg/`。
+- 数据源优先级：`TURSO_DATABASE_URL`（Turso，SQLite 兼容单库）> `DATABASE_URLS`（按朝代 4 分片，Neon Free）
+  > `DATABASE_URL`（单库 PG）> SQLite（默认，全不设即回滚）。Turso 配置见 `server/src/turso-compat.js`
+  与根目录 `.env.example`；PG 迁移与分片规则见 `etl/migrate_pg/`。
+- Turso 远端模式有固定 ~335ms/往返的网关延迟，故 `server/src/index.js` 对 GET 响应做了 TTL 缓存
+  （`LR_CACHE_TTL_MS`，默认 1h）并启动预热；数据集是静态史料，缓存不会导致陈旧。
 - Git：commit 走 Conventional Commits；新克隆执行 `git config core.hooksPath web/.husky`。

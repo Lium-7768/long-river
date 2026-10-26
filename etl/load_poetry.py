@@ -99,6 +99,10 @@ def main():
         "VALUES (?,?,?,?,?,?,?)", rows)
     con.execute("CREATE INDEX idx_poems_author ON poems(author)")
     con.execute("CREATE INDEX idx_poems_dynasty ON poems(dynasty)")
+    # API 实际按 poem_dynasty 过滤（不是 dynasty）——缺索引时 Turso 上 GROUP BY 需全表扫 14s
+    con.execute("CREATE INDEX IF NOT EXISTS idx_poems_poem_dynasty_genre ON poems(poem_dynasty, genre)")
+    con.execute("CREATE INDEX IF NOT EXISTS idx_poems_poem_dynasty_author ON poems(poem_dynasty, author)")
+    con.execute("CREATE INDEX IF NOT EXISTS idx_poems_poem_dynasty_famous ON poems(poem_dynasty, famous, genre, n_lines)")
 
     # 作者表
     con.execute("DROP TABLE IF EXISTS poem_authors")
