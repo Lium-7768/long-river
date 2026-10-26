@@ -50,6 +50,20 @@ export function createTursoCompat({ url, authToken, syncUrl, syncInterval = 0 })
 
   return {
     prepare,
+    /**
+     * 批量执行：把 N 条查询合并成**一次往返**。
+     * 动机：Turso 网关每次往返固定 ~335ms（与 SQL 复杂度无关），
+     * 人物详情页有 25 条串行查询 → 32s；合并后降到 ~1s 级。
+     * 返回与入参同序的 rows 数组。
+     */
+    batchAll: async (queries) => {
+      if (!queries.length) return [];
+      const results = await client.batch(
+        queries.map((q) => ({ sql: q.sql, args: q.args || [] })),
+        'read',
+      );
+      return results.map((rs) => rs.rows.map(normalizeRow));
+    },
     /** 嵌入式副本：手动触发一次远端同步（启动时调用一次即可） */
     sync: async () => {
       if (typeof client.sync === 'function') return client.sync();

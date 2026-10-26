@@ -103,6 +103,35 @@ const parseJsonArr = (v) => {
 };
 
 /**
+ * 批量取数：把一组查询合并成尽可能少的往返。
+ * ------------------------------------------------------------
+ * Turso 网关每次往返固定 ~335ms，人物详情页有 25 条串行查询 → 实测 32.7s。
+ * 当所有查询落在同一个 db 且该 db 支持 batchAll（Turso）时合并为 **1 次往返**；
+ * 其它后端（本地 SQLite / PG 分片）逐条执行，行为与延迟均不变。
+ *
+ * specs: [{ key, db, sql, args?, one? }]  one=true 表示只取首行（原 .get()）
+ */
+async function runQueries(specs) {
+  const handles = new Set(specs.map((s) => s.db));
+  const only = [...handles][0];
+  const canBatch = handles.size === 1 && typeof only.batchAll === 'function';
+
+  const out = {};
+  if (canBatch) {
+    const rows = await only.batchAll(specs.map((s) => ({ sql: s.sql, args: s.args || [] })));
+    specs.forEach((s, i) => {
+      out[s.key] = s.one ? rows[i][0] : rows[i];
+    });
+    return out;
+  }
+  for (const s of specs) {
+    const st = s.db.prepare(s.sql);
+    out[s.key] = s.one ? await st.get(...(s.args || [])) : await st.all(...(s.args || []));
+  }
+  return out;
+}
+
+/**
  * 响应缓存（仅 Turso 远端模式启用）。
  * ------------------------------------------------------------
  * 实测：Turso 网关每次往返固定 ~335ms（与 SQL 复杂度无关），
@@ -113,7 +142,13 @@ const parseJsonArr = (v) => {
  * 本地 SQLite 模式下不启用（本来就是 ms 级，缓存无收益且会拖慢迭代）。
  */
 const CACHE_TTL_MS = parseInt(process.env.LR_CACHE_TTL_MS || '3600000', 10); // 默认 1h
+// 容量上限：/api/persons/:id 理论上有 66 万种 URL，不封顶会让内存无限增长。
+// Map 保持插入顺序 → 超限时删最早插入的键（FIFO 淘汰，够用且无额外依赖）。
+const CACHE_MAX = parseInt(process.env.LR_CACHE_MAX || '5000', 10);
 const cache = new Map(); // key -> { at, payload }
+// 并发合并：同一 URL 的冷请求若同时到达（如热门人物被多人点开），
+// 只真正查一次库，其余等待同一个 Promise。否则 N 个并发各付 2.8s。
+const inflight = new Map(); // key -> Promise<payload>
 
 function cacheKey(pathname, searchParams) {
   const sp = new URLSearchParams(searchParams);
@@ -127,19 +162,103 @@ async function handleCached(pathname, searchParams) {
   const hit = cache.get(key);
   const now = Date.now();
   if (hit && now - hit.at < CACHE_TTL_MS) return hit.payload;
-  const payload = await handle(pathname, searchParams);
-  // 只缓存成功响应（error 不缓存，避免把瞬时故障固化）
-  if (payload && payload.ok) cache.set(key, { at: now, payload });
-  return payload;
+  const pending = inflight.get(key);
+  if (pending) return pending;
+
+  const task = (async () => {
+    const payload = await handle(pathname, searchParams);
+    // 只缓存成功响应（error 不缓存，避免把瞬时故障固化）
+    if (payload && payload.ok) {
+      if (cache.size >= CACHE_MAX) {
+        // 先清过期项，仍超限再淘汰最旧的键
+        for (const [k, v] of cache) {
+          if (Date.now() - v.at >= CACHE_TTL_MS) cache.delete(k);
+        }
+        while (cache.size >= CACHE_MAX) {
+          cache.delete(cache.keys().next().value);
+        }
+      }
+      cache.set(key, { at: Date.now(), payload });
+    }
+    return payload;
+  })();
+
+  inflight.set(key, task);
+  try {
+    return await task;
+  } finally {
+    inflight.delete(key);
+  }
 }
 
-/** 启动预热：把首页/朝代页首次必打的端点先算好，避免用户首屏吃 300ms×N */
-const PREWARM = [
-  '/api/stats',
-  '/api/dynasties',
-  '/api/territory-coverage',
-  '/api/region-stats',
-];
+
+/**
+ * 启动预热：把前端首屏/各层页面必打的端点先算好。
+ * 远端每次往返固定 ~335ms，不预热的话用户第一次进朝代页要吃 2–3s。
+ * 放在 listen 之后**后台并发**执行（不阻塞启动），并发 4 避免打爆免费额度。
+ */
+const PREWARM_BASE = ['/api/stats', '/api/dynasties', '/api/territory-coverage', '/api/region-stats'];
+
+async function prewarm() {
+  const ids = [];
+  try {
+    const rows = await db.prepare('SELECT id FROM dynasty_meta ORDER BY id').all();
+    for (const r of rows) ids.push(r.id);
+  } catch {
+    /* dynasty_meta 不可用时只预热基础端点 */
+  }
+  const urls = [...PREWARM_BASE];
+  for (const id of ids) {
+    const q = `dynasty=${encodeURIComponent(id)}`;
+    urls.push(
+      `/api/dynasty-profile?${q}`,
+      `/api/persons?${q}&limit=24`,
+      `/api/dynasty-poems?${q}`,
+      `/api/nianhao?${q}`,
+      `/api/emperors?${q}`,
+    );
+  }
+
+  const t0 = Date.now();
+  let done = 0;
+  let failed = 0;
+  const CONCURRENCY = 6;
+
+  async function drain(list) {
+    let cursor = 0;
+    async function worker() {
+      while (cursor < list.length) {
+        const url = list[cursor++];
+        const [path, qs] = url.split('?');
+        try {
+          await handleCached(path, new URLSearchParams(qs || ''));
+        } catch {
+          failed++;
+        }
+        done++;
+      }
+    }
+    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  }
+
+  await drain(urls);
+  const tList = Date.now();
+  console.log(`预热完成 L2   ${done} 个端点（失败 ${failed}）· ${((tList - t0) / 1000).toFixed(1)}s`);
+
+  // 第二轮：L2 代表人物格子点进去的 L3 人物详情（每条 25 语句，冷启约 2s，预热后 1ms）
+  const personUrls = [];
+  for (const id of ids) {
+    const q = `dynasty=${encodeURIComponent(id)}`;
+    const payload = await handleCached('/api/persons', new URLSearchParams(`${q}&limit=24`));
+    for (const p of payload?.data || []) {
+      if (p?.id) personUrls.push(`/api/persons/${encodeURIComponent(p.id)}`);
+    }
+  }
+  await drain(personUrls);
+  console.log(
+    `预热完成 L3   ${personUrls.length} 位人物 · 累计 ${done} 个端点（失败 ${failed}）· ${((Date.now() - t0) / 1000).toFixed(1)}s`,
+  );
+}
 
 async function handle(pathname, searchParams) {
   const p = pathname;
@@ -225,80 +344,70 @@ async function handle(pathname, searchParams) {
     // 按当事人朝代切分；persons/poems/aliases 等复制表仍走 db
     const pdb = dbFor(person.dynasty_id);
 
-    const kinships = (await pdb.prepare(
-      `SELECT k.rel, k.b AS id, p.name FROM kinships k
-       JOIN persons p ON p.id = k.b WHERE k.a = ? LIMIT 200`
-    ).all(id));
-    const offices = (await pdb.prepare('SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year NULLS FIRST, office ASC').all(id));
-    const entries = (await pdb.prepare('SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year NULLS FIRST, entry ASC').all(id));
-    const works = (await pdb.prepare('SELECT title, category, role FROM works WHERE person_id = ?').all(id));
-    const texts = (await db.prepare(
-      'SELECT title, role, year FROM person_texts WHERE cbdb_id = ? LIMIT 100'
-    ).all(person.cbdb_id != null ? person.cbdb_id : -1));
-    const notes = (await db.prepare('SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20').all(id));
-    const possessions = (await db.prepare('SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20').all(id));
-    const insts = (await db.prepare('SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20').all(id));
-    const assocs = (await pdb.prepare(
-      `SELECT a.rel_name, a.assoc_id AS id, p.name
-       FROM assocs a JOIN persons p ON p.id = a.assoc_id
-       WHERE a.person_id = ? LIMIT 200`
-    ).all(id));
-    const assocCount = (await pdb.prepare('SELECT COUNT(*) n FROM assocs WHERE person_id = ?').get(id)).n;
-    // 师徒传承：作为老师(门人) / 作为学生(师承)
-    const masters = (await db.prepare(
-      `SELECT l.rel, l.teacher AS id, p.name
-       FROM lineage l JOIN persons p ON p.id = l.teacher
-       WHERE l.student = ? LIMIT 100`
-    ).all(id));
-    const disciples = (await db.prepare(
-      `SELECT l.rel, l.student AS id, p.name
-       FROM lineage l JOIN persons p ON p.id = l.student
-       WHERE l.teacher = ? LIMIT 200`
-    ).all(id));
-    // 人物合并依据（消歧）：person_merge 以 cbdb_id 关联
-    const merges = person.cbdb_id != null
-      ? (await db.prepare(
-          `SELECT merged_from, substr(note,1,200) AS note, source
-           FROM person_merge WHERE person_id = ? LIMIT 50`
-        ).all(String(person.cbdb_id)))
-      : [];
-    const officeAddrs = (await pdb.prepare(
-      `SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? ORDER BY addr ASC LIMIT 100`
-    ).all(id));
-    const evid = (await pdb.prepare(
-      `SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400`
-    ).all(id));
-    // 优先用消歧后的 poem_persons；回退 author 名匹配
-    const poems = (await pdb.prepare(
-      `SELECT p.id, p.title, p.genre, substr(p.content,1,120) AS excerpt, p.n_lines
-       FROM poem_persons pp JOIN poems p ON p.id = pp.poem_id
-       WHERE pp.person_id = ? ORDER BY p.n_lines DESC, p.id ASC LIMIT 200`
-    ).all(id));
-    const nPoems = (await pdb.prepare(
-      `SELECT COUNT(*) n FROM poem_persons WHERE person_id = ?`
-    ).get(id)).n;
-    const poemsByName = (await db.prepare(
-      `SELECT id, title, genre, substr(content,1,120) AS excerpt, n_lines
-       FROM poems WHERE author = ? ORDER BY n_lines DESC, id ASC LIMIT 200`
-    ).all(person.name));
-    const aliases = (await db.prepare(
-      `SELECT alias, type_desc FROM aliases WHERE person_id = ? LIMIT 50`
-    ).all(id));
-    const occupations = (await db.prepare(
-      `SELECT occupation FROM person_occupations WHERE person_id = ? LIMIT 20`
-    ).all(id)).map((r) => r.occupation);
-    const birthplaces = (await db.prepare(
-      `SELECT place FROM person_birthplace WHERE person_id = ? LIMIT 10`
-    ).all(id)).map((r) => r.place);
-    const statuses = (await db.prepare(
-      `SELECT status, fy, ly FROM person_status WHERE person_id = ? LIMIT 20`
-    ).all(person.cbdb_id != null ? String(person.cbdb_id) : id));
-    const network = (await db.prepare(
-      `SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?`
-    ).get(id)) || null;
-    const excerpts = (await db.prepare(
-      `SELECT book, volume, excerpt FROM bio_excerpt WHERE person_id = ? LIMIT 5`
-    ).all(id));
+    // 25 条查询合并为 1 次往返（Turso）／逐条执行（SQLite、PG 分片）
+    const hasCbdb = person.cbdb_id != null;
+    const specs = [
+      { key: 'kinships', db: pdb, sql: `SELECT k.rel, k.b AS id, p.name FROM kinships k
+         JOIN persons p ON p.id = k.b WHERE k.a = ? LIMIT 200`, args: [id] },
+      { key: 'offices', db: pdb, sql: 'SELECT office, year, category FROM offices WHERE person_id = ? ORDER BY year NULLS FIRST, office ASC', args: [id] },
+      { key: 'entries', db: pdb, sql: 'SELECT entry, year FROM entries WHERE person_id = ? ORDER BY year NULLS FIRST, entry ASC', args: [id] },
+      { key: 'works', db: pdb, sql: 'SELECT title, category, role FROM works WHERE person_id = ?', args: [id] },
+      { key: 'texts', db, sql: 'SELECT title, role, year FROM person_texts WHERE cbdb_id = ? LIMIT 100', args: [hasCbdb ? person.cbdb_id : -1] },
+      { key: 'notes', db, sql: 'SELECT kind, note FROM person_notes WHERE person_id = ? LIMIT 20', args: [id] },
+      { key: 'possessions', db, sql: 'SELECT desc, quantity, year FROM possessions WHERE person_id = ? LIMIT 20', args: [id] },
+      { key: 'insts', db, sql: 'SELECT name, begin_year, end_year, source FROM institutions WHERE person_id = ? LIMIT 20', args: [id] },
+      { key: 'assocs', db: pdb, sql: `SELECT a.rel_name, a.assoc_id AS id, p.name
+         FROM assocs a JOIN persons p ON p.id = a.assoc_id
+         WHERE a.person_id = ? LIMIT 200`, args: [id] },
+      { key: 'assocCount', db: pdb, sql: 'SELECT COUNT(*) n FROM assocs WHERE person_id = ?', args: [id], one: true },
+      { key: 'masters', db, sql: `SELECT l.rel, l.teacher AS id, p.name
+         FROM lineage l JOIN persons p ON p.id = l.teacher
+         WHERE l.student = ? LIMIT 100`, args: [id] },
+      { key: 'disciples', db, sql: `SELECT l.rel, l.student AS id, p.name
+         FROM lineage l JOIN persons p ON p.id = l.student
+         WHERE l.teacher = ? LIMIT 200`, args: [id] },
+      { key: 'merges', db, sql: `SELECT merged_from, substr(note,1,200) AS note, source
+         FROM person_merge WHERE person_id = ? LIMIT 50`, args: [hasCbdb ? String(person.cbdb_id) : '\u0000'] },
+      { key: 'officeAddrs', db: pdb, sql: 'SELECT DISTINCT addr FROM office_addrs WHERE person_id = ? ORDER BY addr ASC LIMIT 100', args: [id] },
+      { key: 'evid', db: pdb, sql: 'SELECT claim_type, src_book, src_pages FROM evid WHERE person_id = ? LIMIT 400', args: [id] },
+      { key: 'poems', db: pdb, sql: `SELECT p.id, p.title, p.genre, substr(p.content,1,120) AS excerpt, p.n_lines
+         FROM poem_persons pp JOIN poems p ON p.id = pp.poem_id
+         WHERE pp.person_id = ? ORDER BY p.n_lines DESC, p.id ASC LIMIT 200`, args: [id] },
+      { key: 'nPoems', db: pdb, sql: 'SELECT COUNT(*) n FROM poem_persons WHERE person_id = ?', args: [id], one: true },
+      { key: 'poemsByName', db, sql: `SELECT id, title, genre, substr(content,1,120) AS excerpt, n_lines
+         FROM poems WHERE author = ? ORDER BY n_lines DESC, id ASC LIMIT 200`, args: [person.name] },
+      { key: 'aliases', db, sql: 'SELECT alias, type_desc FROM aliases WHERE person_id = ? LIMIT 50', args: [id] },
+      { key: 'occupations', db, sql: 'SELECT occupation FROM person_occupations WHERE person_id = ? LIMIT 20', args: [id] },
+      { key: 'birthplaces', db, sql: 'SELECT place FROM person_birthplace WHERE person_id = ? LIMIT 10', args: [id] },
+      { key: 'statuses', db, sql: 'SELECT status, fy, ly FROM person_status WHERE person_id = ? LIMIT 20', args: [hasCbdb ? String(person.cbdb_id) : id] },
+      { key: 'network', db, sql: 'SELECT n_out, n_in, n_types FROM person_network WHERE person_id = ?', args: [id], one: true },
+      { key: 'excerpts', db, sql: 'SELECT book, volume, excerpt FROM bio_excerpt WHERE person_id = ? LIMIT 5', args: [id] },
+    ];
+    const R = await runQueries(specs);
+    const kinships = R.kinships;
+    const offices = R.offices;
+    const entries = R.entries;
+    const works = R.works;
+    const texts = R.texts;
+    const notes = R.notes;
+    const possessions = R.possessions;
+    const insts = R.insts;
+    const assocs = R.assocs;
+    const assocCount = (R.assocCount && R.assocCount.n) || 0;
+    const masters = R.masters;
+    const disciples = R.disciples;
+    const merges = hasCbdb ? R.merges : [];
+    const officeAddrs = R.officeAddrs;
+    const evid = R.evid;
+    const poems = R.poems;
+    const nPoems = (R.nPoems && R.nPoems.n) || 0;
+    const poemsByName = R.poemsByName;
+    const aliases = R.aliases;
+    const occupations = R.occupations.map((r) => r.occupation);
+    const birthplaces = R.birthplaces.map((r) => r.place);
+    const statuses = R.statuses;
+    const network = R.network || null;
+    const excerpts = R.excerpts;
 
     return ok({
       ...person,
@@ -732,19 +841,12 @@ const server = createServer(async (req, res) => {
   res.end(JSON.stringify(result));
 });
 
-server.listen(PORT, async () => {
+server.listen(PORT, () => {
   console.log(`长河本地后端  http://localhost:${PORT}`);
   console.log(`数据源        ${SOURCE_LABEL} · ${SOURCE_DESC}`);
   if (USE_TURSO) {
-    console.log(`缓存          ${CACHE_TTL_MS / 1000}s TTL · 预热 ${PREWARM.length} 个端点`);
-    const t0 = Date.now();
-    for (const ep of PREWARM) {
-      try {
-        await handleCached(ep, new URLSearchParams());
-      } catch (e) {
-        console.warn(`[预热失败] ${ep}: ${e && e.message}`);
-      }
-    }
-    console.log(`预热完成      ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    console.log(`缓存          ${CACHE_TTL_MS / 1000}s TTL · 后台预热中…`);
+    // 不 await：先让服务可用，缓存边跑边填
+    prewarm().catch((e) => console.warn('[预热失败]', e && e.message));
   }
 });
