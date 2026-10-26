@@ -7,6 +7,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import type { Kinship } from '@/lib/api';
 import { useWebGLAvailable } from '@/lib/webgl';
+import { getStarTexture } from '@/components/river/starTexture';
 
 /**
  * 3D 亲属关系星群（Three.js）。
@@ -106,6 +107,22 @@ function KinshipNode({
   return (
     <group position={node.pos}>
       <group ref={ref}>
+        {/* 星点：柔光 sprite + 细小核，让节点像"星"而不是纯文字 */}
+        <sprite scale={hover ? [1.5, 1.5, 1] : [1.0, 1.0, 1]}>
+          <spriteMaterial
+            map={getStarTexture()}
+            color={color}
+            transparent
+            opacity={hover ? 0.95 : 0.55}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </sprite>
+        <mesh>
+          <sphereGeometry args={[0.07, 10, 10]} />
+          <meshBasicMaterial color={color} toneMapped={false} />
+        </mesh>
         {/* 只展示文字：无圆点。透明球做点击热区 */}
         <mesh
           visible={false}
@@ -179,12 +196,105 @@ function Links({ nodes }: { nodes: Node[] }) {
       new THREE.LineBasicMaterial({
         color: '#334155',
         transparent: true,
-        opacity: 0.35,
+        opacity: 0,
       }),
     [],
   );
   const lines = useMemo(() => new THREE.LineSegments(geo, mat), [geo, mat]);
+
+  // 连线生长：进入视野后 1.4s 淡入，配合星点形成"星图织成"的感觉
+  const t0 = useRef<number | null>(null);
+  useFrame(({ clock }) => {
+    if (t0.current === null) t0.current = clock.elapsedTime;
+    const k = Math.min(1, (clock.elapsedTime - t0.current) / 1.4);
+    mat.opacity = 0.06 + k * 0.3;
+  });
+
   return <primitive object={lines} />;
+}
+
+/** 星尘：球壳内散布的微光粒子，缓慢自转，作为星图背景 */
+function StarDust({ radius = 26, count = 900 }: { radius?: number; count?: number }) {
+  const geom = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
+    const palette = [
+      new THREE.Color(0.72, 0.78, 0.95),
+      new THREE.Color(0.95, 0.91, 0.82),
+      new THREE.Color(0.86, 0.72, 0.55),
+      new THREE.Color(0.62, 0.76, 0.88),
+    ];
+    for (let i = 0; i < count; i++) {
+      let x: number, y: number, z: number, r: number;
+      do {
+        x = Math.random() * 2 - 1;
+        y = Math.random() * 2 - 1;
+        z = Math.random() * 2 - 1;
+        r = Math.hypot(x, y, z);
+      } while (r > 1 || r < 0.35);
+      const R = radius * (0.55 + Math.random() * 0.45);
+      pos[i * 3] = (x / r) * R;
+      pos[i * 3 + 1] = (y / r) * R * 0.72;
+      pos[i * 3 + 2] = (z / r) * R;
+      const c = palette[i % palette.length];
+      const dim = 0.35 + Math.random() * 0.65;
+      col[i * 3] = c.r * dim;
+      col[i * 3 + 1] = c.g * dim;
+      col[i * 3 + 2] = c.b * dim;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    return g;
+  }, [radius, count]);
+
+  const ref = useRef<THREE.Points>(null);
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.rotation.y = clock.elapsedTime * 0.02;
+      ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.05) * 0.05;
+    }
+  });
+
+  return (
+    <points ref={ref} geometry={geom} frustumCulled={false}>
+      <pointsMaterial
+        size={0.42}
+        map={getStarTexture()}
+        vertexColors
+        transparent
+        opacity={0.75}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        sizeAttenuation
+        toneMapped={false}
+      />
+    </points>
+  );
+}
+
+/** 中心核：本人位置的一团呼吸光，给整图一个视觉重心 */
+function CoreGlow() {
+  const ref = useRef<THREE.Sprite>(null);
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const k = 1 + Math.sin(clock.elapsedTime * 1.6) * 0.12;
+    ref.current.scale.set(3.4 * k, 3.4 * k, 1);
+    (ref.current.material as THREE.SpriteMaterial).opacity = 0.5 + Math.sin(clock.elapsedTime * 1.6) * 0.12;
+  });
+  return (
+    <sprite ref={ref} scale={[3.4, 3.4, 1]}>
+      <spriteMaterial
+        map={getStarTexture()}
+        color="#38bdf8"
+        transparent
+        opacity={0.5}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </sprite>
+  );
 }
 
 function Scene({
@@ -199,6 +309,8 @@ function Scene({
   return (
     <>
       <ambientLight intensity={0.6} />
+      <StarDust />
+      <CoreGlow />
       <SelfNode />
       <Links nodes={nodes} />
       {nodes.map((n, i) => (
@@ -213,8 +325,8 @@ function Scene({
       />
       <EffectComposer multisampling={0}>
         <Bloom
-          intensity={0.7}
-          luminanceThreshold={0.4}
+          intensity={0.95}
+          luminanceThreshold={0.32}
           luminanceSmoothing={0.4}
           mipmapBlur
           radius={0.7}

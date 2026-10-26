@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { inkWipe } from '@/components/ink-transition';
 
 const RiverExperience = dynamic(
   () => import('@/components/river/RiverExperience').then((m) => m.RiverExperience),
@@ -24,6 +25,7 @@ export default function Home() {
   return (
     <RiverExperience
       onEnterDynasty={(d) => {
+        inkWipe(d.name);
         router.push(`/dynasty/${d.id}`);
       }}
     />

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { inkWipe } from '@/components/ink-transition';
 import { Search } from 'lucide-react';
 import type { DynastyProfileData, PersonBrief } from '@/lib/api';
 import { fmtRange, fmtYear } from '@/components/river/year';
@@ -41,9 +42,14 @@ export function DynastyProfileView({
     [base],
   );
 
-  const goPerson = (p: PersonBrief) => router.push(`/dynasty/${dynasty.id}/person/${p.id}`);
-  const goItem = (kind: 'event' | 'system' | 'culture', name: string) =>
+  const goPerson = (p: PersonBrief) => {
+    inkWipe(p.name);
+    router.push(`/dynasty/${dynasty.id}/person/${p.id}`);
+  };
+  const goItem = (kind: 'event' | 'system' | 'culture', name: string) => {
+    inkWipe(name);
     router.push(`/dynasty/${dynasty.id}/${kind}/${itemSlug(name)}`);
+  };
 
   return (
     <main className="relative z-10 min-h-screen bg-[#05070d] px-6 py-10 text-white [background-image:linear-gradient(rgba(40,52,78,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(40,52,78,0.5)_1px,transparent_1px)] [background-size:44px_44px]">
@@ -90,17 +96,19 @@ export function DynastyProfileView({
         <div className="brush-divider" aria-hidden />
 
         {/* 帝王世系 */}
-        <Block title="帝王世系" sub="按即位年排序 · 来自 Wikidata + 正史本名">
+        <Block title="帝王世系" sub="按即位年排序 · 来自 Wikidata + 正史本名" tone="gold" glyph="玺">
           <EmperorPanel dynastyId={dynasty.id} />
         </Block>
 
         {/* 年号 */}
-        <Block title="年号" sub="按起始年排序 · 年号 ↔ 公元纪年">
+        <Block title="年号" sub="按起始年排序 · 年号 ↔ 公元纪年" tone="gold" glyph="年">
           <NianhaoPanel dynastyId={dynasty.id} />
         </Block>
 
         {/* ① 代表人物 */}
         <Block
+          tone="cinnabar"
+          glyph="人"
           title="代表人物"
           sub={
             searching
@@ -139,7 +147,7 @@ export function DynastyProfileView({
         </Block>
 
         {/* ② 政治制度 */}
-        <Block title="政治制度" sub="按确立年份排序 · 点击进入">
+        <Block title="政治制度" sub="按确立年份排序 · 点击进入" tone="gold" glyph="制">
           <CardGrid>
             {profile.institutions.map((it) => (
               <Card
@@ -150,6 +158,7 @@ export function DynastyProfileView({
                 desc={it.desc}
                 tag={it.category}
                 color="amber"
+                tone="gold"
                 onClick={() => goItem('system', it.name)}
               />
             ))}
@@ -157,7 +166,7 @@ export function DynastyProfileView({
         </Block>
 
         {/* ③ 重大事件 */}
-        <Block title="重大事件" sub="按年份排序 · 点击进入">
+        <Block title="重大事件" sub="按年份排序 · 点击进入" tone="cinnabar" glyph="纪">
           <CardGrid>
             {profile.events.map((e) => (
               <Card
@@ -166,6 +175,7 @@ export function DynastyProfileView({
                 name={e.name}
                 desc={e.desc}
                 color="rose"
+                tone="cinnabar"
                 onClick={() => goItem('event', e.name)}
               />
             ))}
@@ -173,7 +183,7 @@ export function DynastyProfileView({
         </Block>
 
         {/* ④ 文化成就 */}
-        <Block title="文化成就" sub="按出现年份排序 · 点击进入">
+        <Block title="文化成就" sub="按出现年份排序 · 点击进入" tone="jade" glyph="文">
           <CardGrid>
             {profile.culture.map((c) => (
               <Card
@@ -183,6 +193,7 @@ export function DynastyProfileView({
                 desc={c.desc}
                 tag={c.category}
                 color="emerald"
+                tone="jade"
                 onClick={() => goItem('culture', c.name)}
               />
             ))}
@@ -192,6 +203,8 @@ export function DynastyProfileView({
         {/* ④b 文学作品（诗词）—— 数据来自 chinese-poetry，名篇点进独立页（水墨：竖排书脊感 + 洒金） */}
         {poems.featured.length > 0 && (
           <Block
+            tone="jade"
+            glyph="诗"
             title="文学作品"
             sub={`${poems.authors.length ? poems.authors[0].name + ' 等 · ' : ''}共 ${poems.genres
               .reduce((s, g) => s + g.n, 0)
@@ -219,7 +232,7 @@ export function DynastyProfileView({
         )}
 
         {/* ⑤ 疆域地理 —— 与上面一样只是个格子，点进独立页（水墨：纸纹） */}
-        <Block title="疆域地理">
+        <Block title="疆域地理" tone="indigo" glyph="舆">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
             <motion.button
               onClick={() => router.push(`/dynasty/${dynasty.id}/territory`)}
@@ -241,7 +254,7 @@ export function DynastyProfileView({
 
         {/* ⑥ 史料来源 —— 多源交叉印证 */}
         {profile.sources && profile.sources.length > 0 && (
-          <Block title="史料来源" sub="多源交叉印证 · 可核验">
+          <Block title="史料来源" sub="多源交叉印证 · 可核验" tone="stone" glyph="源">
             <ul className="space-y-1">
               {profile.sources.map((s) => (
                 <li key={s} className="text-base leading-relaxed text-white/55">
@@ -274,21 +287,38 @@ const COLOR = {
   },
 } as const;
 
+type Tone = 'cinnabar' | 'gold' | 'jade' | 'indigo' | 'stone';
+
+/**
+ * 第二层分区容器。
+ * `glyph` + `tone` 只改变**材质标记**（印记方块、标题细线、卡片左侧色条），
+ * 交互一律保持「整格可点 → 进第三层」，符合 AGENTS.md 的分层一致性要求。
+ */
 function Block({
   title,
   sub,
   action,
+  tone = 'stone',
+  glyph,
   children,
 }: {
   title: string;
   sub?: string;
   action?: React.ReactNode;
+  tone?: Tone;
+  glyph?: string;
   children: React.ReactNode;
 }) {
   return (
     <motion.section variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}>
+      {/* 块标题结构沿用 AGENTS.md：mb-4 + border-b + pb-2；tone 只作用于印记与卡片色条 */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-center gap-2">
+          {glyph && (
+            <span className={`blk-mark blk-mark--${tone}`} aria-hidden>
+              {glyph}
+            </span>
+          )}
           <h2 className="text-2xl font-semibold tracking-wide text-white/90">{title}</h2>
           {sub && <span className="text-base text-white/35">{sub}</span>}
         </div>
@@ -312,6 +342,7 @@ function Card({
   desc,
   tag,
   color,
+  tone,
   onClick,
 }: {
   year?: number;
@@ -320,6 +351,7 @@ function Card({
   desc: string;
   tag?: string;
   color: keyof typeof COLOR;
+  tone?: Tone;
   onClick: () => void;
 }) {
   const c = COLOR[color];
@@ -330,7 +362,7 @@ function Card({
       whileHover={{ y: -4, scale: 1.01 }}
       whileTap={{ scale: 0.985 }}
       transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-      className={`glass-subtle group relative cursor-pointer overflow-hidden rounded-lg px-4 py-3 text-left ${c.hover}`}
+      className={`glass-subtle group relative cursor-pointer overflow-hidden rounded-lg px-4 py-3 text-left ${c.hover} ${tone ? `tone-left--${tone}` : ''}`}
       title={desc}
     >
       <span className="ink-sprinkle" aria-hidden />

@@ -294,7 +294,66 @@
   .group:hover .ink-sprinkle {
     opacity: 0.18;
   }
-  /* 毛笔刷痕分隔线 */
+  /* ------------------------------------------------------------
+   五柜形态差异化（L2 各块）
+   ------------------------------------------------------------
+   ⚠️ AGENTS.md 要求「第二层各块行为一致：都是卡片格子，点整个格子进第三层」。
+   所以这里只差异化**材质与标记**，不改交互：全部仍是 button 卡片 + 整格点击。
+   ------------------------------------------------------------ */
+.blk-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  font-family: var(--font-serif, 'Noto Serif SC'), serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  flex: none;
+  border: 1px solid currentColor;
+  opacity: 0.85;
+}
+.blk-mark--cinnabar {
+  color: rgb(var(--lr-cinnabar-soft));
+  background: rgb(var(--lr-cinnabar) / 0.1);
+}
+.blk-mark--gold {
+  color: rgb(var(--lr-gold-soft));
+  background: rgb(var(--lr-gold) / 0.1);
+}
+.blk-mark--jade {
+  color: rgb(110 200 170);
+  background: rgb(62 123 94 / 0.14);
+}
+.blk-mark--indigo {
+  color: rgb(140 170 205);
+  background: rgb(42 78 110 / 0.18);
+}
+.blk-mark--stone {
+  color: rgb(170 165 155);
+  background: rgb(120 116 106 / 0.12);
+}
+
+/* 卡片左侧色条：各柜一眼可辨，但交互完全相同 */
+.tone-left--cinnabar {
+  box-shadow: inset 2px 0 0 rgb(var(--lr-cinnabar) / 0.6);
+}
+.tone-left--gold {
+  box-shadow: inset 2px 0 0 rgb(var(--lr-gold) / 0.6);
+}
+.tone-left--jade {
+  box-shadow: inset 2px 0 0 rgb(62 123 94 / 0.75);
+}
+.tone-left--indigo {
+  box-shadow: inset 2px 0 0 rgb(94 143 168 / 0.7);
+}
+.tone-left--stone {
+  box-shadow: inset 2px 0 0 rgb(150 146 136 / 0.5);
+}
+
+/* 毛笔刷痕分隔线 */
   .brush-divider {
     height: 14px;
     opacity: 0.42;
@@ -315,6 +374,115 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   墨染转场（L1→L2 / L2→L3）
+   ------------------------------------------------------------
+   约束：整个遮罩 pointer-events: none（见 components/ink-transition.tsx），
+   只做视觉，不参与任何事件，避免重演"全局劫持滚动"的历史问题。
+   ============================================================ */
+.ink-wipe {
+  position: absolute;
+  width: 42vmax;
+  height: 42vmax;
+  margin-left: -21vmax;
+  margin-top: -21vmax;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(8 8 5 / 0.99) 38%,
+    rgb(14 14 12 / 0.92) 58%,
+    rgb(14 14 12 / 0.55) 74%,
+    transparent 84%
+  );
+  transform: scale(0.05);
+  opacity: 0;
+  animation: inkSpread 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  filter: blur(0.5px);
+}
+.ink-wipe--out {
+  animation: inkFadeOut 0.4s ease forwards;
+}
+@keyframes inkSpread {
+  to {
+    transform: scale(3.2);
+    opacity: 1;
+  }
+}
+@keyframes inkFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.ink-veil {
+  position: absolute;
+  inset: 0;
+  background: rgb(5 5 3 / 0);
+  animation: veilIn 0.5s ease forwards;
+}
+.ink-veil--out {
+  animation: veilOut 0.4s ease forwards;
+}
+@keyframes veilIn {
+  to {
+    background: rgb(5 5 3 / 0.72);
+  }
+}
+@keyframes veilOut {
+  from {
+    background: rgb(5 5 3 / 0.72);
+  }
+  to {
+    background: rgb(5 5 3 / 0);
+  }
+}
+
+.ink-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) translateY(6px);
+  font-family: var(--font-serif, 'Noto Serif SC'), serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: rgb(var(--lr-paper) / 0.94);
+  text-shadow: 0 6px 28px rgb(0 0 0 / 0.7);
+  opacity: 0;
+  animation: labelIn 0.5s 0.16s ease forwards;
+  white-space: nowrap;
+}
+.ink-label--out {
+  animation: labelOut 0.32s ease forwards;
+}
+@keyframes labelIn {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}
+@keyframes labelOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 减少动效：墨染退化为极短淡入，不缩放 */
+@media (prefers-reduced-motion: reduce) {
+  .ink-wipe,
+  .ink-veil,
+  .ink-label {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 
